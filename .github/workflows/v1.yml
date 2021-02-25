@@ -14,11 +14,6 @@ jobs:
     if: "!contains(github.event.head_commit.message, '[skip ci]')"
     environment: v1
     env:
-      CHANGE_MINIKUBE_NONE_USER: true
-      MINIKUBE_WANTUPDATENOTIFICATION: false
-      MINIKUBE_WANTREPORTERRORPROMPT: false
-      MINIKUBE_HOME: $HOME
-      KUBECONFIG: $HOME/.kube/config
       #helm chart version
       AGENT_CHART_REV: 0.1.7
       AGENT_HELPER_CHART_REV: 0.1.5
@@ -48,9 +43,11 @@ jobs:
           AGENT_REV: v1.hokkaido.213
           #EC_PPS: ${{secrets.EC_PPS_2_DECRYPT_213}}
         run: |
-          echo deployment
+          chmod +x ./scripts/k8s-deployment-sim.sh
+          source ./scripts/k8s-deployment-sim.sh
           
       - name: push distributed packages
+        if: github.event.pull_request.merged == true
         env:
           AGENT_REV: v1.hokkaido.213
           #EC_PPS: ${{secrets.EC_PPS_2_DECRYPT_213}}
