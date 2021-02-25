@@ -1,5 +1,8 @@
 #!/bin/bash
 
+ls -la k8s/example/
+exit 0
+
 yq() {
   docker run --rm -i -v "${PWD}":/workdir mikefarah/yq yq "$@"
 }
