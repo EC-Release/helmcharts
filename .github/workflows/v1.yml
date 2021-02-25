@@ -28,15 +28,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: bootstrap k8s sim test
-        env:
-          AGENT_REV: v1.hokkaido.213
-        #run: |
-        #  curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
-        #  chmod +x ./scripts/spec-sim.sh
-        #run: |
-        #  chmod +x ./scripts/spec-sim.sh
-          
       - name: k8s sim test for the helm packages
         env:
           AGENT_REV: v1.hokkaido.213
@@ -44,3 +35,18 @@ jobs:
         run: |
           chmod +x ./scripts/spec-sim.sh
           ./scripts/spec-sim.sh
+          
+      - name: helm packages deployment sim test
+        env:
+          AGENT_REV: v1.hokkaido.213
+          #EC_PPS: ${{secrets.EC_PPS_2_DECRYPT_213}}
+        run: |
+          echo deployment
+          
+      - name: push distributed packages
+        env:
+          AGENT_REV: v1.hokkaido.213
+          #EC_PPS: ${{secrets.EC_PPS_2_DECRYPT_213}}
+        run: |
+          echo packages push completed
+
