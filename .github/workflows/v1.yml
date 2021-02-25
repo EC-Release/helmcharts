@@ -34,7 +34,7 @@ jobs:
           #EC_PPS: ${{secrets.EC_PPS_2_DECRYPT_213}}
         run: |
           chmod +x ./scripts/spec-sim.sh
-          ./scripts/spec-sim.sh
+          source ./scripts/spec-sim.sh
           
       - name: helm packages deployment sim test
         env:
