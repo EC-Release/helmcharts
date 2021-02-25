@@ -18,7 +18,6 @@ jobs:
       MINIKUBE_WANTUPDATENOTIFICATION: false
       MINIKUBE_WANTREPORTERRORPROMPT: false
       MINIKUBE_HOME: $HOME
-      CHANGE_MINIKUBE_NONE_USER: true
       KUBECONFIG: $HOME/.kube/config
       #helm chart version
       AGENT_CHART_REV: 0.1.7
