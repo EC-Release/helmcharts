@@ -1,10 +1,8 @@
 #!/bin/bash
 
 yq() {
-  docker run --rm -i -v "${PWD}":/workdir mikefarah/yq yq "$@"
+  docker run --rm -i -v "${PWD}":/workdir mikefarah/yq "$@"
 }
-yq --help
-exit 0
 
 #kubectl cluster-info
 helm version
