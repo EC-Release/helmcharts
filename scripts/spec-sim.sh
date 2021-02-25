@@ -4,7 +4,7 @@ function yq() {
   docker run --rm -i -v "${PWD}":/workdir mikefarah/yq yq "$@"
 }
 
-kubectl cluster-info
+#kubectl cluster-info
 helm version
 echo $(pwd)
 
