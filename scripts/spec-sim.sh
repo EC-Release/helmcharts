@@ -56,20 +56,20 @@ printf "update dependencies in example chart for test"
 helm dependency update k8s/example
 
 printf "\n\n\n*** test server with tls template\n\n"
-yq w -i k8s/example/values.yaml global.agtK8Config.withPlugins.tls.enabled true
-yq w -i k8s/example/values.yaml global.agtK8Config.withPlugins.vln.enabled false
+yq e '.global.agtK8Config.withPlugins.tls.enabled = true' -i k8s/example/values.yaml
+yq e '.global.agtK8Config.withPlugins.vln.enabled = false' -i k8s/example/values.yaml
 helm template k8s/example --debug --set-file global.agtConfig=k8s/example/server+tls.env
 
 printf "\n\n\n*** test client with local vln template\n\n"
-yq w -i k8s/example/values.yaml global.agtK8Config.withPlugins.tls.enabled false
-yq w -i k8s/example/values.yaml global.agtK8Config.withPlugins.vln.enabled true
-yq w -i k8s/example/values.yaml global.agtK8Config.withPlugins.vln.remote false
+yq e '.global.agtK8Config.withPlugins.tls.enabled = false' -i k8s/example/values.yaml
+yq e '.global.agtK8Config.withPlugins.vln.enabled = true' -i k8s/example/values.yaml
+yq e '.global.agtK8Config.withPlugins.vln.remote = false' -i k8s/example/values.yaml
 helm template k8s/example --debug --set-file global.agtConfig=k8s/example/client+vln.env
 
 printf "\n\n\n*** test client with remote vln template\n\n"
-yq w -i k8s/example/values.yaml global.agtK8Config.withPlugins.tls.enabled false
-yq w -i k8s/example/values.yaml global.agtK8Config.withPlugins.vln.enabled true
-yq w -i k8s/example/values.yaml global.agtK8Config.withPlugins.vln.remote true
+yq e '.global.agtK8Config.withPlugins.tls.enabled = false' -i k8s/example/values.yaml
+yq e '.global.agtK8Config.withPlugins.vln.enabled = true' -i k8s/example/values.yaml
+yq e '.global.agtK8Config.withPlugins.vln.remote = true' -i k8s/example/values.yaml
 helm template k8s/example --debug --set-file global.agtConfig=k8s/example/client+vln.env
 
 printf "\n\n\n*** test gateway agt template\n\n"
