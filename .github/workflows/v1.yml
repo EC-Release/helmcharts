@@ -30,14 +30,14 @@ jobs:
 
       - name: bootstrap k8s sim test
         env:
-          #EC_REV_V1: v1.hokkaido.213
+          AGENT_REV: v1.hokkaido.213
         run: |
           curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
           chmod +x ./scripts/spec-sim.sh
           
       - name: k8s sim test for the helm packages
         env:
-          #AGENT_REV: v1.hokkaido.213
+          AGENT_REV: v1.hokkaido.213
           #EC_PPS: ${{secrets.EC_PPS_2_DECRYPT_213}}
         run: |
           ./scripts/spec-sim.sh
