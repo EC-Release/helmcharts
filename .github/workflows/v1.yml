@@ -27,7 +27,11 @@ jobs:
       
     steps:
       - uses: actions/checkout@v2
-
+      
+      - name: bootstrap minikube 
+        id: minikube
+        uses: medyagh/setup-minikube@master
+    
       - name: k8s sim test for the helm packages
         env:
           AGENT_REV: v1.hokkaido.213
