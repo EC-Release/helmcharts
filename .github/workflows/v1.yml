@@ -23,7 +23,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       
-      - name: Setup Minikube
+      - name: bootstrap minikube
         uses: manusa/actions-setup-minikube@v2.3.0
         with:
           minikube version: 'v1.16.0'
