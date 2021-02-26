@@ -3,12 +3,12 @@ entries:
   agent+helper:
   - apiVersion: v1
     appVersion: 1.16.0
-    created: "2021-02-26T18:53:15.004361761Z"
+    created: "2021-02-26T18:56:42.952629755Z"
     description: Agent Helm Chart Library
-    digest: a134bf692a7c91ae560bda20fc03bb18ef2805a08a42a77ff0a21e3c95a682ba
+    digest: 866652a819835dbb214c5b269b7b29f13190c2e657f7fa340c6e571e3c566688
     name: agent+helper
     type: library
     urls:
     - https://raw.githubusercontent.com/EC-Release/helmcharts/disty/agent+helper/0.1.5/agent+helper-0.1.5.tgz
     version: 0.1.5
-generated: "2021-02-26T18:53:15.003801348Z"
+generated: "2021-02-26T18:56:42.952078054Z"
