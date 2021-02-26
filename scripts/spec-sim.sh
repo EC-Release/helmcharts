@@ -72,6 +72,7 @@ printf "\n\n\n*** test gateway agt template\n\n"
 helm template k8s/example --debug --set-file global.agtConfig=k8s/example/gateway.env
 
 printf "\n\n\n*** pkg indexing\n\n"
-helm repo index k8s/pkg/agent/$AGENT_CHART_REV --url https://ec-release.github.io/oci/agent/$AGENT_CHART_REV
-helm repo index k8s/pkg/agent+helper/$AGENT_HELPER_CHART_REV --url https://ec-release.github.io/oci/agent+helper/$AGENT_HELPER_CHART_REV
-helm repo index k8s/pkg/agent+plg/$AGENT_PLG_CHART_REV --url https://ec-release.github.io/oci/agent+plg/$AGENT_PLG_CHART_REV
+#https://raw.githubusercontent.com/EC-Release/helmcharts/disty/agent/0.1.7
+helm repo index k8s/pkg/agent/$AGENT_CHART_REV --url https://raw.githubusercontent.com/EC-Release/helmcharts/disty/agent/$AGENT_CHART_REV
+helm repo index k8s/pkg/agent+helper/$AGENT_HELPER_CHART_REV --url https://raw.githubusercontent.com/EC-Release/helmcharts/disty/agent+helper/$AGENT_HELPER_CHART_REV
+helm repo index k8s/pkg/agent+plg/$AGENT_PLG_CHART_REV --url https://raw.githubusercontent.com/EC-Release/helmcharts/disty/agent+plg/$AGENT_PLG_CHART_REV
