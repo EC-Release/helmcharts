@@ -1,6 +1,5 @@
 name: v1
 on:
-  # Triggers the workflow on push or pull request events but only for the v1.1beta_helm_pkg_update_lber_ay branch
   push:
     branches: [ v1 ]
   pull_request:
@@ -50,7 +49,7 @@ jobs:
           source ./scripts/k8s-deployment-sim.sh
           
       - name: push distribution packages
-        #[**temp removal] if: github.event.pull_request.merged == true
+        #if: github.event.pull_request.merged == true
         uses: cpina/github-action-push-to-another-repository@master
         env:
           AGENT_REV: v1.hokkaido.213
@@ -60,4 +59,5 @@ jobs:
           destination-github-username: 'ec-release'
           destination-repository-name: 'helmcharts'
           target-branch: 'disty'
+          commit-message: "EC Bot Deployment"
           user-email: enterprise-connect@ge.com
