@@ -11,6 +11,7 @@ kubectl get deployments && kubectl get pods && kubectl get services
 #sleep 2
 #kubectl logs -p $(kubectl get pods|grep agent-plg|awk '{print $1}'|head -n 1) --since=5m
 kubectl describe deployments $(kubectl get deployments|grep agent-plg|awk '{print $1}'|head -n 1)
+kubectl describe services $(kubectl get services|grep agent-plg|awk '{print $1}'|head -n 1)
 #printf "\n\n\n*** done debug go ahead delete all.\n\n"
 #kubectl delete --all deployments && kubectl delete --all pods && kubectl delete --all services
 
