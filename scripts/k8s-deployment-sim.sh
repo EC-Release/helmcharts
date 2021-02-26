@@ -3,7 +3,7 @@
 printf "\n\n\n*** install server with tls template in minikube\n\n"
 yq e '.global.agtK8Config.withPlugins.tls.enabled = true' -i k8s/example/values.yaml
 yq e '.global.agtK8Config.withPlugins.vln.enabled = false' -i k8s/example/values.yaml
-helm install k8s/example my-app --set-file global.agtConfig=k8s/example/server+tls.env
+helm install my-app k8s/example --set-file global.agtConfig=k8s/example/server+tls.env
 
 printf "\n\n\n*** verify logs in minikube\n\n"
 kubectl get deployments && kubectl get pods && kubectl get services && kubectl get ingresses
