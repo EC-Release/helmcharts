@@ -49,7 +49,7 @@ jobs:
           source ./scripts/k8s-deployment-sim.sh
           
       - name: publish distribution packages (ec-release/helmcharts)
-        #if: github.event.pull_request.merged == true
+        if: github.event.pull_request.merged == true
         uses: cpina/github-action-push-to-another-repository@master
         env:
           AGENT_REV: v1.hokkaido.213
@@ -62,7 +62,7 @@ jobs:
           commit-message: 'EC Bot Deployment'
           user-email: enterprise-connect@ge.com
       - name: publish distribution packages (ec-release/oci)
-        #if: github.event.pull_request.merged == true
+        if: github.event.pull_request.merged == true
         uses: cpina/github-action-push-to-another-repository@master
         env:
           AGENT_REV: v1.hokkaido.213
