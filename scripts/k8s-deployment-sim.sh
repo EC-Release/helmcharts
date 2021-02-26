@@ -1,6 +1,6 @@
 #!/bin/bash
 
-printf "\n\n\n*** [1] install server with tls template in k8s\n\n"
+printf "\n\n\n*** [1] install server with tls template in k8s\n"
 yq e '.global.agtK8Config.withPlugins.tls.enabled = true' -i k8s/example/values.yaml
 yq e '.global.agtK8Config.withPlugins.vln.enabled = false' -i k8s/example/values.yaml
 helm install k8s/example --set-file global.agtConfig=k8s/example/server+tls.env --generate-name
@@ -18,27 +18,23 @@ kubectl describe services $(kubectl get services|grep agent-plg|awk '{print $1}'
 printf "\n\n\n*** [1.4] clear installation\n"
 kubectl delete --all deployments && kubectl delete --all pods && kubectl delete --all services
 
-: 'printf "\n\n\n*** [2] install client with local vln multi-contr template in k8s\n\n"
+printf "\n\n\n*** [2] install client with local vln multi-contr template in k8s\n"
 yq e '.global.agtK8Config.withPlugins.tls.enabled = false' -i k8s/example/values.yaml
 yq e '.global.agtK8Config.withPlugins.vln.enabled = true' -i k8s/example/values.yaml
 yq e '.global.agtK8Config.withPlugins.vln.remote = false' -i k8s/example/values.yaml
 helm install k8s/example --set-file global.agtConfig=k8s/example/client+vln.env --generate-name
 
-kubectl describe pods $(kubectl get pods|grep agent-plg|awk '{print $1}'|head -n 1)
-#kubectl get pods -o=jsonpath='{range .items[*]}{"\n"}{.metadata.name}{":\t"}{range .spec.containers[*]}{.name}{", "}{end}{end}' | sort
-pdn=$(kubectl get pods -o=jsonpath='{.items[0].metadata.name}')
-echo pdn: $pdn
-ctns=$(kubectl get pods -o=jsonpath='{range .items[*]}{range .spec.containers[*]}{.name}{" "}{end}{range .spec.initContainers[*]}{.name}{end}' | sort)
-echo ctns: $ctns
-for i in $ctns
-do
-   kubectl logs -p $pdn -c $i --since=5m
-done
+printf "\n\n\n*** [2.1] verify installation\n"
+kubectl get deployments && kubectl get pods && kubectl get services
+printf "\n\n\n*** [2.2] verify deployment spec\n"
+kubectl describe deployments $(kubectl get deployments|grep agent-plg|awk '{print $1}'|head -n 1)
+printf "\n\n\n*** [2.3] verify service spec\n"
+kubectl describe services $(kubectl get services|grep agent-plg|awk '{print $1}'|head -n 1)
+#printf "\n\n\n*** done debug go ahead delete all.\n\n"
+printf "\n\n\n*** [2.4] clear installation\n"
+kubectl delete --all deployments && kubectl delete --all pods && kubectl delete --all services
 
-printf "\n\n\n*** done debug go ahead delete all.\n\n"
-kubectl delete --all deployments && kubectl delete --all pods && kubectl delete --all services && kubectl delete --all ingresses
-
-printf "\n\n\n*** install client with remote vln template in minikube\n\n"
+: 'printf "\n\n\n*** install client with remote vln template in minikube\n\n"
 yq e '.global.agtK8Config.withPlugins.tls.enabled = false' -i k8s/example/values.yaml
 yq e '.global.agtK8Config.withPlugins.vln.enabled = true' -i k8s/example/values.yaml
 yq e '.global.agtK8Config.withPlugins.vln.remote = true' -i k8s/example/values.yaml
