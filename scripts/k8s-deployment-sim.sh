@@ -5,12 +5,14 @@ yq e '.global.agtK8Config.withPlugins.tls.enabled = true' -i k8s/example/values.
 yq e '.global.agtK8Config.withPlugins.vln.enabled = false' -i k8s/example/values.yaml
 helm install k8s/example --set-file global.agtConfig=k8s/example/server+tls.env --generate-name
 
-printf "\n\n\n*** verify logs in k8s\n\n"
+printf "\n\n\n*** 1) verify k8s deployment\n"
 kubectl get deployments && kubectl get pods && kubectl get services
 #kubectl rollout status deploy/$(kubectl get deployments|grep agent-plg|awk '{print $1}'|head -n 1)
 #sleep 2
 #kubectl logs -p $(kubectl get pods|grep agent-plg|awk '{print $1}'|head -n 1) --since=5m
+printf "\n\n\n*** 1) verify deployment spec\n"
 kubectl describe deployments $(kubectl get deployments|grep agent-plg|awk '{print $1}'|head -n 1)
+printf "\n\n\n*** 1) verify service spec\n"
 kubectl describe services $(kubectl get services|grep agent-plg|awk '{print $1}'|head -n 1)
 #printf "\n\n\n*** done debug go ahead delete all.\n\n"
 #kubectl delete --all deployments && kubectl delete --all pods && kubectl delete --all services
