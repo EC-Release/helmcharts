@@ -3,12 +3,12 @@ entries:
   agent:
   - apiVersion: v1
     appVersion: v1.1beta
-    created: "2021-02-26T19:02:06.222268953Z"
+    created: "2021-02-26T19:17:54.946417066Z"
     description: The Agent Helm chart example for Kubernet
-    digest: e7cbb37445566f07a17c53b958194d7cd0d0946c5cec4c74d45ed628fc1b24d3
+    digest: 2ee6d587940a52a652db94af903b7e81770c4b4507063146b8719bc758e3e29c
     name: agent
     type: application
     urls:
     - https://raw.githubusercontent.com/EC-Release/helmcharts/disty/agent/0.1.7/agent-0.1.7.tgz
     version: 0.1.7
-generated: "2021-02-26T19:02:06.22122164Z"
+generated: "2021-02-26T19:17:54.945191068Z"
