@@ -23,7 +23,7 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}
+        - name: agentlber
           image: "ghcr.io/ec-release/lb:v1"
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
@@ -91,7 +91,7 @@ spec:
         {{- include "agent.selectorLabels" . | nindent 8 }}
     spec:
       containers:
-        - name: {{ .Chart.Name }}
+        - name: agentlber
           image: "ghcr.io/ec-release/oci/agent:v1"
           command: {{ include "agent.launchCmd" . }}
           securityContext:
