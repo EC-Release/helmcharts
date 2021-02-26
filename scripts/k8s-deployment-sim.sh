@@ -10,12 +10,12 @@ kubectl get deployments && kubectl get pods && kubectl get services
 #kubectl rollout status deploy/$(kubectl get deployments|grep agent-plg|awk '{print $1}'|head -n 1)
 #sleep 2
 #kubectl logs -p $(kubectl get pods|grep agent-plg|awk '{print $1}'|head -n 1) --since=5m
-printf "\n\n\n*** 1.2) verify deployment spec\n"
+printf "\n\n\n*** [1.2] verify deployment spec\n"
 kubectl describe deployments $(kubectl get deployments|grep agent-plg|awk '{print $1}'|head -n 1)
-printf "\n\n\n*** 1.3) verify service spec\n"
+printf "\n\n\n*** [1.3] verify service spec\n"
 kubectl describe services $(kubectl get services|grep agent-plg|awk '{print $1}'|head -n 1)
 #printf "\n\n\n*** done debug go ahead delete all.\n\n"
-printf "\n\n\n*** 1.4) clear installation\n"
+printf "\n\n\n*** [1.4] clear installation\n"
 kubectl delete --all deployments && kubectl delete --all pods && kubectl delete --all services
 
 : 'printf "\n\n\n*** [2] install client with local vln multi-contr template in k8s\n\n"
