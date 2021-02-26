@@ -43,7 +43,7 @@ eval "sed -i -e 's#{{EC_TEST_SST}}#${EC_TEST_SST}#g' k8s/example/gateway.env"
 eval "sed -i -e 's#{{EC_TEST_TKN}}#${EC_TEST_TKN}#g' k8s/example/gateway.env"
 
 printf "\n\n\n*** packaging w/ dependencies \n\n"
-mkdir -p k8s/pkg/agent/$AGENT_CHART_REV k8s/pkg/agent+helper/$AGENT_HELPER_CHART_REV k8s/pkg/agent+plg/$AGENT_PLG_CHART_REV
+mkdir -p k8s/pkg/agent/$AGENT_CHART_REV k8s/pkg/agent+helper/$AGENT_HELPER_CHART_REV k8s/pkg/agent+plg/$AGENT_PLG_CHART_REV k8s/pkg/agent+plg/$AGENT_LBER_CHART_REV
 ls -la k8s/pkg
 helm package k8s/agent+helper -d k8s/pkg/agent+helper/$AGENT_HELPER_CHART_REV
 helm dependency update k8s/agent
