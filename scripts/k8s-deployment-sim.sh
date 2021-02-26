@@ -52,6 +52,8 @@ printf "\n\n\n*** [4] install lber in k8s\n"
 kubectl get deployments && kubectl get pods && kubectl get services && kubectl get ingresses
 printf "\n\n\n*** [4.2] verify deployment spec\n"
 kubectl describe deployments $(kubectl get deployments|grep agent-plg|awk '{print $1}'|head -n 1)
+printf "\n\n\n*** [4.2] verify statefulset spec\n"
+kubectl describe sts $(kubectl get sts|grep agent-plg|awk '{print $1}'|head -n 1)
 printf "\n\n\n*** [4.3] verify service spec\n"
 kubectl describe services $(kubectl get services|grep agent-plg|awk '{print $1}'|head -n 1)
 printf "\n\n\n*** [4.4] verify ingress spec\n"
