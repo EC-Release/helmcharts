@@ -79,7 +79,9 @@ Generate container HEALTH port spec for client agent. Need review for gateway us
 
 
 {{- define "agent.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
+{{- $name_p := default $.Chart.Name $.Values.nameOverride -}}
+{{- $name := ($name_p | replace "+" "-") -}}
+{{- $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 
@@ -128,7 +130,7 @@ If release name contains chart name it will be used as a full name.
 {{- if $.Values.fullnameOverride -}}
 {{- $.Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
-{{- $name := default $.Chart.Name $.Values.nameOverride -}}
+{{- $name := include "agent.name" . }}
 {{- if contains $name $.Release.Name -}}
 {{- $.Release.Name | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
