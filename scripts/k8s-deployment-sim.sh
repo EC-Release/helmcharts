@@ -1,30 +1,29 @@
 #!/bin/bash
 
-printf "\n\n\n*** install server with tls template in minikube\n\n"
+printf "\n\n\n*** [1] install server with tls template in k8s\n\n"
 yq e '.global.agtK8Config.withPlugins.tls.enabled = true' -i k8s/example/values.yaml
 yq e '.global.agtK8Config.withPlugins.vln.enabled = false' -i k8s/example/values.yaml
 helm install k8s/example --set-file global.agtConfig=k8s/example/server+tls.env --generate-name
 
-printf "\n\n\n*** 1) verify k8s deployment\n"
+printf "\n\n\n*** [1.1] verify installation\n"
 kubectl get deployments && kubectl get pods && kubectl get services
 #kubectl rollout status deploy/$(kubectl get deployments|grep agent-plg|awk '{print $1}'|head -n 1)
 #sleep 2
 #kubectl logs -p $(kubectl get pods|grep agent-plg|awk '{print $1}'|head -n 1) --since=5m
-printf "\n\n\n*** 1.1) verify deployment spec\n"
+printf "\n\n\n*** 1.2) verify deployment spec\n"
 kubectl describe deployments $(kubectl get deployments|grep agent-plg|awk '{print $1}'|head -n 1)
-printf "\n\n\n*** 1.2) verify service spec\n"
+printf "\n\n\n*** 1.3) verify service spec\n"
 kubectl describe services $(kubectl get services|grep agent-plg|awk '{print $1}'|head -n 1)
 #printf "\n\n\n*** done debug go ahead delete all.\n\n"
-#kubectl delete --all deployments && kubectl delete --all pods && kubectl delete --all services
+printf "\n\n\n*** 1.4) clear installation\n"
+kubectl delete --all deployments && kubectl delete --all pods && kubectl delete --all services
 
-: 'printf "\n\n\n*** install client with local vln multi-contr template in minikube\n\n"
+: 'printf "\n\n\n*** [2] install client with local vln multi-contr template in k8s\n\n"
 yq e '.global.agtK8Config.withPlugins.tls.enabled = false' -i k8s/example/values.yaml
 yq e '.global.agtK8Config.withPlugins.vln.enabled = true' -i k8s/example/values.yaml
 yq e '.global.agtK8Config.withPlugins.vln.remote = false' -i k8s/example/values.yaml
 helm install k8s/example --set-file global.agtConfig=k8s/example/client+vln.env --generate-name
 
-printf "\n\n\n*** verify logs in minikube\n\n"
-sleep 15
 kubectl describe pods $(kubectl get pods|grep agent-plg|awk '{print $1}'|head -n 1)
 #kubectl get pods -o=jsonpath='{range .items[*]}{"\n"}{.metadata.name}{":\t"}{range .spec.containers[*]}{.name}{", "}{end}{end}' | sort
 pdn=$(kubectl get pods -o=jsonpath='{.items[0].metadata.name}')
