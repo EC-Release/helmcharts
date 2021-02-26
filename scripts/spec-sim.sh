@@ -55,6 +55,7 @@ helm package k8s/agent+lber -d k8s/pkg/agent+lber/$AGENT_LBER_CHART_REV
 
 printf "update dependencies in example chart for test"
 helm dependency update k8s/example
+ls -la k8s/example/charts/
 
 printf "\n\n\n*** test server with tls template\n\n"
 yq e '.global.agtK8Config.withPlugins.tls.enabled = true' -i k8s/example/values.yaml
