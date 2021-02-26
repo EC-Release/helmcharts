@@ -25,7 +25,7 @@ yq e '.global.agtK8Config.withPlugins.vln.remote = false' -i k8s/example/values.
 helm install k8s/example --set-file global.agtConfig=k8s/example/client+vln.env --generate-name
 
 printf "\n\n\n*** [2.1] verify installation\n"
-kubectl get deployments && kubectl get pods && kubectl get services
+kubectl get deployments && kubectl get pods
 printf "\n\n\n*** [2.2] verify deployment spec\n"
 kubectl describe deployments $(kubectl get deployments|grep agent-plg|awk '{print $1}'|head -n 1)
 printf "\n\n\n*** [2.3] clear installation\n"
@@ -46,10 +46,15 @@ kubectl describe services $(kubectl get services|grep agent-plg|awk '{print $1}'
 printf "\n\n\n*** [3.4] clear installation\n"
 kubectl delete --all deployments && kubectl delete --all pods && kubectl delete --all services
 
-: 'printf "\n\n\n*** verify logs in minikube\n\n"
+printf "\n\n\n*** [4] install lber in k8s\n"
+#helm install k8s/example --set-file global.agtConfig=k8s/example/client+vln.env --generate-name
+: 'printf "\n\n\n*** [4.1] verify installation\n"
 kubectl get deployments && kubectl get pods && kubectl get services && kubectl get ingresses
-#kubectl logs -p $(kubectl get pods|grep agent-plg|awk '{print $1}'|head -n 1) --since=5m
-kubectl rollout status deploy/$(kubectl get deployments|grep agent-plg|awk '{print $1}'|head -n 1)
-#kubectl describe deployments $(kubectl get pods|grep agent-plg|awk '{print $1}'|head -n 1)
-printf "\n\n\n*** done debug go ahead delete all.\n\n"
-kubectl delete --all deployments && kubectl delete --all pods && kubectl delete --all services && kubectl delete --all ingresses'
+printf "\n\n\n*** [4.2] verify deployment spec\n"
+kubectl describe deployments $(kubectl get deployments|grep agent-plg|awk '{print $1}'|head -n 1)
+printf "\n\n\n*** [4.3] verify service spec\n"
+kubectl describe services $(kubectl get services|grep agent-plg|awk '{print $1}'|head -n 1)
+printf "\n\n\n*** [4.4] verify ingress spec\n"
+kubectl describe services $(kubectl get services|grep agent-plg|awk '{print $1}'|head -n 1)
+printf "\n\n\n*** [4.5] clear installation\n"
+kubectl delete --all deployments && kubectl delete --all pods && kubectl delete --all services'
