@@ -1,6 +1,5 @@
 name: v1
 on:
-  # Triggers the workflow on push or pull request events but only for the v1.1beta_helm_pkg_update_lber_ay branch
   push:
     branches: [ v1 ]
   pull_request:
@@ -15,15 +14,16 @@ jobs:
     environment: v1
     env:
       #helm chart version
-      AGENT_CHART_REV: 0.1.7
-      AGENT_HELPER_CHART_REV: 0.1.5
-      AGENT_PLG_CHART_REV: 0.1.6
+      AGENT_CHART_REV: 0.1.8
+      AGENT_HELPER_CHART_REV: 0.1.6
+      AGENT_PLG_CHART_REV: 0.1.7
       AGENT_LBER_CHART_REV: 0.1.0
+      AGENT_REV: v1.hokkaido.213
       
     steps:
       - uses: actions/checkout@v2
       
-      - name: Setup Minikube
+      - name: bootstrap minikube
         uses: manusa/actions-setup-minikube@v2.3.0
         with:
           minikube version: 'v1.16.0'
@@ -48,11 +48,29 @@ jobs:
           source ./scripts/commonlib.sh
           source ./scripts/k8s-deployment-sim.sh
           
-      - name: push distributed packages
-        if: github.event.pull_request.merged == true
+      - name: publish distribution packages (ec-release/helmcharts)
+        #if: github.event.pull_request.merged == true
+        uses: cpina/github-action-push-to-another-repository@master
         env:
           AGENT_REV: v1.hokkaido.213
-          #EC_PPS: ${{secrets.EC_PPS_2_DECRYPT_213}}
-        run: |
-          echo packages push completed
-
+          API_TOKEN_GITHUB: ${{ secrets.EC_CHART_DEPLOYMENT_TKN }}
+        with:
+          source-directory: 'k8s/pkg-new'
+          destination-github-username: 'ec-release'
+          destination-repository-name: 'helmcharts'
+          target-branch: 'disty'
+          commit-message: 'EC Bot Deployment'
+          user-email: enterprise-connect@ge.com
+      - name: publish distribution packages (ec-release/oci)
+        #if: github.event.pull_request.merged == true
+        uses: cpina/github-action-push-to-another-repository@master
+        env:
+          AGENT_REV: v1.hokkaido.213
+          API_TOKEN_GITHUB: ${{ secrets.EC_CHART_DEPLOYMENT_TKN }}
+        with:
+          source-directory: 'k8s/pkg'
+          destination-github-username: 'ec-release'
+          destination-repository-name: 'oci'
+          target-branch: 'disty'
+          commit-message: 'EC Bot Deployment'
+          user-email: enterprise-connect@ge.com

@@ -4,7 +4,7 @@
 helm version
 echo $(pwd)
 
-printf "\n\n\n*** update the pkg chart params \n\n"
+printf "\n\n\n*** update the pkg chart params \n"
 eval "sed -i -e 's#<AGENT_HELPER_CHART_REV>#${AGENT_HELPER_CHART_REV}#g' k8s/agent+helper/Chart.yaml"
 eval "sed -i -e 's#<AGENT_CHART_REV>#${AGENT_CHART_REV}#g' k8s/agent/Chart.yaml"
 eval "sed -i -e 's#<AGENT_HELPER_CHART_REV>#${AGENT_HELPER_CHART_REV}#g' k8s/agent/Chart.yaml"
@@ -18,7 +18,7 @@ eval "sed -i -e 's#<AGENT_LBER_CHART_REV>#${AGENT_LBER_CHART_REV}#g' k8s/example
 eval "sed -i -e 's#<AGENT_CHART_REV>#${AGENT_CHART_REV}#g' k8s/example/Chart.yaml"
 cat k8s/agent+helper/Chart.yaml k8s/agent/Chart.yaml k8s/agent+plg/Chart.yaml k8s/example/Chart.yaml
 
-printf "\n\n\n*** update server+tls.env \n\n"
+printf "\n\n\n*** update server+tls.env \n"
 eval "sed -i -e 's#{{EC_TEST_OA2}}#${EC_TEST_OA2}#g' k8s/example/server+tls.env"
 eval "sed -i -e 's#{{EC_TEST_AID}}#${EC_TEST_AID}#g' k8s/example/server+tls.env"
 eval "sed -i -e 's#{{EC_TEST_TKN}}#${EC_TEST_TKN}#g' k8s/example/server+tls.env"
@@ -29,21 +29,22 @@ eval "sed -i -e 's#{{EC_TEST_GRP}}#${EC_TEST_GRP}#g' k8s/example/server+tls.env"
 eval "sed -i -e 's#{{EC_TEST_CID}}#${EC_TEST_CID}#g' k8s/example/server+tls.env"
 eval "sed -i -e 's#{{EC_TEST_CSC}}#${EC_TEST_CSC}#g' k8s/example/server+tls.env"
 
-printf "\n\n\n*** update client+vln.env \n\n"
+printf "\n\n\n*** update client+vln.env \n"
 eval "sed -i -e 's#{{EC_TEST_OA2}}#${EC_TEST_OA2}#g' k8s/example/client+vln.env"
 eval "sed -i -e 's#{{EC_TEST_ZON}}#${EC_TEST_ZON}#g' k8s/example/client+vln.env"
 eval "sed -i -e 's#{{EC_TEST_GRP}}#${EC_TEST_GRP}#g' k8s/example/client+vln.env"
 eval "sed -i -e 's#{{EC_TEST_CID}}#${EC_TEST_CID}#g' k8s/example/client+vln.env"
 eval "sed -i -e 's#{{EC_TEST_CSC}}#${EC_TEST_CSC}#g' k8s/example/client+vln.env"
 
-printf "\n\n\n*** update gateway.env \n\n"
+printf "\n\n\n*** update gateway.env \n"
 eval "sed -i -e 's#{{EC_TEST_ZON}}#${EC_TEST_ZON}#g' k8s/example/gateway.env"
 eval "sed -i -e 's#{{EC_TEST_GRP}}#${EC_TEST_GRP}#g' k8s/example/gateway.env"
 eval "sed -i -e 's#{{EC_TEST_SST}}#${EC_TEST_SST}#g' k8s/example/gateway.env"
 eval "sed -i -e 's#{{EC_TEST_TKN}}#${EC_TEST_TKN}#g' k8s/example/gateway.env"
 
-printf "\n\n\n*** packaging w/ dependencies \n\n"
+printf "\n\n\n*** packaging w/ dependencies (ec-release/oci) \n"
 mkdir -p k8s/pkg/agent/$AGENT_CHART_REV k8s/pkg/agent+helper/$AGENT_HELPER_CHART_REV k8s/pkg/agent+plg/$AGENT_PLG_CHART_REV k8s/pkg/agent+lber/$AGENT_LBER_CHART_REV
+
 ls -la k8s/pkg
 helm package k8s/agent+helper -d k8s/pkg/agent+helper/$AGENT_HELPER_CHART_REV
 helm dependency update k8s/agent
@@ -57,28 +58,45 @@ printf "update dependencies in example chart for test"
 helm dependency update k8s/example
 ls -la k8s/example/charts/
 
-printf "\n\n\n*** test server with tls template\n\n"
+printf "\n\n\n*** test server with tls template\n"
 yq e '.global.agtK8Config.withPlugins.tls.enabled = true' -i k8s/example/values.yaml
 yq e '.global.agtK8Config.withPlugins.vln.enabled = false' -i k8s/example/values.yaml
 helm template my-app k8s/example --debug --set-file global.agtConfig=k8s/example/server+tls.env
 
-printf "\n\n\n*** test client with local vln template\n\n"
+printf "\n\n\n*** test client with local vln template\n"
 yq e '.global.agtK8Config.withPlugins.tls.enabled = false' -i k8s/example/values.yaml
 yq e '.global.agtK8Config.withPlugins.vln.enabled = true' -i k8s/example/values.yaml
 yq e '.global.agtK8Config.withPlugins.vln.remote = false' -i k8s/example/values.yaml
 helm template my-app k8s/example --debug --set-file global.agtConfig=k8s/example/client+vln.env
 
-printf "\n\n\n*** test client with remote vln template\n\n"
+printf "\n\n\n*** test client with remote vln template\n"
 yq e '.global.agtK8Config.withPlugins.tls.enabled = false' -i k8s/example/values.yaml
 yq e '.global.agtK8Config.withPlugins.vln.enabled = true' -i k8s/example/values.yaml
 yq e '.global.agtK8Config.withPlugins.vln.remote = true' -i k8s/example/values.yaml
 helm template my-app k8s/example --debug --set-file global.agtConfig=k8s/example/client+vln.env
 
-printf "\n\n\n*** test gateway agt template\n\n"
-helm template my-app k8s/example --debug --set-file global.agtConfig=k8s/example/gateway.env
+printf "\n\n\n*** test gateway agt template\n"
+helm template k8s/example --debug --set-file global.agtConfig=k8s/example/gateway.env
 
-printf "\n\n\n*** pkg indexing\n\n"
+printf "\n\n\n*** pkg indexing (ec-release/oci)\n"
+#https://raw.githubusercontent.com/EC-Release/helmcharts/disty/agent/0.1.7
 helm repo index k8s/pkg/agent/$AGENT_CHART_REV --url https://ec-release.github.io/oci/agent/$AGENT_CHART_REV
 helm repo index k8s/pkg/agent+helper/$AGENT_HELPER_CHART_REV --url https://ec-release.github.io/oci/agent+helper/$AGENT_HELPER_CHART_REV
 helm repo index k8s/pkg/agent+plg/$AGENT_PLG_CHART_REV --url https://ec-release.github.io/oci/agent+plg/$AGENT_PLG_CHART_REV
 helm repo index k8s/pkg/agent+lber/$AGENT_LBER_CHART_REV --url https://ec-release.github.io/oci/agent+lber/$AGENT_LBER_CHART_REV
+
+
+printf "\n\n\n*** packaging w/ dependencies (ec-release/helmcharts)\n"
+mkdir -p k8s/pkg-new/agent/$AGENT_CHART_REV k8s/pkg-new/agent+helper/$AGENT_HELPER_CHART_REV k8s/pkg-new/agent+plg/$AGENT_PLG_CHART_REV
+cp -R k8s/pkg/* k8s/pkg-new
+ls -la k8s/pkg-new
+helm package k8s/agent+helper -d k8s/pkg-new/agent+helper/$AGENT_HELPER_CHART_REV
+helm dependency update k8s/agent
+helm dependency update k8s/agent+plg
+helm package k8s/agent -d k8s/pkg-new/agent/$AGENT_CHART_REV
+helm package k8s/agent+plg -d k8s/pkg-new/agent+plg/$AGENT_PLG_CHART_REV
+
+printf "\n\n\n*** pkg indexing (ec-release/helmcharts)\n"
+helm repo index k8s/pkg-new/agent/$AGENT_CHART_REV --url https://raw.githubusercontent.com/EC-Release/helmcharts/disty/agent/$AGENT_CHART_REV
+helm repo index k8s/pkg-new/agent+helper/$AGENT_HELPER_CHART_REV --url https://raw.githubusercontent.com/EC-Release/helmcharts/disty/agent+helper/$AGENT_HELPER_CHART_REV
+helm repo index k8s/pkg-new/agent+plg/$AGENT_PLG_CHART_REV --url https://raw.githubusercontent.com/EC-Release/helmcharts/disty/agent+plg/$AGENT_PLG_CHART_REV
