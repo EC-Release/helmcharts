@@ -35,7 +35,7 @@ printf "\n\n\n*** [3] install client with remote vln template in minikube\n"
 yq e '.global.agtK8Config.withPlugins.tls.enabled = false' -i k8s/example/values.yaml
 yq e '.global.agtK8Config.withPlugins.vln.enabled = true' -i k8s/example/values.yaml
 yq e '.global.agtK8Config.withPlugins.vln.remote = true' -i k8s/example/values.yaml
-helm install k8s/example --set-file global.agtConfig=k8s/example/client+vln.env --generate-name
+helm install my-app k8s/example --set-file global.agtConfig=k8s/example/client+vln.env
 
 printf "\n\n\n*** [3.1] verify installation\n"
 kubectl get deployments && kubectl get pods && kubectl get services
