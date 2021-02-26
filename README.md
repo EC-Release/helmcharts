@@ -25,21 +25,24 @@ The diagram illustrates the usage of the connectivity model in k8s
 #### Add Dependency Repo
 ```bash
 # bootstrap a chart
-$ helm create example
+$ helm create example -n namespace
 
 # REQUIRED: add the helper library as the dependency to support usage
-$ helm repo add agent+helper https://ec-release.github.io/oci/agent+helper/<version. E.g. "0.1.0">
+$ helm repo add agent+helper https://ec-release.github.io/oci/agent+helper/<version. E.g. "0.1.0"> -n namespace
 
 # OPTIONAL: add any of the following agent package(s) to the mychart deployment
 # agent: the deployment includes the agent artifact, and the configuration
-$ helm repo add agent https://ec-release.github.io/oci/agent/<version. E.g. "0.1.1">
+$ helm repo add agent https://ec-release.github.io/oci/agent/<version. E.g. "0.1.1"> -n namespace
 # agent+plg: agent with plugin usage, this allow to configure plugins alongside the agent.
-$ helm repo add agent+plg https://ec-release.github.io/oci/agent+plg/<version. E.g. "0.1.1">
+$ helm repo add agent+plg https://ec-release.github.io/oci/agent+plg/<version. E.g. "0.1.1"> -n namespace
+# agentlber: agent with loadbalncer usage, this allow to deploy agent with load balancer.
+$ helm repo add agentlber https://ec-release.github.io/oci/agentlber/<version. E.g. "0.1.0"> -n namespace
 
-$ helm repo list
+$ helm repo list -n namespace
 NAME         URL
 agent+helper https://ec-release.github.io/oci/agent+helper/0.1.0
 agent        https://ec-release.github.io/oci/agent/0.1.3
+agentlber    https://ec-release.github.io/oci/agentlber/0.1.0
 
 ```
 [Back to Contents](#contents)
@@ -59,43 +62,78 @@ dependencies:
 - name: agent+plg
   version: 0.1.1
   repository: "@agent+plg"
+# OPTIONAL
+- name: agentlber
+  version: 0.1.0
+  repository: "@agentlber"
 ...
 ```
 ```bash
 # update chart repo index after modify the list
-$ helm dependency update example
+$ helm dependency update example -n namespace
 ```
 [Back to Contents](#contents)
 #### Update the agent usage
 In the parent chart(s), there are some options avaialble to customise the agent usage. The configuration below is also available in the example/values.yaml for the usage reference.
 
 For plugins-relate usage in detail, please refer to the [TLS docs](https://github.com/EC-Release/sdk/tree/v1/plugins/tls), and for [VLAN docs](https://github.com/EC-Release/sdk/tree/v1/plugins/vln)
+
+Please refer [page](https://gitlab.com/digital-fo/connectivity/enterprise-connect/platform-agnostic/agent/-/tree/v1/example-yml) to get the subset of agent flags based on mod
 ```yaml
 ...
 global:
+  agtConfig:
+    conf.mod=gateway|server|client|gw:server|gw:client
+    conf.gpt=global port in number
+    conf.dbg=boolean true|false
+    conf.hst="ws|wss://gateway-url/agent"
+    conf.tkn=ec-service-admin-token
+    conf.cps=number
+    conf.zon=predix-zone-id
+    conf.grp=ec-group-name
+    conf.sst=https://predix-zone-id.run.aws-usw02-pr|dev.ice.predix.io
+    conf.cid=uaa-client-id
+    conf.csc=uaa-client-secret
+    conf.oa2=https://uaa-authentication-url/oauth/token
+    conf.dur=number in seconds
+    conf.aid=agent-id
+    conf.rpt=target-port-number
+    conf.rht=target-host
+    conf.plg=true|false
+    conf.tid=target-agent-id
+    conf.lpt=local-listening-port-number
+    conf.hca=agent-health-port-number
+    conf.pxy="org-proxy-url"
+    AGENT_REV=agent-release-version
+    EC_PPS=admin-hash
   agtK8Config:
     # some cluster instances require resource-spec for the deployment, e.g. GE Digital
-    # PCS CF1/CF3 Cluster, whereas some can simply ignore the usage. Users may comment
-    # out the "resources" section if it is not needed in your cluster.
+    # PCS CF1/CF3 Cluster, whereas some can simply ignore the usage.
     resources:
       limits:
         cpu: 200m
-        memory: 1Gi
-      requests:
-        cpu: 200m
         memory: 512Mi
-    svcPortNum: 18080
-    svcHealthPortNum: 18081
-    #options v1.1beta|v1|v1beta
+      requests:
+        cpu: 100m
+        memory: 128Mi
+    svcPortNum: 8080
+    svcHealthPortNum: 8081
+    # Following properties related to load balancer
+    # statefulset fields are optional for deploying agent alone.. mandatory for agent with load balancer
+    stsName: ram-app-agent
+    lberReplicaCount: 1
+    # options v1.1beta|v1|v1beta
     releaseTag: v1
+    # specify an agent revision in the container runtime
+    agentRev: v1.hokkaido.213
     binaryURL: https://github.com/EC-Release/sdk/releases/agent
     # replicaCount currently supports client instances only.
     # supporting scaling gateway/server instances in k8s is in discussion.
-    replicaCount: 1
-    # withIngress decides the availability of the ingress obj in deployment.
+    replicaCount: 2
+    # withIngress decides the availability of the agt ingress obj in deployment.
     # by default, when deploy as the gateway mode (conf.mod=gateway), the value (enabled) will be overridden to true
     withIngress:
-      enabled: false
+      enabled: true
       # host utilised to make the agt accessible via non-tls traffic. 
       # it is also possible for the co-existence and the overlap of both tls/non-tls routings (hosts/tls)
       hosts:
@@ -131,41 +169,26 @@ global:
         # interface at the parental pod.
         remote: false
         # customise the securityContext when the vln plugin launched in a multi-contr pod (remote: false)
-        securityContext: 
+        securityContext:
           # map the container runner to an internal user. E.g. uid: 1000
           runAsUser: 0
           # deny a potential privilege escalation request
           allowPrivilegeEscalation: false
           privileged: false
-        # The "ports" key-value pair will be overridden by the default "agtConfig" setting, if specified. E.g. "conf.rpt=<port1,port2..portn>"
+        # The "ports" keypair will be overridden by the default "agtConfig" setting, if specified. E.g. "conf.rpt=<port1,port2..portn>"
         ports: [8000,8001,8002,8003]
-        # The "ips" key-value pair is ignored when set "remote" to true
+        # The "ips" keypair is ignored when set "remote" to true
         ips: ["10.10.10.0/30","8.8.8.100","8.8.8.101","8.8.8.102"]
 ```
 
 [Back to Contents](#contents)
-#### Agent/Chart Configuration Conversion
-```bash
-# convert the ec config file into a chart-readable format and be ready for the chart deployment
-$ cd <path/to/example> && source <(wget -O - https://ec-release.github.io/sdk/scripts/agt/v1.1beta.linux64.txt) \
--cfg <conf.yaml> \
--out <conf.env>
-```
-```batch
-:: for windows 10+
-c:\> cd <path\to\mychart> ^
-&& curl -LOk https://github.com/EC-Release/sdk/raw/v1.1beta/dist/agent/agent_windows_sys.exe.tar.gz ^
-&& tar xvf agent_windows_sys.exe.tar.gz ^
-&& agent_windows_sys.exe -cfg -cfg <conf.yaml> -out <conf.env>
-```
-[Back to Contents](#contents)
 #### Install Plugin & Go
 ```bash
 # test charts template
-$ helm template --set-file global.agtConfig=<conf.env> example
+$ helm template example -n namespace
 
-# deploy charts. agtConfig must present for the custom file -out
-$ helm install --set-file global.agtConfig=<conf.env> --<debug|dry-run> example example/
+# deploy charts
+$ helm install --<debug|dry-run> example example/ -n namespace
 # Source: example/charts/agent/templates/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -254,6 +277,82 @@ spec:
 MANIFEST:
 ...
 ```
+
+#### Parametes
+
+EC configuration parameters - `global.agtConfig`
+
+| Parameter             | Description                           | Allowed values                            |
+| --------------------- | ------------------------------------- | ---------------------------------------   | 
+| `conf.mod`            | Agent mode                            | gateway/server/client/gw:server/gw:client |
+| `conf.gpt`            | global port                           | number                                    |
+| `conf.dbg`            | enable debug                          | boolean true/false                        |
+| `conf.hst`            | gateway url in quotes                 | "wss://gateway-url/agent"                 |
+| `conf.tkn`            | EC service admin token                |                                           |
+| `conf.cps`            |                                       | number                                    |
+| `conf.zon`            | Predix zone id                        |                                           |
+| `conf.grp`            | EC group name                         |                                           |
+| `conf.sst`            | EC Service URI                        | https://predix-zone-id.run.aws-usw02-pr[dev].ice.predix.io |
+| `conf.cid`            | uaa-client-id                         |                                           |
+| `conf.csc`            | uaa-client-secret                     |                                           |
+| `conf.oa2`            | Authentication URL                    | https://uaa-authentication-url/oauth/token|
+| `conf.dur`            | oAuth token validation time           | number in seconds                         |
+| `conf.aid`            | Agent Id                              |                                           |
+| `conf.rpt`            | Target port number                    |                                           |
+| `conf.rht`            | Target host/IP                        |                                           |
+| `conf.plg`            | Enable plugins                        | true/false                                |
+| `conf.tid`            | Target agent Id                       |                                           |
+| `conf.lpt`            | Local listening port number           |                                           |
+| `conf.hca`            | Agent health port number              |                                           |
+| `conf.pxy`            | Org proxy URL in quotes               | "org-proxy-url"                           |
+| `AGENT_REV`           | Agent release version                 |                                           |
+| `EC_PPS`              | admin-hash                            |                                           |
+| `AGENT_REPLICA_COUNT` | #HIDDEN# Agent replica count          |                                           |
+| `VCAP_APPLICATION`    | #HIDDEN# CF VCAP properties           |                                           |
+| `AGENT_ENV`           | #HIDDEN# Property where agent running | `k8s` for EKS                             |
+
+Agent parameters - `global.agtK8Config`
+
+| Parameter                                                  | Description                               | Allowed values |
+| ---------------------------------------------------------- | ----------------------------------------- | -------------- |
+| `svcPortNum`                                               | Service/headless service port num         | number         |
+| `svcHealthPortNum`                                         | Service/headless service health port      | number         |
+| `agentRev`                                                 | Agent version                             |                |
+
+Agent Parameters - TLS Plugin - `global.agtK8Config.tls`
+
+| Parameter                                                  | Description                               | Allowed values |
+| ---------------------------------------------------------- | ----------------------------------------- | -------------- |
+| `withPlugins.tls.enabled`                                  | Enable TLS plugin                         | boolean        |
+| `withPlugins.tls.schema`                                   | Protocol                                  |                |
+| `withPlugins.tls.hostname`                                 | Host or resource to connect               |                |
+| `withPlugins.tls.tlsport`                                  | Host or resource port                     |                |
+| `withPlugins.tls.proxy`                                    | Proxy (if any) to connect to remote resource |             |
+| `withPlugins.tls.port`                                     | Port EC agent listening to                | number         |
+
+Agent Parameters - VLAN Plugin - `global.agtK8Config.vln`
+
+| Parameter                                                  | Description                               | Allowed values |
+| ---------------------------------------------------------- | ----------------------------------------- | -------------- |
+| `withPlugins.vln.enabled`                                  | Enable VLAN plugin                        | number         |
+| `withPlugins.vln.remote`                                   |                                           | boolean        |
+| `withPlugins.vln.securityContext.runAsUser`                | User name for connecting to remote resource |              |
+| `withPlugins.vln.securityContext.allowPrivilegeEscalation` |                                           |                |
+| `withPlugins.vln.securityContext.privileged`               |                                           |                |
+| `withPlugins.vln.ports`                                    | Target system ports in array              |                |
+| `withPlugins.vln.ips`                                      | Target system hosts/ips in array          |                |
+
+Ingress parameters - `global.agtK8Config.withIngress`
+
+| Parameter        | Description                                           | Allowed values |
+| ---------------- | ----------------------------------------------------- | -------------- |
+| `enabled`        | Enable Ingress component                              | boolean        |
+| `hosts.host`     | Ingress URL or DNS name assigned to Ingress component |                |
+| `hosts.paths`    | End point paths                                       |                |
+| `tls.secretName` |                                                       |                |
+| `tls.hosts`      |                                                       |                |
+
+
 [Back to Contents](#contents)
 ### chart developer
 [Back to Contents](#contents)
