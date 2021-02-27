@@ -1,3 +1,12 @@
+{{- $agentRev := .Values.global.agtK8Config.agentRev -}}
+{{- $binaryURL := .Values.global.agtK8Config.binaryURL -}}
+{{- $ownerHash := .Values.global.agtK8Config.ownerHash -}}
+{{- $contrName := "agt-contr" -}}
+{{- $releaseTag := .Values.global.agtK8Config.releaseTag -}}
+{{- $securityContext := .Values.global.agtK8Config.withPlugins.vln.securityContext -}}
+{{- $portName := .Values.agtK8Config.portName -}}
+{{- $healthPortName := .Values.agtK8Config.healthPortName -}}
+      
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -21,7 +30,7 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        {{- include "agent.container" (merge (dict "agentRev" $agentRev "binaryURL" $binaryURL "ownerHash" $ownerHash "contrName" $contrName "contrReleaseTag" $contrReleaseTag "contrSecurityContext" $contrSecurityContext "portName" $portName "healthPortName" $healthPortName "healthPortName" $healthPortName) .) | nindent 8 }}
+        {{- include "agent.container" (merge (dict "agentRev" $agentRev "binaryURL" $binaryURL "ownerHash" $ownerHash "contrName" $contrName "releaseTag" $releaseTag "securityContext" $securityContext "portName" $portName "healthPortName" $healthPortName) .) | nindent 8 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
