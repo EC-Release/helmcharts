@@ -9,6 +9,7 @@
    *
    * author: apolo.yasuda@ge.com
    */}}
+   
 {{- define "agent.container" -}}
 - name: {{ .contrName|quote }}
   image: "ghcr.io/ec-release/oci/agent:{{ .releaseTag }}"
@@ -45,7 +46,6 @@
     {{- end -}}
 {{- end -}}
 
-
 {{- define "agent.plugins" -}}
 {{- $contrName := "" -}}
 {{- $contrReleaseTag := .Values.global.agtK8Config.releaseTag -}}
@@ -60,37 +60,9 @@
 {{- $agentRev := .Values.global.agtK8Config.agentRev -}}
 {{- $binaryURL := .Values.global.agtK8Config.binaryURL -}}
 {{- $ownerHash := .Values.global.agtK8Config.ownerHash -}}
+{{- $mode := include "agent.mode" . -}}
+{{- $hasPlugin := include "agent.hasPlugin" . -}}
 {{- include "agent.container" (merge (dict "agentRev" $agentRev "binaryURL" $binaryURL "ownerHash" $ownerHash "contrName" $contrName "contrReleaseTag" $contrReleaseTag "contrSecurityContext" $contrSecurityContext "portName" $portName "healthPortName" $healthPortName "healthPortName" $healthPortName) .) }}
-    
-- name: {{ $contrName|quote }}
-  image: ghcr.io/ec-release/oci/plugins:{{ $contrReleaseTag }}
-  command: {{ include "agent.launchCmd" . }}
-  securityContext: 
-    {{- toYaml $contrSecurityContext | nindent 4 }}
-  imagePullPolicy: Always
-  ports:
-    {{- include "agent.portSpec" (merge (dict "portName" $portName) .) | nindent 4 }}
-    {{- include "agent.healthPortSpec" (merge (dict "healthPortName" $healthPortName) .) | nindent 4 }}
-  livenessProbe:
-    httpGet:
-      path: /health
-      port: {{ $healthPortName }}
-  readinessProbe:
-    httpGet:
-      path: /health
-      port: {{ $healthPortName }}
-  resources:
-    {{- include "agent.podResource" . | nindent 4 }}
-  env:
-    {{- range (split "\n" .Values.global.agtConfig) }}
-    {{- $a := splitn "=" 2 . }}
-    {{- if and (not (eq $a._1 "")) ($a._1) }}
-    - name: {{ $a._0|quote }}
-      value: {{ $a._1|quote }}
-    {{- end }}
-    {{- end -}}
-    {{- $mode := include "agent.mode" . -}}
-    {{- $hasPlugin := include "agent.hasPlugin" . -}}
     {{- if (eq $hasPlugin "true") -}}
     {{- if and (.Values.global.agtK8Config.withPlugins.tls.enabled) (or (eq $mode "server") (eq $mode "gw:server")) }}
     {{- include "agent.tlsPluginType" . | nindent 4 }}
