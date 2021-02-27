@@ -21,39 +21,7 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}
-          image: "ghcr.io/ec-release/oci/agent:{{ .Values.global.agtK8Config.releaseTag }}"
-          command: {{ include "agent.launchCmd" . }} 
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          ports:
-            {{- include "agent.portSpec" . | nindent 12 }}
-            {{- include "agent.healthPortSpec" . | nindent 12 }}
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: {{ .Values.agtK8Config.healthPortName }}
-          readinessProbe:
-            httpGet:
-              path: /health
-              port: {{ .Values.agtK8Config.healthPortName }}
-          resources:
-            {{- include "agent.podResource" . | nindent 12 }}
-          env:
-            - name: AGENT_REV
-              value: {{ .Values.global.agtK8Config.agentRev|quote }}
-            - name: AGENT_BIN_URL
-              value: {{ .Values.global.agtK8Config.binaryURL|quote }}
-            - name: EC_PPS
-              value: {{ .Values.global.agtK8Config.ownerHash|quote }}
-            {{- range (split "\n" .Values.global.agtConfig) }}
-            {{- $a := splitn "=" 2 . }}
-            {{- if and (not (eq $a._1 "")) ($a._1) }}
-            - name: {{ $a._0|quote }}
-              value: {{ $a._1|quote }}
-            {{- end }}
-            {{- end -}}
+        {{- include "agent.container" (merge (dict "agentRev" $agentRev "binaryURL" $binaryURL "ownerHash" $ownerHash "contrName" $contrName "contrReleaseTag" $contrReleaseTag "contrSecurityContext" $contrSecurityContext "portName" $portName "healthPortName" $healthPortName "healthPortName" $healthPortName) .) | nindent 8 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
