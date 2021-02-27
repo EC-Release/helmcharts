@@ -62,7 +62,7 @@
 {{- $ownerHash := .Values.global.agtK8Config.ownerHash -}}
 {{- $mode := include "agent.mode" . -}}
 {{- $hasPlugin := include "agent.hasPlugin" . -}}
-{{- include "agent.container" (merge (dict "agentRev" $agentRev "binaryURL" $binaryURL "ownerHash" $ownerHash "contrName" $contrName "contrReleaseTag" $contrReleaseTag "contrSecurityContext" $contrSecurityContext "portName" $portName "healthPortName" $healthPortName "healthPortName" $healthPortName) .) }}
+{{- include "agent.container" (merge (dict "agentRev" $agentRev "binaryURL" $binaryURL "ownerHash" $ownerHash "contrName" $contrName "releaseTag" $contrReleaseTag "contrSecurityContext" $contrSecurityContext "portName" $portName "healthPortName" $healthPortName "healthPortName" $healthPortName) .) }}
     {{- if (eq $hasPlugin "true") -}}
     {{- if and (.Values.global.agtK8Config.withPlugins.tls.enabled) (or (eq $mode "server") (eq $mode "gw:server")) }}
     {{- include "agent.tlsPluginType" . | nindent 4 }}
