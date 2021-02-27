@@ -86,7 +86,7 @@ Generate container port spec for client agent. Need review for gateway usage
 {{- $a := (. | replace ":" "") -}}
 {{- $b := ($a | replace "'" "") -}}
 {{- $c := ($b | replace "\"" "") -}}
-- name: {{ $.Values.agtK8Config.portName }}
+- name: {{ .portName }}
   containerPort: {{ (split "=" $c )._1 }}
   protocol: TCP
 {{- end -}}
@@ -97,10 +97,10 @@ Generate container port spec for client agent. Need review for gateway usage
 Generate service port spec for agent pods.
 */}}
 {{- define "agent.svcPortSpec" -}}
-- port: {{ ternary .Values.agtK8Config.svcPortNum .Values.global.agtK8Config.svcPortNum (kindIs "invalid" .Values.global.agtK8Config.svcPortNum) }}
-  targetPort: {{ .Values.agtK8Config.portName }}
+- port: {{ .svcPortNum }}
+  targetPort: {{ .portName }}
   protocol: TCP
-  name: {{ .Values.agtK8Config.svcPortName }}
+  name: {{ .svcPortName }}
 {{- end -}}
 
 {{/*
@@ -113,11 +113,11 @@ Generate container HEALTH port spec for client agent. Need review for gateway us
 {{- $portName = "gpt=" -}}
 {{- end -}}
 {{- range (split "\n" .Values.global.agtConfig) }}
-{{- if contains $portName . -}}
+{{- if contains .portName . -}}
 {{- $a := (. | replace ":" "") -}}
 {{- $b := ($a | replace "'" "") -}}
 {{- $c := ($b | replace "\"" "") -}}
-- name: {{ $.Values.agtK8Config.healthPortName }}
+- name: {{ .healthPortName }}
   containerPort: {{ (split "=" $c )._1 }}
   protocol: TCP
 {{- end -}}
@@ -128,10 +128,10 @@ Generate container HEALTH port spec for client agent. Need review for gateway us
 Generate service health port spec for agent pods. 
 */}}
 {{- define "agent.svcHealthPortSpec" -}}
-- port: {{ ternary .Values.agtK8Config.svcHealthPortNum .Values.global.agtK8Config.svcHealthPortNum  (kindIs "invalid" .Values.global.agtK8Config.svcHealthPortNum) }}
-  targetPort: {{ .Values.agtK8Config.healthPortName }}
+- port: {{ .svcHealthPortNum }}
+  targetPort: {{ .healthPortName }}
   protocol: TCP
-  name: {{ .Values.agtK8Config.svcHealthPortName }}
+  name: {{ .svcHealthPortName }}
 {{- end -}}
 
 {{/*
