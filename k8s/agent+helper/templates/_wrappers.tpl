@@ -60,7 +60,7 @@
 {{- $agentRev := .Values.global.agtK8Config.agentRev -}}
 {{- $binaryURL := .Values.global.agtK8Config.binaryURL -}}
 {{- $ownerHash := .Values.global.agtK8Config.ownerHash -}}
-{{- include "agent.plugins" (merge (dict "agentRev" $agentRev "binaryURL" $binaryURL "ownerHash" $ownerHash "contrName" $contrName "contrReleaseTag" $contrReleaseTag "contrSecurityContext" $contrSecurityContext "portName" $portName "healthPortName" $healthPortName "healthPortName" $healthPortName) .) }}
+{{- include "agent.container" (merge (dict "agentRev" $agentRev "binaryURL" $binaryURL "ownerHash" $ownerHash "contrName" $contrName "contrReleaseTag" $contrReleaseTag "contrSecurityContext" $contrSecurityContext "portName" $portName "healthPortName" $healthPortName "healthPortName" $healthPortName) .) }}
     
 - name: {{ $contrName|quote }}
   image: ghcr.io/ec-release/oci/plugins:{{ $contrReleaseTag }}
