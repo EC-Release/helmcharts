@@ -47,7 +47,7 @@ printf "\n\n\n*** [3.4] clear installation\n"
 kubectl delete --all deployments && kubectl delete --all pods && kubectl delete --all services
 
 printf "\n\n\n*** [4] install lber in k8s\n"
-#helm install k8s/example --set-file global.agtConfig=k8s/example/client+vln.env --generate-name
+#helm install k8s/agent+lber --generate-name
 : 'printf "\n\n\n*** [4.1] verify installation\n"
 kubectl get deployments && kubectl get pods && kubectl get services && kubectl get ingresses
 printf "\n\n\n*** [4.2] verify deployment spec\n"
