@@ -13,7 +13,7 @@
 {{- define "agent.container" -}}
 - name: {{ .contrName|quote }}
   image: "ghcr.io/ec-release/oci/agent:{{ .releaseTag }}"
-  command: {{ include "agent.launchCmd" . }} 
+  command: {{ .launchCmd" }} 
   securityContext:
     {{- toYaml .securityContext | nindent 4 }}
   imagePullPolicy: {{ .pullPolicy }}
@@ -61,8 +61,9 @@
 {{- $binaryURL := .Values.global.agtK8Config.binaryURL -}}
 {{- $ownerHash := .Values.global.agtK8Config.ownerHash -}}
 {{- $mode := include "agent.mode" . -}}
+{{- $launchCmd := include "agent.launchCmd" . -}}
 {{- $hasPlugin := include "agent.hasPlugin" . -}}
-{{- include "agent.container" (merge (dict "agentRev" $agentRev "binaryURL" $binaryURL "ownerHash" $ownerHash "contrName" $contrName "releaseTag" $contrReleaseTag "contrSecurityContext" $contrSecurityContext "portName" $portName "healthPortName" $healthPortName "healthPortName" $healthPortName) .) }}
+{{- include "agent.container" (merge (dict "agentRev" $agentRev "binaryURL" $binaryURL "ownerHash" $ownerHash "contrName" $contrName "releaseTag" $contrReleaseTag "contrSecurityContext" $contrSecurityContext "portName" $portName "launchCmd" $launchCmd "healthPortName" $healthPortName "healthPortName" $healthPortName) .) }}
     {{- if (eq $hasPlugin "true") -}}
     {{- if and (.Values.global.agtK8Config.withPlugins.tls.enabled) (or (eq $mode "server") (eq $mode "gw:server")) }}
     {{- include "agent.tlsPluginType" . | nindent 4 }}
