@@ -9,7 +9,43 @@
    *
    * author: apolo.yasuda@ge.com
    */}}
-   
+{{- define "agent.container" -}}
+- name: {{ .contrName|quote }}
+  image: "ghcr.io/ec-release/oci/agent:{{ .releaseTag }}"
+  command: {{ include "agent.launchCmd" . }} 
+  securityContext:
+    {{- toYaml .securityContext | nindent 4 }}
+  imagePullPolicy: {{ .pullPolicy }}
+  ports:
+    {{- include "agent.portSpec" (merge (dict "portName" .portName) .) | nindent 4 }}
+    {{- include "agent.healthPortSpec" (merge (dict "healthPortName" .healthPortName) .) | nindent 4 }}
+  livenessProbe:
+    httpGet:
+      path: /health
+      port: {{ .healthPortName }}
+  readinessProbe:
+    httpGet:
+      path: /health
+      port: {{ .healthPortName }}
+  resources:
+    {{- include "agent.podResource" . | nindent 12 }}
+  env:
+    - name: AGENT_REV
+      value: {{ .agentRev|quote }}
+    - name: AGENT_BIN_URL
+      value: {{ .binaryURL|quote }}
+    - name: EC_PPS
+      value: {{ .ownerHash|quote }}
+    {{- range (split "\n" .agtConfig) }}
+    {{- $a := splitn "=" 2 . }}
+    {{- if and (not (eq $a._1 "")) ($a._1) }}
+    - name: {{ $a._0|quote }}
+      value: {{ $a._1|quote }}
+    {{- end }}
+    {{- end -}}
+{{- end -}}
+
+
 {{- define "agent.plugins" -}}
 {{- $contrName := "" -}}
 {{- $contrReleaseTag := .Values.global.agtK8Config.releaseTag -}}
@@ -21,6 +57,11 @@
 {{- else -}}
 {{- $contrName = include "agent.name" . -}}
 {{- end -}}
+{{- $agentRev := .Values.global.agtK8Config.agentRev -}}
+{{- $binaryURL := .Values.global.agtK8Config.binaryURL -}}
+{{- $ownerHash := .Values.global.agtK8Config.ownerHash -}}
+{{- include "agent.plugins" (merge (dict "agentRev" $agentRev "binaryURL" $binaryURL "ownerHash" $ownerHash "contrName" $contrName "contrReleaseTag" $contrReleaseTag "contrSecurityContext" $contrSecurityContext "portName" $portName "healthPortName" $healthPortName "healthPortName" $healthPortName) .) }}
+    
 - name: {{ $contrName|quote }}
   image: ghcr.io/ec-release/oci/plugins:{{ $contrReleaseTag }}
   command: {{ include "agent.launchCmd" . }}
@@ -63,12 +104,6 @@
       value: {{ .Values.global.agtK8Config.withPlugins.tls.proxy|quote }}
     - name: plg.tls.lpt
       value: {{ .Values.global.agtK8Config.withPlugins.tls.port|quote }}
-    - name: AGENT_REV
-      value: {{ .Values.global.agtK8Config.agentRev|quote }}
-    - name: AGENT_BIN_URL
-      value: {{ .Values.global.agtK8Config.binaryURL|quote }}
-    - name: EC_PPS
-      value: {{ .Values.global.agtK8Config.ownerHash|quote }}
     {{- include "vln.ports" . | nindent 4 -}}
     {{- else if and (.Values.global.agtK8Config.withPlugins.vln.enabled) (or (eq $mode "client") (eq $mode "gw:client")) }}
     {{- include "agent.vlnPluginType" . | nindent 4 }}
