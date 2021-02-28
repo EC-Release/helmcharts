@@ -12,6 +12,7 @@
    
 {{/*
  function: "agent.container"
+ example: https://github.com/EC-Release/helmcharts/blob/v1/k8s/agent/templates/deployment.yaml#L33
  params:
    type: (dict)
    - name: "isPlugin"
@@ -49,7 +50,7 @@
      memo: the owner's hash for a prompt-free deployment
     - name: "agtConfig"
      type: string
-     memo: agent configuration with property format. Refer to example https://github.com/EC-Release/helmcharts/blob/v1/k8s/example/server%2Btls.env
+     memo: agent configuration in environment format. Refer to example https://github.com/EC-Release/helmcharts/blob/v1/k8s/example/server%2Btls.env
 */}}
 {{- define "agent.container" -}}
 - name: {{ .contrName|quote }}
