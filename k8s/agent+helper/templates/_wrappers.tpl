@@ -10,46 +10,64 @@
    * author: apolo.yasuda@ge.com
    */}}
    
-{{- define "agent.plugins" -}}
-{{- $contrName := "" -}}
-{{- $contrReleaseTag := .Values.global.agtK8Config.releaseTag -}}
-{{- $contrSecurityContext := .Values.global.agtK8Config.withPlugins.vln.securityContext -}}
-{{- $portName := "agt-prt" -}}
-{{- $healthPortName := "agt-h-prt" -}}
-{{- if and (.Values.global.agtK8Config.withPlugins.vln.enabled) (not .Values.global.agtK8Config.withPlugins.vln.remote) -}}
-{{- $contrName = .contrDictContrName -}}
-{{- else -}}
-{{- $contrName = include "agent.name" . -}}
-{{- end -}}
-- name: {{ $contrName|quote }}
-  image: ghcr.io/ec-release/oci/plugins:{{ $contrReleaseTag }}
-  command: {{ include "agent.launchCmd" . }}
-  securityContext: 
-    {{- toYaml $contrSecurityContext | nindent 4 }}
-  imagePullPolicy: Always
+{{- define "agent.container" -}}
+- name: {{ .contrName|quote }}
+  image: "ghcr.io/ec-release/oci/agent:{{ .releaseTag }}"
+  imagePullPolicy: IfNotPresent
+  command: {{ .launchCmd" }} 
+  securityContext:
+    {{- toYaml .securityContext | nindent 4 }}
   ports:
-    {{- include "agent.portSpec" (merge (dict "portName" $portName) .) | nindent 4 }}
-    {{- include "agent.healthPortSpec" (merge (dict "healthPortName" $healthPortName) .) | nindent 4 }}
+    {{- include "agent.portSpec" (merge (dict "portName" .portName) .) | nindent 4 }}
+    {{- include "agent.healthPortSpec" (merge (dict "healthPortName" .healthPortName) .) | nindent 4 }}
   livenessProbe:
     httpGet:
       path: /health
-      port: {{ $healthPortName }}
+      port: {{ .healthPortName }}
   readinessProbe:
     httpGet:
       path: /health
-      port: {{ $healthPortName }}
+      port: {{ .healthPortName }}
   resources:
-    {{- include "agent.podResource" . | nindent 4 }}
+    {{- toYaml .podResource . | nindent 12 }}
   env:
-    {{- range (split "\n" .Values.global.agtConfig) }}
+    - name: AGENT_REV
+      value: {{ .agentRev|quote }}
+    - name: AGENT_BIN_URL
+      value: {{ .binaryURL|quote }}
+    - name: EC_PPS
+      value: {{ .ownerHash|quote }}
+    {{- range (split "\n" .agtConfig) }}
     {{- $a := splitn "=" 2 . }}
     {{- if and (not (eq $a._1 "")) ($a._1) }}
     - name: {{ $a._0|quote }}
       value: {{ $a._1|quote }}
     {{- end }}
     {{- end -}}
-    {{- $mode := include "agent.mode" . -}}
-    {{- $hasPlugin := include "agent.hasPlugin" . -}}
+{{- end -}}
+
+{{- define "agent.plugins" -}}
+{{- $contrReleaseTag := .Values.global.agtK8Config.releaseTag -}}
+{{- $contrSecurityContext := .Values.global.agtK8Config.withPlugins.vln.securityContext -}}
+{{- $portName := "agt-prt" -}}
+{{- $healthPortName := "agt-h-prt" -}}
+
+{{- $contrName := "" -}}
+{{- if and (.Values.global.agtK8Config.withPlugins.vln.enabled) (not .Values.global.agtK8Config.withPlugins.vln.remote) -}}
+{{- $contrName = .contrDictContrName -}}
+{{- else -}}
+{{- $contrName = include "agent.name" . -}}
+{{- end -}}
+
+{{- $agentRev := .Values.global.agtK8Config.agentRev -}}
+{{- $binaryURL := .Values.global.agtK8Config.binaryURL -}}
+{{- $ownerHash := .Values.global.agtK8Config.ownerHash -}}
+{{- $agtConfig := .Values.global.agtConfig -}}
+{{- $mode := include "agent.mode" . -}}
+{{- $launchCmd := "[]" . -}}
+{{- $podResource := include "agent.podResource" . -}}
+{{- $hasPlugin := include "agent.hasPlugin" . -}}
+{{- include "agent.container" (merge (dict "contrName" $contrName "releaseTag" $contrReleaseTag "launchCmd" $launchCmd "securityContext" $contrSecurityContext "portName" $portName "healthPortName" $healthPortName "podResource" $podResource "agentRev" $agentRev "binaryURL" $binaryURL "ownerHash" $ownerHash "agtConfig" $agtConfig) .) }}
     {{- if (eq $hasPlugin "true") -}}
     {{- if and (.Values.global.agtK8Config.withPlugins.tls.enabled) (or (eq $mode "server") (eq $mode "gw:server")) }}
     {{- include "agent.tlsPluginType" . | nindent 4 }}
@@ -63,12 +81,6 @@
       value: {{ .Values.global.agtK8Config.withPlugins.tls.proxy|quote }}
     - name: plg.tls.lpt
       value: {{ .Values.global.agtK8Config.withPlugins.tls.port|quote }}
-    - name: AGENT_REV
-      value: {{ .Values.global.agtK8Config.agentRev|quote }}
-    - name: AGENT_BIN_URL
-      value: {{ .Values.global.agtK8Config.binaryURL|quote }}
-    - name: EC_PPS
-      value: {{ .Values.global.agtK8Config.ownerHash|quote }}
     {{- include "vln.ports" . | nindent 4 -}}
     {{- else if and (.Values.global.agtK8Config.withPlugins.vln.enabled) (or (eq $mode "client") (eq $mode "gw:client")) }}
     {{- include "agent.vlnPluginType" . | nindent 4 }}

@@ -1,2 +1,1 @@
-1. is there a plugin setting?
-{{- include "agent.hasPlugin" . }}
+Installing the "agent+plg" helm package.

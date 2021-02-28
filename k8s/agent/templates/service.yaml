@@ -1,3 +1,9 @@
+{{- $portName := .Values.agtK8Config.portName -}}
+{{- $healthPortName := .Values.agtK8Config.healthPortName -}}
+{{- $svcPortName := .Values.agtK8Config.svcPortName -}}
+{{- $svcPortNum := .Values.agtK8Config.svcPortNum -}}
+{{- $svcHealthPortNum := .Values.agtK8Config.svcHealthPortNum -}}
+{{- $svcHealthPortName := .Values.agtK8Config.svcHealthPortName -}}
 apiVersion: v1
 kind: Service
 metadata:
@@ -7,7 +13,7 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    {{- include "agent.svcPortSpec" . | nindent 4 }}
-    {{- include "agent.svcHealthPortSpec" . | nindent 4 }}
+    {{- include "agent.svcPortSpec" (dict "portName" $portName "svcPortName" $svcPortName "svcPortNum" $svcPortNum) | nindent 4 }}
+    {{- include "agent.svcHealthPortSpec" (dict "healthPortName" $healthPortName "svcHealthPortName" $svcHealthPortName "svcHealthPortNum" $svcHealthPortNum) | nindent 4 }}
   selector:
     {{- include "agent.selectorLabels" . | nindent 4 }}

@@ -1,29 +1,3 @@
-{{/* vim: set filetype=mustache: */}}
-
-{{/*
-   * Copyright (c) 2020 General Electric Company. All rights reserved.
-   *
-   * The copyright to the computer software herein is the property of
-   * General Electric Company. The software may be used and/or copied only
-   * with the written permission of General Electric Company or in accordance
-   * with the terms and conditions stipulated in the agreement/contract
-   * under which the software has been supplied.
-   *
-   * author: apolo.yasuda@ge.com
-   */}}
-
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "agent.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create -}}
-    {{ default (include "agent.fullname" .) .Values.serviceAccount.name }}
-{{- else -}}
-    {{ default "default" .Values.serviceAccount.name }}
-{{- end -}}
-{{- end -}}
-
-
 {{/*
 Specify the agt ingress spec
 */}}
