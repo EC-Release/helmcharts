@@ -33,7 +33,7 @@
       path: /health
       port: {{ .healthPortName }}
   resources:
-    {{- toYaml .podResource | nindent 4 }}
+    {{- .podResource | nindent 4 }}
   env:
     - name: AGENT_REV
       value: {{ .agentRev|quote }}
