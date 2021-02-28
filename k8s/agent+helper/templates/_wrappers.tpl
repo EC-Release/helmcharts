@@ -12,7 +12,11 @@
    
 {{- define "agent.container" -}}
 - name: {{ .contrName|quote }}
+  {{- if not (.isPlugin) -}}
   image: "ghcr.io/ec-release/oci/agent:{{ .releaseTag }}"
+  {{- else -}}
+  image: "ghcr.io/ec-release/oci/plugins:{{ .releaseTag }}"
+  {{- end }}
   imagePullPolicy: IfNotPresent
   command: {{ .launchCmd }} 
   securityContext:
@@ -29,7 +33,7 @@
       path: /health
       port: {{ .healthPortName }}
   resources:
-    {{- toYaml .podResource | nindent 12 }}
+    {{- toYaml .podResource | nindent 4 }}
   env:
     - name: AGENT_REV
       value: {{ .agentRev|quote }}
@@ -67,7 +71,7 @@
 {{- $launchCmd := "[]" -}}
 {{- $podResource := include "agent.podResource" . -}}
 {{- $hasPlugin := include "agent.hasPlugin" . -}}
-{{- include "agent.container" (merge (dict "contrName" $contrName "releaseTag" $contrReleaseTag "launchCmd" $launchCmd "securityContext" $contrSecurityContext "portName" $portName "healthPortName" $healthPortName "podResource" $podResource "agentRev" $agentRev "binaryURL" $binaryURL "ownerHash" $ownerHash "agtConfig" $agtConfig) .) }}
+{{- include "agent.container" (merge (dict "isPlugin" true "contrName" $contrName "releaseTag" $contrReleaseTag "launchCmd" $launchCmd "securityContext" $contrSecurityContext "portName" $portName "healthPortName" $healthPortName "podResource" $podResource "agentRev" $agentRev "binaryURL" $binaryURL "ownerHash" $ownerHash "agtConfig" $agtConfig) .) }}
     {{- if (eq $hasPlugin "true") -}}
     {{- if and (.Values.global.agtK8Config.withPlugins.tls.enabled) (or (eq $mode "server") (eq $mode "gw:server")) }}
     {{- include "agent.tlsPluginType" . | nindent 4 }}
