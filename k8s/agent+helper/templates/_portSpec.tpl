@@ -26,7 +26,7 @@ Generate container port spec for client agent. Need review for gateway usage
 {{- $a := (. | replace ":" "") -}}
 {{- $b := ($a | replace "'" "") -}}
 {{- $c := ($b | replace "\"" "") -}}
-- name: {{ .portName }}
+- name: {{ $.portName }}
   containerPort: {{ (split "=" $c )._1 }}
   protocol: TCP
 {{- end -}}
@@ -53,11 +53,11 @@ Generate container HEALTH port spec for client agent. Need review for gateway us
 {{- $portName = "gpt=" -}}
 {{- end -}}
 {{- range (split "\n" .Values.global.agtConfig) }}
-{{- if contains .portName . -}}
+{{- if contains $portName . -}}
 {{- $a := (. | replace ":" "") -}}
 {{- $b := ($a | replace "'" "") -}}
 {{- $c := ($b | replace "\"" "") -}}
-- name: {{ .healthPortName }}
+- name: {{ $.healthPortName }}
   containerPort: {{ (split "=" $c )._1 }}
   protocol: TCP
 {{- end -}}

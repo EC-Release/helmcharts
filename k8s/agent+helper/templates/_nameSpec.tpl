@@ -1,6 +1,17 @@
-   
+{{/*
+ * Copyright (c) 2020 General Electric Company. All rights reserved.
+ *
+ * The copyright to the computer software herein is the property of
+ * General Electric Company. The software may be used and/or copied only
+ * with the written permission of General Electric Company or in accordance
+ * with the terms and conditions stipulated in the agreement/contract
+ * under which the software has been supplied.
+ *
+ * author: apolo.yasuda@ge.com
+ */}}
+ 
 {{- define "agent.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
+{{- default .Chart.Name .Values.nameOverride | replace "+" "-" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -16,7 +27,7 @@ If release name contains chart name it will be used as a full name.
 {{- if contains $name $.Release.Name -}}
 {{- $.Release.Name | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
-{{- printf "%s-%s" $.Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s" $.Release.Name $name | replace "+" "-" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
 {{- end -}}
@@ -25,7 +36,7 @@ If release name contains chart name it will be used as a full name.
 Create chart name and version as used by the chart label.
 */}}
 {{- define "agent.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "-" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*

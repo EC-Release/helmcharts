@@ -25,3 +25,14 @@ Extract the agent mode from the agent config
 {{- end -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Extract the Remote Port List flag setting (-rpt) from the agent config
+*/}}
+{{- define "agent.hasRPT" -}}
+{{- range (split "\n" .Values.global.agtConfig) -}}
+{{- if contains "rpt=" . -}}
+true
+{{- end -}}
+{{- end -}}
+{{- end -}}
