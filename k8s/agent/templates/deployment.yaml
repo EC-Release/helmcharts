@@ -30,7 +30,7 @@ spec:
         {{- toYaml . | nindent 8 }}
     {{- end }}
       containers:
-        {{- include "agent.container" (merge (dict "contrName" $contrName "releaseTag" $releaseTag "launchCmd" $launchCmd "securityContext" $securityContext "portName" $portName "healthPortName" $healthPortName "podResource" $podResource "agentRev" $agentRev "binaryURL" $binaryURL "ownerHash" $ownerHash "agtConfig" $agtConfig) .) | nindent 8}}
+        {{- include "agent.container" (merge (dict "isPlugin" false "contrName" $contrName "releaseTag" $releaseTag "launchCmd" $launchCmd "securityContext" $securityContext "portName" $portName "healthPortName" $healthPortName "podResource" $podResource "agentRev" $agentRev "binaryURL" $binaryURL "ownerHash" $ownerHash "agtConfig" $agtConfig) .) | nindent 8}}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
