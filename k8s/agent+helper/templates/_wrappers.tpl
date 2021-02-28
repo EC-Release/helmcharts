@@ -12,7 +12,7 @@
    
 {{- define "agent.container" -}}
 - name: {{ .contrName|quote }}
-  {{- if not (.isPlugin) -}}
+  {{- if not (.isPlugin) }}
   image: "ghcr.io/ec-release/oci/agent:{{ .releaseTag }}"
   {{- else -}}
   image: "ghcr.io/ec-release/oci/plugins:{{ .releaseTag }}"
