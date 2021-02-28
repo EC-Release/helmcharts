@@ -13,10 +13,10 @@
 {{- define "agent.container" -}}
 - name: {{ .contrName|quote }}
   image: "ghcr.io/ec-release/oci/agent:{{ .releaseTag }}"
+  imagePullPolicy: IfNotPresent
   command: {{ .launchCmd" }} 
   securityContext:
     {{- toYaml .securityContext | nindent 4 }}
-  imagePullPolicy: {{ .pullPolicy }}
   ports:
     {{- include "agent.portSpec" (merge (dict "portName" .portName) .) | nindent 4 }}
     {{- include "agent.healthPortSpec" (merge (dict "healthPortName" .healthPortName) .) | nindent 4 }}
@@ -29,7 +29,7 @@
       path: /health
       port: {{ .healthPortName }}
   resources:
-    {{- include "agent.podResource" . | nindent 12 }}
+    {{- toYaml .podResource . | nindent 12 }}
   env:
     - name: AGENT_REV
       value: {{ .agentRev|quote }}
@@ -47,23 +47,27 @@
 {{- end -}}
 
 {{- define "agent.plugins" -}}
-{{- $contrName := "" -}}
 {{- $contrReleaseTag := .Values.global.agtK8Config.releaseTag -}}
 {{- $contrSecurityContext := .Values.global.agtK8Config.withPlugins.vln.securityContext -}}
 {{- $portName := "agt-prt" -}}
 {{- $healthPortName := "agt-h-prt" -}}
+
+{{- $contrName := "" -}}
 {{- if and (.Values.global.agtK8Config.withPlugins.vln.enabled) (not .Values.global.agtK8Config.withPlugins.vln.remote) -}}
 {{- $contrName = .contrDictContrName -}}
 {{- else -}}
 {{- $contrName = include "agent.name" . -}}
 {{- end -}}
+
 {{- $agentRev := .Values.global.agtK8Config.agentRev -}}
 {{- $binaryURL := .Values.global.agtK8Config.binaryURL -}}
 {{- $ownerHash := .Values.global.agtK8Config.ownerHash -}}
+{{- $agtConfig := .Values.global.agtConfig -}}
 {{- $mode := include "agent.mode" . -}}
 {{- $launchCmd := include "agent.launchCmd" . -}}
+{{- $podResource := include "agent.podResource" . -}}
 {{- $hasPlugin := include "agent.hasPlugin" . -}}
-{{- include "agent.container" (merge (dict "agentRev" $agentRev "binaryURL" $binaryURL "ownerHash" $ownerHash "contrName" $contrName "releaseTag" $contrReleaseTag "contrSecurityContext" $contrSecurityContext "portName" $portName "launchCmd" $launchCmd "healthPortName" $healthPortName "healthPortName" $healthPortName) .) }}
+{{- include "agent.container" (merge (dict "contrName" $contrName "releaseTag" $contrReleaseTag "launchCmd" $launchCmd "securityContext" $contrSecurityContext "portName" $portName "healthPortName" $healthPortName "podResource" $podResource "agentRev" $agentRev "binaryURL" $binaryURL "ownerHash" $ownerHash "agtConfig" $agtConfig) .) }}
     {{- if (eq $hasPlugin "true") -}}
     {{- if and (.Values.global.agtK8Config.withPlugins.tls.enabled) (or (eq $mode "server") (eq $mode "gw:server")) }}
     {{- include "agent.tlsPluginType" . | nindent 4 }}
