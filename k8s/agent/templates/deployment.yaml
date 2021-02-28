@@ -6,7 +6,9 @@
 {{- $securityContext := .Values.global.agtK8Config.withPlugins.vln.securityContext -}}
 {{- $portName := .Values.agtK8Config.portName -}}
 {{- $healthPortName := .Values.agtK8Config.healthPortName -}}
-      
+{{- $launchCmd := "[]" -}}
+{{- $podResource := include "agent.podResource" . -}}
+{{- $agtConfig := .Values.global.agtConfig -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -30,7 +32,7 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        {{- include "agent.container" (merge (dict "agentRev" $agentRev "binaryURL" $binaryURL "ownerHash" $ownerHash "contrName" $contrName "releaseTag" $releaseTag "securityContext" $securityContext "portName" $portName "healthPortName" $healthPortName) .) | nindent 8 }}
+        {{- include "agent.container" (merge (dict "contrName" $contrName "releaseTag" $releaseTag "launchCmd" $launchCmd "securityContext" $securityContext "portName" $portName "healthPortName" $healthPortName "podResource" $podResource "agentRev" $agentRev "binaryURL" $binaryURL "ownerHash" $ownerHash "agtConfig" $agtConfig) .) | nindent 8}}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
