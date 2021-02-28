@@ -64,7 +64,7 @@
 {{- $ownerHash := .Values.global.agtK8Config.ownerHash -}}
 {{- $agtConfig := .Values.global.agtConfig -}}
 {{- $mode := include "agent.mode" . -}}
-{{- $launchCmd := "[]" . -}}
+{{- $launchCmd := printf "[]" -}}
 {{- $podResource := include "agent.podResource" . -}}
 {{- $hasPlugin := include "agent.hasPlugin" . -}}
 {{- include "agent.container" (merge (dict "contrName" $contrName "releaseTag" $contrReleaseTag "launchCmd" $launchCmd "securityContext" $contrSecurityContext "portName" $portName "healthPortName" $healthPortName "podResource" $podResource "agentRev" $agentRev "binaryURL" $binaryURL "ownerHash" $ownerHash "agtConfig" $agtConfig) .) }}
