@@ -64,7 +64,7 @@
 {{- $ownerHash := .Values.global.agtK8Config.ownerHash -}}
 {{- $agtConfig := .Values.global.agtConfig -}}
 {{- $mode := include "agent.mode" . -}}
-{{- $launchCmd := include "agent.launchCmd" . -}}
+{{- $launchCmd := "[]" . -}}
 {{- $podResource := include "agent.podResource" . -}}
 {{- $hasPlugin := include "agent.hasPlugin" . -}}
 {{- include "agent.container" (merge (dict "contrName" $contrName "releaseTag" $contrReleaseTag "launchCmd" $launchCmd "securityContext" $contrSecurityContext "portName" $portName "healthPortName" $healthPortName "podResource" $podResource "agentRev" $agentRev "binaryURL" $binaryURL "ownerHash" $ownerHash "agtConfig" $agtConfig) .) }}
@@ -88,15 +88,4 @@
     {{- include "vln.ips" . | nindent 4 }}
     {{- end -}}
     {{- end -}}
-{{- end -}}
-
-{{/*
-Specify agent launch command based on the revision from the global variable "releasetag"
-*/}}
-{{- define "agent.launchCmd" -}}
-{{- if or (eq .Values.global.agtK8Config.releaseTag "v1.1beta") (eq .Values.global.agtK8Config.releaseTag "v1.1") -}}
-["./agent","env"]
-{{- else -}}
-[]
-{{- end -}}
 {{- end -}}
