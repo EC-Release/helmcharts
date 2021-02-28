@@ -29,8 +29,6 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
     {{- end }}
-      securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         {{- include "agent.container" (merge (dict "contrName" $contrName "releaseTag" $releaseTag "launchCmd" $launchCmd "securityContext" $securityContext "portName" $portName "healthPortName" $healthPortName "podResource" $podResource "agentRev" $agentRev "binaryURL" $binaryURL "ownerHash" $ownerHash "agtConfig" $agtConfig) .) | nindent 8}}
       {{- with .Values.nodeSelector }}
