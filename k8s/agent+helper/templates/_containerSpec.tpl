@@ -10,6 +10,47 @@
    * author: apolo.yasuda@ge.com
    */}}
    
+{{/*
+ function: "agent.container"
+ params:
+   type: (dict)
+   - name: "isPlugin"
+     type: boolean
+     memo: is the container launched as a plugin?
+   - name: "contrName"
+     type: string
+     memo: unique container name
+   - name: "releaseTag"
+     type: string
+     memo: image release tag. E.g. "v1", "v1beta"
+   - name: "launchCmd"
+     type: string
+     memo: image release tag. E.g. ["echo","hell0"]
+   - name: "securityContext"
+     type: yaml
+     memo: k8-spec container securityContext. See k8s api ref
+   - name: "portName"
+     type: string
+     memo: port name for agent container spec
+   - name: "healthPortName"
+     type: string
+     memo: health port name for agent container spec
+   - name: "podResource"
+     type: yaml
+     memo: k8-spec resource spec. See k8s api ref
+   - name: "agentRev"
+     type: string
+     memo: agent revision. E.g. "v1.hokkaido.212", "v1beta.fukuoka.1728"
+   - name: "binaryURL"
+     type: string
+     memo: a downloadable agent binary in a git format 
+   - name: "ownerHash"
+     type: string
+     memo: the owner's hash for a prompt-free deployment
+    - name: "agtConfig"
+     type: string
+     memo: agent configuration with property format. Refer to example https://github.com/EC-Release/helmcharts/blob/v1/k8s/example/server%2Btls.env
+*/}}
 {{- define "agent.container" -}}
 - name: {{ .contrName|quote }}
   {{ if not (.isPlugin) }}
@@ -49,4 +90,3 @@
     {{- end }}
     {{- end -}}
 {{- end -}}
-
