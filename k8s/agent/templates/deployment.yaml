@@ -3,7 +3,7 @@
 {{- $ownerHash := .Values.global.agtK8Config.ownerHash -}}
 {{- $contrName := "agt-contr" -}}
 {{- $releaseTag := .Values.global.agtK8Config.releaseTag -}}
-{{- $securityContext := .Values.global.agtK8Config.withPlugins.vln.securityContext -}}
+{{- $securityContext := .Values.securityContext -}}
 {{- $portName := .Values.agtK8Config.portName -}}
 {{- $healthPortName := .Values.agtK8Config.healthPortName -}}
 {{- $launchCmd := "[]" -}}
