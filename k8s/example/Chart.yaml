@@ -33,6 +33,3 @@ dependencies:
 - name: agent+plg
   version: <AGENT_PLG_CHART_REV>
   repository: "file://./../agent+plg"
-- name: agent+lber
-  version: <AGENT_LBER_CHART_REV>
-  repository: "file://./../agent+lber"

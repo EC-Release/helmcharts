@@ -28,21 +28,21 @@ The diagram illustrates the usage of the connectivity model in k8s
 $ helm create example -n namespace
 
 # REQUIRED: add the helper library as the dependency to support usage
-$ helm repo add agent+helper https://ec-release.github.io/oci/agent+helper/<version. E.g. "0.1.0"> -n namespace
+$ helm repo add agent+helper https://raw.githubusercontent.com/EC-Release/helmcharts/disty/agent+helper/<version. E.g. "0.1.0"> -n namespace
 
 # OPTIONAL: add any of the following agent package(s) to the mychart deployment
 # agent: the deployment includes the agent artifact, and the configuration
-$ helm repo add agent https://ec-release.github.io/oci/agent/<version. E.g. "0.1.1"> -n namespace
+$ helm repo add agent https://raw.githubusercontent.com/EC-Release/helmcharts/disty/agent/<version. E.g. "0.1.1"> -n namespace
 # agent+plg: agent with plugin usage, this allow to configure plugins alongside the agent.
-$ helm repo add agent+plg https://ec-release.github.io/oci/agent+plg/<version. E.g. "0.1.1"> -n namespace
+$ helm repo add agent+plg https://raw.githubusercontent.com/EC-Release/helmcharts/disty/agent+plg/<version. E.g. "0.1.1"> -n namespace
 # agentlber: agent with loadbalncer usage, this allow to deploy agent with load balancer.
-$ helm repo add agentlber https://ec-release.github.io/oci/agentlber/<version. E.g. "0.1.0"> -n namespace
+$ helm repo add agent+lber https://raw.githubusercontent.com/EC-Release/helmcharts/disty/agent+lber/<version. E.g. "0.1.0"> -n namespace
 
 $ helm repo list -n namespace
 NAME         URL
-agent+helper https://ec-release.github.io/oci/agent+helper/0.1.0
-agent        https://ec-release.github.io/oci/agent/0.1.3
-agentlber    https://ec-release.github.io/oci/agentlber/0.1.0
+agent+helper https://raw.githubusercontent.com/EC-Release/helmcharts/disty/agent+helper/0.1.0
+agent        https://raw.githubusercontent.com/EC-Release/helmcharts/disty/agent/0.1.3
+agent+lber   https://raw.githubusercontent.com/EC-Release/helmcharts/disty/0.1.0
 
 ```
 [Back to Contents](#contents)
