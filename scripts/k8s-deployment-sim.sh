@@ -14,6 +14,8 @@ printf "\n\n\n*** [0.4] verify headless service spec\n"
 kubectl describe services $(kubectl get services|grep -w my-app-agent|awk '{print $1}'|head -n 1)
 printf "\n\n\n*** [0.5] verify lber service spec\n"
 kubectl describe services $(kubectl get services|grep -w my-app-agentlber|awk '{print $1}'|head -n 1)
+printf "\n\n\n*** [0.5] verify ingress spec\n"
+kubectl describe ingress $(kubectl get ingress|grep agentlber|awk '{print $1}'|head -n 1)
 printf "\n\n\n*** [0.6] clear installation\n"
 kubectl delete --all deployments && kubectl delete --all sts && kubectl delete --all pods && kubectl delete --all services && kubectl delete --all ingress
 
