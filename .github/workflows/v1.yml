@@ -18,10 +18,13 @@ jobs:
       AGENT_PLG_CHART_REV: 0.1.7
       AGENT_LBER_CHART_REV: 0.1.0
       AGENT_REV: v1.hokkaido.213
+      RELEASE_PUSH: true
       
     steps:
       - uses: actions/checkout@v2
       
+      - name: test
+        run: EC-Release:v1
       - name: bootstrap minikube
         uses: manusa/actions-setup-minikube@v2.3.0
         with:
@@ -48,7 +51,8 @@ jobs:
           source ./scripts/k8s-deployment-sim.sh
           
       - name: publish distribution packages (ec-release/helmcharts)
-        if: github.event.pull_request.merged == true
+        #if: github.event.pull_request.merged == true
+        if: RELEASE_PUSH == true
         uses: cpina/github-action-push-to-another-repository@master
         env:
           AGENT_REV: v1.hokkaido.213
@@ -61,7 +65,8 @@ jobs:
           commit-message: 'EC Bot Deployment'
           user-email: enterprise-connect@ge.com
       - name: publish distribution packages (ec-release/oci)
-        if: github.event.pull_request.merged == true
+        #if: github.event.pull_request.merged == true
+        if: RELEASE_PUSH == true
         uses: cpina/github-action-push-to-another-repository@master
         env:
           AGENT_REV: v1.hokkaido.213
