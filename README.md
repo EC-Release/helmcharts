@@ -1,3 +1,5 @@
+![helmcharts build](https://github.com/ec-release/helmcharts/actions/workflows/v1.yml/badge.svg)
+
 ## EC Connectivity in kubernetes
 agent k8s deployment via helmchart examples.
 
