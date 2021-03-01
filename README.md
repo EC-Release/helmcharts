@@ -35,7 +35,7 @@ $ helm repo add agent+helper https://raw.githubusercontent.com/EC-Release/helmch
 $ helm repo add agent https://raw.githubusercontent.com/EC-Release/helmcharts/disty/agent/<version. E.g. "0.1.1"> -n namespace
 # agent+plg: agent with plugin usage, this allow to configure plugins alongside the agent.
 $ helm repo add agent+plg https://raw.githubusercontent.com/EC-Release/helmcharts/disty/agent+plg/<version. E.g. "0.1.1"> -n namespace
-# agentlber: agent with loadbalncer usage, this allow to deploy agent with load balancer.
+# agent+lber: agent with loadbalncer usage, this allow to deploy agent with load balancer.
 $ helm repo add agent+lber https://raw.githubusercontent.com/EC-Release/helmcharts/disty/agent+lber/<version. E.g. "0.1.0"> -n namespace
 
 $ helm repo list -n namespace
@@ -63,9 +63,9 @@ dependencies:
   version: 0.1.1
   repository: "@agent+plg"
 # OPTIONAL
-- name: agentlber
+- name: agent+lber
   version: 0.1.0
-  repository: "@agentlber"
+  repository: "@agent+lber"
 ...
 ```
 ```bash

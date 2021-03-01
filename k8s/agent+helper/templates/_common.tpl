@@ -36,15 +36,3 @@ true
 {{- end -}}
 {{- end -}}
 {{- end -}}
-
-
-{{/*
-Specify agent launch command based on the revision from the global variable "releasetag"
-*/}}
-{{- define "agent.launchCmd" -}}
-{{- if or (eq .Values.global.agtK8Config.releaseTag "v1.1beta") (eq .Values.global.agtK8Config.releaseTag "v1.1") -}}
-["./agent","env"]
-{{- else -}}
-[]
-{{- end -}}
-{{- end -}}

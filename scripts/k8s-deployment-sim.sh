@@ -1,18 +1,21 @@
 #!/bin/bash
 
-printf "\n\n\n*** [0] install server with tls template and HA in k8s\n"
-yq e '.global.agtK8Config.withPlugins.tls.enabled = true' -i k8s/agent+lber/values.yaml
+printf "\n\n\n*** [0] install gateway with HA in k8s\n"
+yq e '.global.agtK8Config.withPlugins.tls.enabled = false' -i k8s/agent+lber/values.yaml
 yq e '.global.agtK8Config.withPlugins.vln.enabled = false' -i k8s/agent+lber/values.yaml
-helm install my-app k8s/agent+lber --set-file global.agtConfig=k8s/example/server+tls.env
+helm install my-app k8s/agent+lber --set-file global.agtConfig=k8s/example/gateway.env
 printf "\n\n\n*** [0.1] verify installation\n"
-kubectl get deployments && kubectl get pods && kubectl get services && kubectl get ingress
+kubectl get deployments && kubectl get sts && kubectl get pods && kubectl get services && kubectl get ingress
 printf "\n\n\n*** [0.2] verify deployment spec\n"
 kubectl describe deployments $(kubectl get deployments|grep agentlber|awk '{print $1}'|head -n 1)
-printf "\n\n\n*** [0.3] verify service spec\n"
-kubectl describe services $(kubectl get services|grep agent|awk '{print $1}'|head -n 1)
-#printf "\n\n\n*** done debug go ahead delete all.\n\n"
-printf "\n\n\n*** [0.4] clear installation\n"
-kubectl delete --all deployments && kubectl delete --all pods && kubectl delete --all services && kubectl delete --all ingress
+printf "\n\n\n*** [0.3] verify statefulset spec\n"
+kubectl describe sts $(kubectl get sts|grep agent|awk '{print $1}'|head -n 1)
+printf "\n\n\n*** [0.4] verify headless service spec\n"
+kubectl describe services $(kubectl get services|grep -w my-app-agent|awk '{print $1}'|head -n 1)
+printf "\n\n\n*** [0.5] verify lber service spec\n"
+kubectl describe services $(kubectl get services|grep -w my-app-agentlber|awk '{print $1}'|head -n 1)
+printf "\n\n\n*** [0.6] clear installation\n"
+kubectl delete --all deployments && kubectl delete --all sts && kubectl delete --all pods && kubectl delete --all services && kubectl delete --all ingress
 
 
 printf "\n\n\n*** [1] install server with tls template in k8s\n"
