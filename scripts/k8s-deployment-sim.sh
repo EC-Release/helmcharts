@@ -3,7 +3,7 @@
 printf "\n\n\n*** [0] install server with tls template and HA in k8s\n"
 yq e '.global.agtK8Config.withPlugins.tls.enabled = true' -i k8s/agent+lber/values.yaml
 yq e '.global.agtK8Config.withPlugins.vln.enabled = false' -i k8s/agent+lber/values.yaml
-helm install k8s/agent+lber --set-file global.agtConfig=k8s/example/server+tls.env --generate-name
+helm install my-app k8s/agent+lber --set-file global.agtConfig=k8s/example/server+tls.env
 printf "\n\n\n*** [0.1] verify installation\n"
 kubectl get deployments && kubectl get pods && kubectl get services && kubectl get ingress
 printf "\n\n\n*** [0.2] verify deployment spec\n"
