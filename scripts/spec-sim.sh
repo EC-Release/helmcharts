@@ -87,16 +87,19 @@ helm repo index k8s/pkg/agent+lber/$AGENT_LBER_CHART_REV --url https://ec-releas
 
 
 printf "\n\n\n*** packaging w/ dependencies (ec-release/helmcharts)\n"
-mkdir -p k8s/pkg-new/agent/$AGENT_CHART_REV k8s/pkg-new/agent+helper/$AGENT_HELPER_CHART_REV k8s/pkg-new/agent+plg/$AGENT_PLG_CHART_REV
+mkdir -p k8s/pkg-new/agent/$AGENT_CHART_REV k8s/pkg-new/agent+helper/$AGENT_HELPER_CHART_REV k8s/pkg-new/agent+plg/$AGENT_PLG_CHART_REV k8s/pkg-new/agent+lber/$AGENT_LBER_CHART_REV
 cp -R k8s/pkg/* k8s/pkg-new
 ls -la k8s/pkg-new
 helm package k8s/agent+helper -d k8s/pkg-new/agent+helper/$AGENT_HELPER_CHART_REV
 helm dependency update k8s/agent
 helm dependency update k8s/agent+plg
+helm dependency update k8s/agent+lber
 helm package k8s/agent -d k8s/pkg-new/agent/$AGENT_CHART_REV
 helm package k8s/agent+plg -d k8s/pkg-new/agent+plg/$AGENT_PLG_CHART_REV
+helm package k8s/agent+lber -d k8s/pkg-new/agent+lber/$AGENT_LBER_CHART_REV
 
 printf "\n\n\n*** pkg indexing (ec-release/helmcharts)\n"
 helm repo index k8s/pkg-new/agent/$AGENT_CHART_REV --url https://raw.githubusercontent.com/EC-Release/helmcharts/disty/agent/$AGENT_CHART_REV
 helm repo index k8s/pkg-new/agent+helper/$AGENT_HELPER_CHART_REV --url https://raw.githubusercontent.com/EC-Release/helmcharts/disty/agent+helper/$AGENT_HELPER_CHART_REV
 helm repo index k8s/pkg-new/agent+plg/$AGENT_PLG_CHART_REV --url https://raw.githubusercontent.com/EC-Release/helmcharts/disty/agent+plg/$AGENT_PLG_CHART_REV
+helm repo index k8s/pkg-new/agent+lber/$AGENT_LBER_CHART_REV --url https://raw.githubusercontent.com/EC-Release/helmcharts/disty/agent+lber/$AGENT_LBER_CHART_REV

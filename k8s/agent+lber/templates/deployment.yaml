@@ -1,4 +1,15 @@
 {{- $uuid := uuidv4 -}}
+{{- $agentRev := .Values.global.agtK8Config.agentRev -}}
+{{- $binaryURL := .Values.global.agtK8Config.binaryURL -}}
+{{- $ownerHash := .Values.global.agtK8Config.ownerHash -}}
+{{- $stsContrName := "agentlber" -}}
+{{- $releaseTag := .Values.global.agtK8Config.releaseTag -}}
+{{- $securityContext := .Values.securityContext -}}
+{{- $portName := "agt-prt" -}}
+{{- $healthPortName := "agt-h-prt" -}}
+{{- $launchCmd := "[]" -}}
+{{- $podResource := include "agent.podResource" . -}}
+{{- $agtConfig := .Values.global.agtConfig -}}
 
 apiVersion: apps/v1
 kind: Deployment
@@ -91,37 +102,11 @@ spec:
         {{- include "agent.selectorLabels" . | nindent 8 }}
     spec:
       containers:
-        - name: agentlber
-          image: "ghcr.io/ec-release/oci/agent:v1"
-          command: {{ include "agent.launchCmd" . }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          ports:
-            {{- include "agent.portSpec" . | nindent 12 }}
-            {{- include "agent.healthPortSpec" . | nindent 12 }}
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: agt-h-prt
-          readinessProbe:
-            httpGet:
-              path: /health
-              port: agt-h-prt
-          resources:
-            {{- include "agent.podResource" . | nindent 12 }}
-          env:
-            {{- range (split "\n" .Values.global.agtConfig) }}
-            {{- $a := splitn "=" 2 . }}
-            {{- if and (not (eq $a._1 "")) ($a._1) }}
-            - name: {{ $a._0|quote }}
-              value: {{ $a._1|quote }}
-            {{- end -}}
-            {{- end -}}
-            {{- include "agent.cfenv" . | nindent 12 }}
+        {{- include "agent.container" (merge (dict "isPlugin" false "contrName" $stsContrName "releaseTag" $releaseTag "launchCmd" $launchCmd "securityContext" $securityContext "portName" $portName "healthPortName" $healthPortName "podResource" $podResource "agentRev" $agentRev "binaryURL" $binaryURL "ownerHash" $ownerHash "agtConfig" $agtConfig) .) | nindent 8}}
             - name: uuid
               value: {{ $uuid | quote }}
             - name: EC_HOSTNAME
               value: {{ include "agent.host" . }}
+            {{- include "agent.cfenv" . | nindent 12 }}
 
 
