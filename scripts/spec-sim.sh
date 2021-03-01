@@ -61,19 +61,19 @@ ls -la k8s/example/charts/
 printf "\n\n\n*** test server with tls template\n"
 yq e '.global.agtK8Config.withPlugins.tls.enabled = true' -i k8s/example/values.yaml
 yq e '.global.agtK8Config.withPlugins.vln.enabled = false' -i k8s/example/values.yaml
-helm template my-app k8s/example --debug --set-file global.agtConfig=k8s/example/server+tls.env
+helm template k8s/example --debug --set-file global.agtConfig=k8s/example/server+tls.env
 
 printf "\n\n\n*** test client with local vln template\n"
 yq e '.global.agtK8Config.withPlugins.tls.enabled = false' -i k8s/example/values.yaml
 yq e '.global.agtK8Config.withPlugins.vln.enabled = true' -i k8s/example/values.yaml
 yq e '.global.agtK8Config.withPlugins.vln.remote = false' -i k8s/example/values.yaml
-helm template my-app k8s/example --debug --set-file global.agtConfig=k8s/example/client+vln.env
+helm template k8s/example --debug --set-file global.agtConfig=k8s/example/client+vln.env
 
 printf "\n\n\n*** test client with remote vln template\n"
 yq e '.global.agtK8Config.withPlugins.tls.enabled = false' -i k8s/example/values.yaml
 yq e '.global.agtK8Config.withPlugins.vln.enabled = true' -i k8s/example/values.yaml
 yq e '.global.agtK8Config.withPlugins.vln.remote = true' -i k8s/example/values.yaml
-helm template my-app k8s/example --debug --set-file global.agtConfig=k8s/example/client+vln.env
+helm template k8s/example --debug --set-file global.agtConfig=k8s/example/client+vln.env
 
 printf "\n\n\n*** test gateway agt template\n"
 helm template k8s/example --debug --set-file global.agtConfig=k8s/example/gateway.env
