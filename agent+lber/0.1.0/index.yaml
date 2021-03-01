@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  agent+lber:
+  - apiVersion: v1
+    appVersion: v1.1beta
+    created: "2021-03-01T22:08:00.632883183Z"
+    description: A Helm chart for Kubernetes
+    digest: 18128611f4a64c03817a5228e58f7fc0d648e8c902c7d569af2e0c02face94d3
+    name: agent+lber
+    type: application
+    urls:
+    - https://raw.githubusercontent.com/EC-Release/helmcharts/disty/agent+lber/0.1.0/agent+lber-0.1.0.tgz
+    version: 0.1.0
+generated: "2021-03-01T22:08:00.631466552Z"
