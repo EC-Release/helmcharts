@@ -67,26 +67,38 @@ tolerations: []
 
 affinity: {}
 
+agtK8Config:
+  portName: agt-prt
+  svcPortName: agt-svc-prt
+  svcPortNum: 8080
+  healthPortName: agt-h-prt
+  svcHealthPortName: agt-svc-h-prt
+  svcHealthPortNum: 8081
+
 global:
   agtK8Config:
     # some cluster instances require resource-spec for the deployment, e.g. GE Digital
     # PCS CF1/CF3 Cluster, whereas some can simply ignore the usage.
     resources:
       limits:
-        cpu: 100m
-        memory: 128Mi
+        cpu: 200m
+        memory: 512Mi
       requests:
         cpu: 100m
         memory: 128Mi
-    svcPortNum: 18080
-    svcHealthPortNum: 18081
+    svcPortNum: 8080
+    svcHealthPortNum: 8081
+    # Following properties related to load balancer
+    # statefulset fields are optional for deploying agent alone.. mandatory for agent with load balancer
+    stsName: my-app-agent
+    lberReplicaCount: 1
     # options v1.1beta|v1|v1beta
     releaseTag: v1
     # A download-able url for an "decrypted" agent binary that will be used as
     # the connectivity runtime in the target environment
-    binaryURL: https://github.com/EC-Release/sdk/releases/agent
+    # binaryURL: https://github.com/EC-Release/sdk/releases/agent
     # specify an agent revision in the container runtime
-    agentRev: v1.hokkaido.212
+    agentRev: v1.hokkaido.213
     # The OCI spec uses the "ownerHash" to bypass the passphrase prompt which is required to decrypt-
     # the artifact in a runtime environment. This is mandantory value for releases v1.hokkaido.213+
     # follow the steps to generate the hash-
@@ -94,7 +106,7 @@ global:
     ownerHash: 1234567890abcdefg
     # replicaCount currently supports client instances only.
     # supporting scaling gateway/server instances in k8s is in discussion.
-    replicaCount: 1
+    replicaCount: 2
     # withIngress decides the availability of the agt ingress obj in deployment.
     # by default, when deploy as the gateway mode (conf.mod=gateway), the value (enabled) will be overridden to true
     withIngress:

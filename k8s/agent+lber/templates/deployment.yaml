@@ -1,0 +1,112 @@
+{{- $uuid := uuidv4 -}}
+{{- $agentRev := .Values.global.agtK8Config.agentRev -}}
+{{- $binaryURL := .Values.global.agtK8Config.binaryURL -}}
+{{- $ownerHash := .Values.global.agtK8Config.ownerHash -}}
+{{- $stsContrName := "agentlber" -}}
+{{- $releaseTag := .Values.global.agtK8Config.releaseTag -}}
+{{- $securityContext := .Values.securityContext -}}
+{{- $portName := "agt-prt" -}}
+{{- $healthPortName := "agt-h-prt" -}}
+{{- $launchCmd := "[]" -}}
+{{- $podResource := include "agent.podResource" . -}}
+{{- $agtConfig := .Values.global.agtConfig -}}
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "agentlber.fullname" . }}
+  labels:
+    {{- include "agentlber.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.global.agtK8Config.lberReplicaCount }}
+  selector:
+    matchLabels:
+      {{- include "agentlber.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "agentlber.selectorLabels" . | nindent 8 }}
+    spec:
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: agentlber
+          image: "ghcr.io/ec-release/lb:v1"
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          imagePullPolicy: Always
+          ports:
+            {{- include "agentlber.portSpec" . | nindent 12 }}
+            {{- include "agentlber.healthPortSpec" . | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: lb-h-prt-name
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: lb-h-prt-name
+          resources:
+            {{- include "agentlber.podResource" . | nindent 12 }}
+          env:
+            {{- range (split "\n" .Values.global.agtConfig) }}
+            {{- $a := splitn "=" 2 . }}
+            {{- if and (not (eq $a._1 "")) ($a._1) }}
+            - name: {{ $a._0|quote }}
+              value: {{ $a._1|quote }}
+            {{- end -}}
+            {{- end }}
+            - name: serverblock
+              value: {{ include "agent.loadbalancer" . | quote }}
+            - name: uuid
+              value: {{ $uuid | quote }}
+            - name: replicaCount
+              value: {{ .Values.global.agtK8Config.replicaCount | quote }}
+            - name: stsName
+              value: {{ .Values.global.agtK8Config.stsName | quote }}
+            - name: namespace
+              value: {{ .Release.Namespace | quote }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Values.global.agtK8Config.stsName }}
+  labels:
+    {{- include "agent.labels" . | nindent 4 }}
+spec:
+  serviceName: {{ .Values.global.agtK8Config.stsName }}
+  replicas: {{ .Values.global.agtK8Config.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "agent.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "agent.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        {{- include "agent.container" (merge (dict "isPlugin" false "contrName" $stsContrName "releaseTag" $releaseTag "launchCmd" $launchCmd "securityContext" $securityContext "portName" $portName "healthPortName" $healthPortName "podResource" $podResource "agentRev" $agentRev "binaryURL" $binaryURL "ownerHash" $ownerHash "agtConfig" $agtConfig) .) | nindent 8}}
+            - name: uuid
+              value: {{ $uuid | quote }}
+            - name: EC_HOSTNAME
+              value: {{ include "agent.host" . }}
+            {{- include "agent.cfenv" . | nindent 12 }}
+
+

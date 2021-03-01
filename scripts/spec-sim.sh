@@ -10,10 +10,13 @@ eval "sed -i -e 's#<AGENT_CHART_REV>#${AGENT_CHART_REV}#g' k8s/agent/Chart.yaml"
 eval "sed -i -e 's#<AGENT_HELPER_CHART_REV>#${AGENT_HELPER_CHART_REV}#g' k8s/agent/Chart.yaml"
 eval "sed -i -e 's#<AGENT_PLG_CHART_REV>#${AGENT_PLG_CHART_REV}#g' k8s/agent+plg/Chart.yaml"
 eval "sed -i -e 's#<AGENT_HELPER_CHART_REV>#${AGENT_HELPER_CHART_REV}#g' k8s/agent+plg/Chart.yaml"
+eval "sed -i -e 's#<AGENT_LBER_CHART_REV>#${AGENT_LBER_CHART_REV}#g' k8s/agent+lber/Chart.yaml"
+eval "sed -i -e 's#<AGENT_HELPER_CHART_REV>#${AGENT_HELPER_CHART_REV}#g' k8s/agent+lber/Chart.yaml"
 eval "sed -i -e 's#<AGENT_HELPER_CHART_REV>#${AGENT_HELPER_CHART_REV}#g' k8s/example/Chart.yaml"
 eval "sed -i -e 's#<AGENT_PLG_CHART_REV>#${AGENT_PLG_CHART_REV}#g' k8s/example/Chart.yaml"
+# eval "sed -i -e 's#<AGENT_LBER_CHART_REV>#${AGENT_LBER_CHART_REV}#g' k8s/example/Chart.yaml"
 eval "sed -i -e 's#<AGENT_CHART_REV>#${AGENT_CHART_REV}#g' k8s/example/Chart.yaml"
-cat k8s/agent+helper/Chart.yaml k8s/agent/Chart.yaml k8s/agent+plg/Chart.yaml k8s/example/Chart.yaml
+cat k8s/agent+helper/Chart.yaml k8s/agent/Chart.yaml k8s/agent+plg/Chart.yaml k8s/agent+lber/Chart.yaml k8s/example/Chart.yaml
 
 printf "\n\n\n*** update server+tls.env \n"
 eval "sed -i -e 's#{{EC_TEST_OA2}}#${EC_TEST_OA2}#g' k8s/example/server+tls.env"
@@ -40,16 +43,20 @@ eval "sed -i -e 's#{{EC_TEST_SST}}#${EC_TEST_SST}#g' k8s/example/gateway.env"
 eval "sed -i -e 's#{{EC_TEST_TKN}}#${EC_TEST_TKN}#g' k8s/example/gateway.env"
 
 printf "\n\n\n*** packaging w/ dependencies (ec-release/oci) \n"
-mkdir -p k8s/pkg/agent/$AGENT_CHART_REV k8s/pkg/agent+helper/$AGENT_HELPER_CHART_REV k8s/pkg/agent+plg/$AGENT_PLG_CHART_REV
+mkdir -p k8s/pkg/agent/$AGENT_CHART_REV k8s/pkg/agent+helper/$AGENT_HELPER_CHART_REV k8s/pkg/agent+plg/$AGENT_PLG_CHART_REV k8s/pkg/agent+lber/$AGENT_LBER_CHART_REV
+
 ls -la k8s/pkg
 helm package k8s/agent+helper -d k8s/pkg/agent+helper/$AGENT_HELPER_CHART_REV
 helm dependency update k8s/agent
 helm dependency update k8s/agent+plg
+helm dependency update k8s/agent+lber
 helm package k8s/agent -d k8s/pkg/agent/$AGENT_CHART_REV
 helm package k8s/agent+plg -d k8s/pkg/agent+plg/$AGENT_PLG_CHART_REV
+helm package k8s/agent+lber -d k8s/pkg/agent+lber/$AGENT_LBER_CHART_REV
 
 printf "update dependencies in example chart for test"
 helm dependency update k8s/example
+ls -la k8s/example/charts/
 
 printf "\n\n\n*** test server with tls template\n"
 yq e '.global.agtK8Config.withPlugins.tls.enabled = true' -i k8s/example/values.yaml
@@ -76,18 +83,23 @@ printf "\n\n\n*** pkg indexing (ec-release/oci)\n"
 helm repo index k8s/pkg/agent/$AGENT_CHART_REV --url https://ec-release.github.io/oci/agent/$AGENT_CHART_REV
 helm repo index k8s/pkg/agent+helper/$AGENT_HELPER_CHART_REV --url https://ec-release.github.io/oci/agent+helper/$AGENT_HELPER_CHART_REV
 helm repo index k8s/pkg/agent+plg/$AGENT_PLG_CHART_REV --url https://ec-release.github.io/oci/agent+plg/$AGENT_PLG_CHART_REV
+helm repo index k8s/pkg/agent+lber/$AGENT_LBER_CHART_REV --url https://ec-release.github.io/oci/agent+lber/$AGENT_LBER_CHART_REV
+
 
 printf "\n\n\n*** packaging w/ dependencies (ec-release/helmcharts)\n"
-mkdir -p k8s/pkg-new/agent/$AGENT_CHART_REV k8s/pkg-new/agent+helper/$AGENT_HELPER_CHART_REV k8s/pkg-new/agent+plg/$AGENT_PLG_CHART_REV
+mkdir -p k8s/pkg-new/agent/$AGENT_CHART_REV k8s/pkg-new/agent+helper/$AGENT_HELPER_CHART_REV k8s/pkg-new/agent+plg/$AGENT_PLG_CHART_REV k8s/pkg-new/agent+lber/$AGENT_LBER_CHART_REV
 cp -R k8s/pkg/* k8s/pkg-new
 ls -la k8s/pkg-new
 helm package k8s/agent+helper -d k8s/pkg-new/agent+helper/$AGENT_HELPER_CHART_REV
 helm dependency update k8s/agent
 helm dependency update k8s/agent+plg
+helm dependency update k8s/agent+lber
 helm package k8s/agent -d k8s/pkg-new/agent/$AGENT_CHART_REV
 helm package k8s/agent+plg -d k8s/pkg-new/agent+plg/$AGENT_PLG_CHART_REV
+helm package k8s/agent+lber -d k8s/pkg-new/agent+lber/$AGENT_LBER_CHART_REV
 
 printf "\n\n\n*** pkg indexing (ec-release/helmcharts)\n"
 helm repo index k8s/pkg-new/agent/$AGENT_CHART_REV --url https://raw.githubusercontent.com/EC-Release/helmcharts/disty/agent/$AGENT_CHART_REV
 helm repo index k8s/pkg-new/agent+helper/$AGENT_HELPER_CHART_REV --url https://raw.githubusercontent.com/EC-Release/helmcharts/disty/agent+helper/$AGENT_HELPER_CHART_REV
 helm repo index k8s/pkg-new/agent+plg/$AGENT_PLG_CHART_REV --url https://raw.githubusercontent.com/EC-Release/helmcharts/disty/agent+plg/$AGENT_PLG_CHART_REV
+helm repo index k8s/pkg-new/agent+lber/$AGENT_LBER_CHART_REV --url https://raw.githubusercontent.com/EC-Release/helmcharts/disty/agent+lber/$AGENT_LBER_CHART_REV

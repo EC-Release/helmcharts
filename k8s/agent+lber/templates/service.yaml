@@ -1,0 +1,34 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "agentlber.fullname" . }}
+  labels:
+    {{- include "agentlber.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    {{- include "agentlber.svcPortSpec" . | nindent 4 }}
+    {{- include "agentlber.svcHealthPortSpec" . | nindent 4 }}
+  selector:
+    {{- include "agentlber.selectorLabels" . | nindent 4 }}
+
+---
+{{- $portName := .Values.agtK8Config.portName -}}
+{{- $healthPortName := .Values.agtK8Config.healthPortName -}}
+{{- $svcPortName := .Values.agtK8Config.svcPortName -}}
+{{- $svcPortNum := .Values.agtK8Config.svcPortNum -}}
+{{- $svcHealthPortNum := .Values.agtK8Config.svcHealthPortNum -}}
+{{- $svcHealthPortName := .Values.agtK8Config.svcHealthPortName -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.global.agtK8Config.stsName }}
+  labels:
+    {{- include "agent.labels" . | nindent 4 }}
+spec:
+  clusterIP: None
+  ports:
+    {{- include "agent.svcPortSpec" (dict "portName" $portName "svcPortName" $svcPortName "svcPortNum" $svcPortNum) | nindent 4 }}
+    {{- include "agent.svcHealthPortSpec" (dict "healthPortName" $healthPortName "svcHealthPortName" $svcHealthPortName "svcHealthPortNum" $svcHealthPortNum) | nindent 4 }}
+  selector:
+    {{- include "agent.selectorLabels" . | nindent 4 }}
