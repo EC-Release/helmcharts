@@ -29,6 +29,9 @@ The diagram illustrates the usage of the connectivity model in k8s
 # bootstrap a chart
 $ helm create example -n namespace
 
+# Delete files from example/templates dir
+$ rm -rf example/templates
+
 # REQUIRED: add the helper library as the dependency to support usage
 $ helm repo add agent+helper https://raw.githubusercontent.com/EC-Release/helmcharts/disty/agent+helper/<version. E.g. "0.1.0"> -n namespace
 
@@ -44,7 +47,7 @@ $ helm repo list -n namespace
 NAME         URL
 agent+helper https://raw.githubusercontent.com/EC-Release/helmcharts/disty/agent+helper/0.1.0
 agent        https://raw.githubusercontent.com/EC-Release/helmcharts/disty/agent/0.1.3
-agent+lber   https://raw.githubusercontent.com/EC-Release/helmcharts/disty/0.1.0
+agent+lber   https://raw.githubusercontent.com/EC-Release/helmcharts/disty/agent+lber/0.1.0
 
 ```
 [Back to Contents](#contents)
@@ -76,7 +79,7 @@ $ helm dependency update example -n namespace
 ```
 [Back to Contents](#contents)
 #### Update the agent usage
-In the parent chart(s), there are some options avaialble to customise the agent usage. The configuration below is also available in the example/values.yaml for the usage reference.
+In the parent chart(s), there are some options available to customise the agent usage. The configuration below is also available in the example/values.yaml for the usage reference.
 
 For plugins-relate usage in detail, please refer to the [TLS docs](https://github.com/EC-Release/sdk/tree/v1/plugins/tls), and for [VLAN docs](https://github.com/EC-Release/sdk/tree/v1/plugins/vln)
 
