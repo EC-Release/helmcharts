@@ -1,9 +1,9 @@
 #!/bin/bash
 
 printf "\n\n\n*** [0] install gateway with HA in k8s\n"
-yq e '.global.agtK8Config.withPlugins.tls.enabled = false' -i k8s/agent+lber/values.yaml
-yq e '.global.agtK8Config.withPlugins.vln.enabled = false' -i k8s/agent+lber/values.yaml
-helm install my-app k8s/agent+lber --set-file global.agtConfig=k8s/examples/agent/gateway.env
+yq e '.global.agtK8Config.withPlugins.tls.enabled = false' -i k8s/examples/lber/values.yaml
+yq e '.global.agtK8Config.withPlugins.vln.enabled = false' -i k8s/examples/lber/values.yaml
+helm install my-app k8s/examples/lber --set-file global.agtConfig=k8s/examples/lber/gateway.env
 printf "\n\n\n*** [0.1] verify installation\n"
 kubectl get deployments && kubectl get sts && kubectl get pods && kubectl get services && kubectl get ingress
 printf "\n\n\n*** [0.2] verify deployment spec\n"
