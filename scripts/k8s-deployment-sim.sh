@@ -1,9 +1,9 @@
 #!/bin/bash
 
 printf "\n\n\n*** [0] install gateway with HA in k8s\n"
-yq e '.global.agtK8Config.withPlugins.tls.enabled = false' -i k8s/agent+lber/values.yaml
-yq e '.global.agtK8Config.withPlugins.vln.enabled = false' -i k8s/agent+lber/values.yaml
-helm install my-app k8s/agent+lber --set-file global.agtConfig=k8s/example/gateway.env
+yq e '.global.agtK8Config.withPlugins.tls.enabled = false' -i k8s/examples/lber/values.yaml
+yq e '.global.agtK8Config.withPlugins.vln.enabled = false' -i k8s/examples/lber/values.yaml
+helm install my-app k8s/examples/lber --set-file global.agtConfig=k8s/examples/lber/gateway.env
 printf "\n\n\n*** [0.1] verify installation\n"
 kubectl get deployments && kubectl get sts && kubectl get pods && kubectl get services && kubectl get ingress
 printf "\n\n\n*** [0.2] verify deployment spec\n"
@@ -21,9 +21,9 @@ kubectl delete --all deployments && kubectl delete --all sts && kubectl delete -
 
 
 printf "\n\n\n*** [1] install server with tls template in k8s\n"
-yq e '.global.agtK8Config.withPlugins.tls.enabled = true' -i k8s/example/values.yaml
-yq e '.global.agtK8Config.withPlugins.vln.enabled = false' -i k8s/example/values.yaml
-helm install k8s/example --set-file global.agtConfig=k8s/example/server+tls.env --generate-name
+yq e '.global.agtK8Config.withPlugins.tls.enabled = true' -i k8s/examples/agent/values.yaml
+yq e '.global.agtK8Config.withPlugins.vln.enabled = false' -i k8s/examples/agent/values.yaml
+helm install k8s/examples/agent --set-file global.agtConfig=k8s/examples/agent/server+tls.env --generate-name
 
 printf "\n\n\n*** [1.1] verify installation\n"
 kubectl get deployments && kubectl get pods && kubectl get services
@@ -39,10 +39,10 @@ printf "\n\n\n*** [1.4] clear installation\n"
 kubectl delete --all deployments && kubectl delete --all pods && kubectl delete --all services
 
 printf "\n\n\n*** [2] install client with local vln multi-contr template in k8s\n"
-yq e '.global.agtK8Config.withPlugins.tls.enabled = false' -i k8s/example/values.yaml
-yq e '.global.agtK8Config.withPlugins.vln.enabled = true' -i k8s/example/values.yaml
-yq e '.global.agtK8Config.withPlugins.vln.remote = false' -i k8s/example/values.yaml
-helm install k8s/example --set-file global.agtConfig=k8s/example/client+vln.env --generate-name
+yq e '.global.agtK8Config.withPlugins.tls.enabled = false' -i k8s/examples/agent/values.yaml
+yq e '.global.agtK8Config.withPlugins.vln.enabled = true' -i k8s/examples/agent/values.yaml
+yq e '.global.agtK8Config.withPlugins.vln.remote = false' -i k8s/examples/agent/values.yaml
+helm install k8s/examples/agent --set-file global.agtConfig=k8s/examples/agent/client+vln.env --generate-name
 
 printf "\n\n\n*** [2.1] verify installation\n"
 kubectl get deployments && kubectl get pods
@@ -52,10 +52,10 @@ printf "\n\n\n*** [2.3] clear installation\n"
 kubectl delete --all deployments && kubectl delete --all pods && kubectl delete --all services
 
 printf "\n\n\n*** [3] install client with remote vln template in minikube\n"
-yq e '.global.agtK8Config.withPlugins.tls.enabled = false' -i k8s/example/values.yaml
-yq e '.global.agtK8Config.withPlugins.vln.enabled = true' -i k8s/example/values.yaml
-yq e '.global.agtK8Config.withPlugins.vln.remote = true' -i k8s/example/values.yaml
-helm install k8s/example --set-file global.agtConfig=k8s/example/client+vln.env --generate-name
+yq e '.global.agtK8Config.withPlugins.tls.enabled = false' -i k8s/examples/agent/values.yaml
+yq e '.global.agtK8Config.withPlugins.vln.enabled = true' -i k8s/examples/agent/values.yaml
+yq e '.global.agtK8Config.withPlugins.vln.remote = true' -i k8s/examples/agent/values.yaml
+helm install k8s/examples/agent --set-file global.agtConfig=k8s/examples/agent/client+vln.env --generate-name
 
 printf "\n\n\n*** [3.1] verify installation\n"
 kubectl get deployments && kubectl get pods && kubectl get services
