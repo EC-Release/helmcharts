@@ -29,10 +29,10 @@ spec:
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "ghcr.io/ec-release/oci/oauth:v1.2beta"
-          imagePullPolicy: "Always"
+          imagePullPolicy: Always
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 7990
               protocol: TCP
           livenessProbe:
             httpGet:
@@ -45,26 +45,13 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
-            - name: EC_PORT
-              value: "7990"
-            - name: EC_PVTKEY
-              value: ""
-            - name: EC_PUBCRT
-              value: ""
-            - name: EC_AUTH_VALIDATE
-              value: "oidc"
-            - name: EC_OIDC_DOMAIN
-              value: "https://helloOauthDomain.co"
-            - name: EC_OIDC_AUTH_PATH
-              value: "/authorize"
-            - name: EC_OIDC_TOKEN_PATH
-              value: "/oauth/token"
-            - name: EC_OIDC_USER_PATH
-              value: ""
-            - name: EC_OIDC_CID
-              value: ""
-            - name: EC_OIDC_CSC
-              value: ""
+            {{- range (split "\n" .Values.global.oauthConfig) }}
+            {{- $a := splitn "=" 2 . }}
+            {{- if and (not (eq $a._1 "")) ($a._1) }}
+            - name: {{ $a._0|quote }}
+              value: {{ $a._1|quote }}
+            {{- end }}
+            {{- end -}}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

@@ -19,6 +19,7 @@ jobs:
       AGENT_HELPER_CHART_REV: 0.1.6
       AGENT_PLG_CHART_REV: 0.1.7
       AGENT_LBER_CHART_REV: 0.1.0
+      OAUTH_CHART_REV: 0.1.0
       AGENT_REV: v1.hokkaido.213
       
     steps:
