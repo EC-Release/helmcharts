@@ -21,15 +21,6 @@ version: 0.1.0
 appVersion: 1.16.0
 
 dependencies:
-- name: agent+helper
-  version: <AGENT_HELPER_CHART_REV>
-  repository: "file://./../agent+helper"
-# pkg "agent+plg" supports "agent" deployment. However, it is recommended to use pkg "agent" over-
-# "agent+plg" for deployments without plugins' need.
-#
-#- name: agent
-#  version: <AGENT_CHART_REV>
-#  repository: "file://./../agent"
-- name: agent+plg
-  version: <AGENT_PLG_CHART_REV>
-  repository: "file://./../agent+plg"
+- name: agent+lber
+  version: <LBER_HELPER_CHART_REV>
+  repository: "file://./../../agent+lber"
