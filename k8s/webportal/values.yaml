@@ -70,3 +70,10 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+global:
+  webportalConfig: |-
+    PORT={{PORT}}
+    EC_OAUTH_URL={{EC_OAUTH_URL}}
+    EC_CID={{EC_CID}}
+    EC_CSC={{EC_CSC}}
