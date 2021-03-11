@@ -11,7 +11,7 @@ $ rm -rf example/templates
 $ helm repo add oauth https://raw.githubusercontent.com/EC-Release/helmcharts/disty/oauth/<version. E.g. "0.1.0"> -n namespace
 $ helm repo list -n namespace
 NAME         URL
-agent+helper https://raw.githubusercontent.com/EC-Release/helmcharts/disty/oauth/0.1.0
+oauth https://raw.githubusercontent.com/EC-Release/helmcharts/disty/oauth/0.1.0
 ```
 
 #### Update Dependency List
