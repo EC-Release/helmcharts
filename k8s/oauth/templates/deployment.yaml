@@ -48,12 +48,15 @@ spec:
             {{- range (split "\n" .Values.global.oauthConfig) }}
             {{- $a := splitn "=" 2 . }}
             {{- if and (not (eq $a._1 "")) ($a._1) }}
-            {{- if not (or (contains "CID" $a._0) (contains "CSC" $a._0) (contains "PVTKEY" $a._0) (contains "CA_PPRS" $a._0)) }}
             - name: {{ $a._0|quote }}
               value: {{ $a._1|quote }}
             {{- end }}
             {{- end }}
-            {{- end -}}
+            - name: EC_PPS
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: owners-hash
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
