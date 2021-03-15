@@ -28,19 +28,19 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "ghcr.io/ec-release/oci/oauth:v1.2beta"
+          image: "ghcr.io/ec-release/oauth:v1.2beta"
           imagePullPolicy: Always
           ports:
             - name: http
-              containerPort: 7990
+              containerPort: 17990
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /
+              path: /oauth/token
               port: http
           readinessProbe:
             httpGet:
-              path: /
+              path: /oauth/token
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
@@ -52,11 +52,6 @@ spec:
               value: {{ $a._1|quote }}
             {{- end }}
             {{- end }}
-            - name: EC_PPS
-              valueFrom:
-                secretKeyRef:
-                  key: password
-                  name: owners-hash
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
