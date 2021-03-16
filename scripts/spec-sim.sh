@@ -52,16 +52,10 @@ eval "sed -i -e 's#{{EC_TEST_SST}}#${EC_TEST_SST}#g' k8s/examples/lber/gateway.e
 eval "sed -i -e 's#{{EC_TEST_TKN}}#${EC_TEST_TKN}#g' k8s/examples/lber/gateway.env"
 
 printf "\n\n\n*** update oauth.env \n"
-eval "sed -i -e 's#{{EC_PORT}}#${EC_PORT}#g' k8s/examples/oauth/oauth.env"
-eval "sed -i -e 's#{{EC_PVTKEY}}#${EC_PVTKEY}#g' k8s/examples/oauth/oauth.env"
-eval "sed -i -e 's#{{EC_PUBCRT}}#${EC_PUBCRT}#g' k8s/examples/oauth/oauth.env"
-eval "sed -i -e 's#{{EC_AUTH_VALIDATE}}#${EC_AUTH_VALIDATE}#g' k8s/examples/oauth/oauth.env"
-eval "sed -i -e 's#{{EC_OIDC_DOMAIN}}#${EC_OIDC_DOMAIN}#g' k8s/examples/oauth/oauth.env"
-eval "sed -i -e 's#{{EC_OIDC_AUTH_PATH}}#${EC_OIDC_AUTH_PATH}#g' k8s/examples/oauth/oauth.env"
-eval "sed -i -e 's#{{EC_OIDC_TOKEN_PATH}}#${EC_OIDC_TOKEN_PATH}#g' k8s/examples/oauth/oauth.env"
-eval "sed -i -e 's#{{EC_OIDC_USER_PATH}}#${EC_OIDC_USER_PATH}#g' k8s/examples/oauth/oauth.env"
+eval "sed -i -e 's#{{CA_PPRS}}#${CA_PPRS}#g' k8s/examples/oauth/oauth.env"
 eval "sed -i -e 's#{{EC_OIDC_CID}}#${EC_OIDC_CID}#g' k8s/examples/oauth/oauth.env"
 eval "sed -i -e 's#{{EC_OIDC_CSC}}#${EC_OIDC_CSC}#g' k8s/examples/oauth/oauth.env"
+eval "sed -i -e 's#{{EC_PVTKEY_EXTERNAL}}#${EC_PVTKEY_EXTERNAL}#g' k8s/examples/oauth/oauth.env"
 
 printf "\n\n\n*** packaging w/ dependencies (ec-release/oci) \n"
 mkdir -p k8s/pkg/agent/$AGENT_CHART_REV k8s/pkg/agent+helper/$AGENT_HELPER_CHART_REV k8s/pkg/agent+plg/$AGENT_PLG_CHART_REV k8s/pkg/agent+lber/$AGENT_LBER_CHART_REV k8s/pkg/oauth/$OAUTH_CHART_REV

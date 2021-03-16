@@ -20,6 +20,10 @@ jobs:
       AGENT_PLG_CHART_REV: 0.0.0
       AGENT_LBER_CHART_REV: 0.0.0
       AGENT_REV: v1.hokkaido.213
+      CA_PPRS: ${{ secrets.CA_PPRS }}
+      EC_OIDC_CID: ${{ secrets.EC_OIDC_CID }}
+      EC_OIDC_CSC: ${{ secrets.EC_OIDC_CSC }}
+      EC_PVTKEY_EXTERNAL: ${{ secrets.EC_PVTKEY_EXTERNAL }}
 
     steps:
       - uses: actions/checkout@v2
