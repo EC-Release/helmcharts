@@ -67,7 +67,7 @@ printf "\n\n\n*** [3.4] clear installation\n"
 kubectl delete --all deployments && kubectl delete --all pods && kubectl delete --all services
 
 printf "\n\n\n*** [4] install oauth in k8s\n"
-helm install k8s/example/oauth --generate-name
+helm install k8s/example/oauth --set-file global.agtConfig=k8s/examples/oauth/oauth.env --generate-name
 printf "\n\n\n*** [4.1] verify installation\n"
 kubectl get deployments && kubectl get pods && kubectl get services && kubectl get ingresses
 printf "\n\n\n*** [4.2] verify deployment spec\n"
