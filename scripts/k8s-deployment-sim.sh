@@ -77,5 +77,5 @@ kubectl describe services $(kubectl get services|grep oauth|awk '{print $1}'|hea
 printf "\n\n\n*** [4.4] verify ingress spec\n"
 kubectl describe ingresses $(kubectl get ingresses|grep oauth|awk '{print $1}'|head -n 1)
 printf "\n\n\n*** [4.5] clear installation\n"
-kubectl delete --all deployments && kubectl delete --all pods && kubectl delete --all services && && kubectl delete --all ingresses
+kubectl delete --all deployments && kubectl delete --all pods && kubectl delete --all services && kubectl delete --all ingresses
 
