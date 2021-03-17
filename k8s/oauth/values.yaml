@@ -41,7 +41,7 @@ service:
   port: 80
 
 ingress:
-  enabled: false
+  enabled: true
   annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
@@ -72,14 +72,37 @@ tolerations: []
 affinity: {}
 
 global:
+  oauthK8Config:
+    resources:
+      limits:
+        cpu: 200m
+        memory: 512Mi
+      requests:
+        cpu: 200m
+        memory: 256Mi
+    withIngress:
+      enabled: true
+      hosts:
+        - host: ec.http.helloworld.ge.com
+          paths: [ "/" ]
+      tls:
+        - secretName: tls-secret-1
+          hosts: [ "ec.helloworld.ge.com", "ec.rel.ge.com" ]
+        - secretName: tls.secret-2
+          hosts: [ "*.ec.https.ge.com", "ec.dev.azure.com" ]
   oauthConfig: |-
-    EC_PORT={EC_PORT}
-    EC_PVTKEY={EC_PVTKEY}
-    EC_PUBCRT={EC_PUBCRT}
-    EC_AUTH_VALIDATE={EC_AUTH_VALIDATE}
-    EC_OIDC_DOMAIN={EC_OIDC_DOMAIN}
-    EC_OIDC_AUTH_PATH={EC_OIDC_AUTH_PATH}
-    EC_OIDC_TOKEN_PATH={EC_OIDC_TOKEN_PATH}
-    EC_OIDC_USER_PATH={EC_OIDC_USER_PATH}
-    EC_OIDC_CID={EC_OIDC_CID}
-    EC_OIDC_CSC={EC_OIDC_CSC}
+    AGENT_REV=temp_1.2-b.0.reiwa
+    EC_AUTH_VALIDATE=aha
+    EC_OAUTH_FAIL_URL=https://ng-portal.run.aws-usw02-dev.ice.predix.io/v1.2beta/ec
+    EC_OIDC_AUTH_PATH=/oauth/authorize
+    EC_OIDC_DOMAIN=https://ge-dw.aha.io
+    EC_OIDC_TOKEN_PATH=/oauth/token
+    EC_OIDC_USER_PATH=https://ge-dw.aha.io/api/v1/me
+    EC_PORT=17990
+    CA_PPRS={{CA_PPRS}}
+    EC_OIDC_CID={{EC_OIDC_CID}}
+    EC_OIDC_CSC={{EC_OIDC_CSC}}
+    EC_PVTKEY_EXTERNAL={{EC_PVTKEY_EXTERNAL}}
+    EC_SEED_HOST=https://ec-oauth-aha.run.aws-usw02-dev.ice.predix.io/v1.2beta
+    EC_SEED_NODE=https://ec-oauth-oaep.run.aws-usw02-dev.ice.predix.io/v1.2beta
+    IS_TIMECONTRLR=false
