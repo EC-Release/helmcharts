@@ -31,9 +31,8 @@ spec:
           image: "ghcr.io/ec-release/oauth:v1.2beta"
           imagePullPolicy: Always
           ports:
-            - name: http
-              containerPort: 17990
-              protocol: TCP
+            {{- include "oauth.portSpec" . | nindent 12 }}
+            {{- include "oauth.healthPortSpec" . | nindent 12 }}
           livenessProbe:
             httpGet:
               path: /oauth/token
@@ -43,7 +42,7 @@ spec:
               path: /oauth/token
               port: http
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- include "oauth.podResource" . | nindent 12 }}
           env:
             {{- range (split "\n" .Values.global.oauthConfig) }}
             {{- $a := splitn "=" 2 . }}

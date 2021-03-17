@@ -48,6 +48,7 @@ Selector labels
 {{- define "oauth.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "oauth.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+run: {{ include "oauth.fullname" . }}
 {{- end }}
 
 {{/*
@@ -60,3 +61,88 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Specify the agt ingress spec
+*/}}
+{{- define "oauth.ingress" -}}
+{{- if .Values.global.oauthK8Config.withIngress.tls -}}
+tls:
+{{- range .Values.global.oauthK8Config.withIngress.tls }}
+  - hosts:
+    {{- range .hosts }}
+    - {{ . | quote }}
+    {{- end }}
+    secretName: {{ .secretName }}
+{{- end -}}
+{{- end }}
+rules:
+{{- $serviceName := include "oauth.fullname" . -}}
+{{- $servicePort := 18090 -}}
+{{- range .Values.global.oauthK8Config.withIngress.hosts }}
+  - host: {{ .host | quote }}
+    http:
+      paths:
+      {{- range $path := .paths }}
+        - path: {{ $path | quote }}
+          backend:
+            serviceName: {{ $serviceName | quote }}
+            servicePort: {{ $servicePort }}
+      {{- end }}
+{{- end }}
+{{- end -}}
+
+{{/*
+Generate service port spec for pods.
+*/}}
+{{- define "oauth.svcPortSpec" -}}
+- port: 18090
+  targetPort: auth-prt-name
+  protocol: TCP
+  name: auth-svc-prt
+{{- end -}}
+
+{{/*
+Generate service health port spec for pods.
+*/}}
+{{- define "oauth.svcHealthPortSpec" -}}
+- port: 18091
+  targetPort: auth-h-prt-name
+  protocol: TCP
+  name: auth-svc-h-prt
+{{- end -}}
+
+{{/*
+Generate container port spec for oauth
+*/}}
+{{- define "oauth.portSpec" -}}
+- name: auth-prt-name
+  containerPort: 17990
+  protocol: TCP
+{{- end -}}
+
+
+{{/*
+Generate container HEALTH port spec for oauth
+*/}}
+{{- define "oauth.healthPortSpec" -}}
+- name: auth-h-prt-name
+  containerPort: 17990
+  protocol: TCP
+{{- end -}}
+
+{{/*
+Specify the resource in the targeted cluster, if any
+*/}}
+{{- define "oauth.podResource" -}}
+{{- if .Values.global.oauthK8Config.resources -}}
+limits:
+  cpu: {{ .Values.global.oauthK8Config.resources.limits.cpu }}
+  memory: {{ .Values.global.oauthK8Config.resources.limits.memory }}
+requests:
+  cpu: {{ .Values.global.oauthK8Config.resources.requests.cpu }}
+  memory: {{ .Values.global.oauthK8Config.resources.requests.memory }}
+{{- else -}}
+{}
+{{- end -}}
+{{- end -}}
