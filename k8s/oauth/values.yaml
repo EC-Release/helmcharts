@@ -73,6 +73,15 @@ affinity: {}
 
 global:
   oauthK8Config:
+    efsPersistence:
+      reclaimPolicy: Retain
+      # mountOptions:
+      # provisioner:
+      # accessPointId:
+      # fileSystemId:
+      accessModes:
+        - ReadWriteMany
+      storageClassName: efs-sc
     resources:
       limits:
         cpu: 200m
