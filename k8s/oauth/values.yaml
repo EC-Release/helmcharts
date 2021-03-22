@@ -92,11 +92,11 @@ global:
     withIngress:
       enabled: true
       hosts:
-        - host: ec.http.helloworld.ge.com
+        - host: ec-oauth-oidc-ci.digitalconnect.apps.ge.com
           paths: [ "/" ]
       tls:
         - secretName: tls-secret-1
-          hosts: [ "ec.helloworld.ge.com", "ec.rel.ge.com" ]
+          hosts: [ "ec-oauth-oidc-ci.digitalconnect.apps.ge.com", "ec.rel.ge.com" ]
         - secretName: tls.secret-2
           hosts: [ "*.ec.https.ge.com", "ec.dev.azure.com" ]
   oauthConfig: |-
