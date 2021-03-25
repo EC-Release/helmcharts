@@ -86,10 +86,19 @@ For plugins-relate usage in detail, please refer to the [TLS docs](https://githu
 Please refer [page](https://gitlab.com/digital-fo/connectivity/enterprise-connect/platform-agnostic/agent/-/tree/v1/example-yml) to get the subset of agent flags based on mod
 ```yaml
 ...
+# Please add this only for lber
+agtK8Config:
+  portName: agt-prt
+  svcPortName: agt-svc-prt
+  svcPortNum: 8080
+  healthPortName: agt-h-prt
+  svcHealthPortName: agt-svc-h-prt
+  svcHealthPortNum: 8081
+
 global:
   agtConfig:
     conf.mod=gateway|server|client|gw:server|gw:client
-    conf.gpt=global port in number
+    conf.gpt=global port in number (7990 for lber)
     conf.dbg=boolean true|false
     conf.hst="ws|wss://gateway-url/agent"
     conf.tkn=ec-service-admin-token
