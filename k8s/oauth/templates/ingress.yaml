@@ -1,4 +1,4 @@
-{{- if .Values.ingress.enabled -}}
+{{- if .Values.global.oauthK8Config.withIngress.enabled -}}
 {{- $fullName := include "oauth.fullname" . -}}
 {{- $svcPort := .Values.service.port -}}
 {{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}

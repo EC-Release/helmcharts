@@ -1,3 +1,6 @@
+# add security context to pvc
+# pvc will have th mount - ~/.ec/.db
+
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -5,9 +8,9 @@ metadata:
   labels:
     {{- include "oauth.labels" . | nindent 4 }}
 spec:
- accessModes:
- {{- toYaml .Values.global.oauthK8Config.efsPersistence.accessModes | nindent 4 }}
- storageClassName: {{ .Values.global.oauthK8Config.efsPersistence.storageClassName | quote }}
- resources:
-  requests:
-   storage: 5Gi
+  accessModes:
+  {{- toYaml .Values.global.oauthK8Config.efsPersistence.accessModes | nindent 4 }}
+  storageClassName: {{ .Values.global.oauthK8Config.efsPersistence.storageClassName | quote }}
+  resources:
+    requests:
+      storage: 1Gi

@@ -1,3 +1,4 @@
+{{- if .Values.global.oauthK8Config.efsPersistence.enabled -}}
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -6,7 +7,7 @@ metadata:
     {{- include "oauth.labels" . | nindent 4 }}
 spec:
   capacity:
-    storage: 5Gi
+    storage: 1Gi
   volumeMode: Filesystem
   accessModes:
   {{- toYaml .Values.global.oauthK8Config.efsPersistence.accessModes | nindent 4 }}
@@ -16,11 +17,6 @@ spec:
   {{- toYaml .Values.global.oauthK8Config.efsPersistence.mountOptions | nindent 4 }}
   csi:
     driver: {{ .Values.global.oauthK8Config.efsPersistence.provisioner  | quote }}
-    {{- if .Values.global.oauthK8Config.efsPersistence.accessPointId -}}
     volumeHandle: {{ printf "%s::%s" .Values.global.oauthK8Config.efsPersistence.fileSystemId .Values.global.oauthK8Config.efsPersistence.accessPointId }}
-    {{- else -}}
-    volumeHandle: {{ .Values.global.oauthK8Config.efsPersistence.fileSystemId }}
-    {{- end -}}
-  nfs:
-    path: /tmp
-    server: 172.17.0.2
+ {{- end }}
+# Storage class - EFS default, but can be override from values

@@ -23,11 +23,15 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
           image: "ghcr.io/ec-release/oauth:v1.2beta"
           imagePullPolicy: Always
           ports:
@@ -37,10 +41,12 @@ spec:
             httpGet:
               path: /oauth/token
               port: http
+            initialDelaySeconds: 60
           readinessProbe:
             httpGet:
               path: /oauth/token
               port: http
+            initialDelaySeconds: 60
           resources:
             {{- include "oauth.podResource" . | nindent 12 }}
           env:
@@ -55,7 +61,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: password
-                  name: owners-hash
+                  name: {{ .Values.global.oauthK8Config.ownersHash }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
