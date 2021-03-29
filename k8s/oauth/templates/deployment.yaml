@@ -25,13 +25,11 @@ spec:
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000
-        fsGroup: 1000
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
             runAsUser: 1000
             runAsGroup: 1000
-            fsGroup: 1000
           image: "ghcr.io/ec-release/oauth:v1.2beta"
           imagePullPolicy: Always
           ports:
