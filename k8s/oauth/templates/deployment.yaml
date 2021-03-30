@@ -23,13 +23,11 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       securityContext:
-        runAsUser: 1000
-        runAsGroup: 1000
+        {{- toYaml .Values.securityContext | nindent 12 }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
-            runAsUser: 1000
-            runAsGroup: 1000
+            {{- toYaml .Values.securityContext | nindent 12 }}
           image: "ghcr.io/ec-release/oauth:v1.2beta"
           imagePullPolicy: Always
           ports:
