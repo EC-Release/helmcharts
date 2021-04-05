@@ -28,21 +28,11 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "ghcr.io/ec-release/oauth:v1.2beta"
+          image: "enterpriseconnect/oauth:v1.2beta"
           imagePullPolicy: Always
           ports:
             {{- include "oauth.portSpec" . | nindent 12 }}
             {{- include "oauth.healthPortSpec" . | nindent 12 }}
-          livenessProbe:
-            httpGet:
-              path: /oauth/token
-              port: http
-            initialDelaySeconds: 60
-          readinessProbe:
-            httpGet:
-              path: /oauth/token
-              port: http
-            initialDelaySeconds: 60
           resources:
             {{- include "oauth.podResource" . | nindent 12 }}
           env:
@@ -53,11 +43,6 @@ spec:
               value: {{ $a._1|quote }}
             {{- end }}
             {{- end }}
-            - name: CA_PPRS
-              valueFrom:
-                secretKeyRef:
-                  key: password
-                  name: {{ .Values.global.oauthK8Config.ownersHash }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

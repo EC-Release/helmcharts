@@ -63,7 +63,7 @@ Create the name of the service account to use
 {{- end }}
 
 {{/*
-Specify the agt ingress spec
+Specify the oauth ingress spec
 */}}
 {{- define "oauth.ingress" -}}
 {{- if .Values.global.oauthK8Config.withIngress.tls -}}
@@ -77,8 +77,6 @@ tls:
 {{- end -}}
 {{- end }}
 rules:
-{{- $serviceName := include "oauth.fullname" . -}}
-{{- $servicePort := 18090 -}}
 {{- range .Values.global.oauthK8Config.withIngress.hosts }}
   - host: {{ .host | quote }}
     http:
@@ -86,8 +84,8 @@ rules:
       {{- range $path := .paths }}
         - path: {{ $path | quote }}
           backend:
-            serviceName: {{ $serviceName | quote }}
-            servicePort: {{ $servicePort }}
+            serviceName: oauth
+            servicePort: 18090
       {{- end }}
 {{- end }}
 {{- end -}}
@@ -99,7 +97,7 @@ Generate service port spec for pods.
 - port: 18090
   targetPort: auth-prt-name
   protocol: TCP
-  name: auth-svc-prt
+  name: oauth
 {{- end -}}
 
 {{/*
