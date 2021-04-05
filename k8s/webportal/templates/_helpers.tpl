@@ -42,11 +42,80 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
+
 {{/*
 Selector labels
 */}}
 {{- define "webportal.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "webportal.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+run: {{ include "webportal.fullname" . }}
 {{- end }}
 
+{{/*
+Specify the webportal ingress spec
+*/}}
+{{- define "webportal.ingress" -}}
+{{- if .Values.global.webportalK8Config.withIngress.tls -}}
+tls:
+{{- range .Values.global.webportalK8Config.withIngress.tls }}
+  - hosts:
+    {{- range .hosts }}
+    - {{ . | quote }}
+    {{- end }}
+    secretName: {{ .secretName }}
+{{- end -}}
+{{- end }}
+rules:
+{{- range .Values.global.webportalK8Config.withIngress.hosts }}
+  - host: {{ .host | quote }}
+    http:
+      paths:
+      {{- range $path := .paths }}
+        - path: {{ $path | quote }}
+          backend:
+            serviceName: webportal
+            servicePort: 18090
+      {{- end }}
+{{- end }}
+{{- end -}}
+
+
+{{/*
+Generate service port spec for pods.
+*/}}
+{{- define "webportal.svcPortSpec" -}}
+- port: 18090
+  targetPort: webui-prt-name
+  protocol: TCP
+  name: webportal
+{{- end -}}
+
+{{/*
+Generate service health port spec for pods.
+*/}}
+{{- define "webportal.svcHealthPortSpec" -}}
+- port: 18091
+  targetPort: web-h-prt-name
+  protocol: TCP
+  name: webui-svc-h-prt
+{{- end -}}
+
+{{/*
+Generate container port spec for oauth
+*/}}
+{{- define "webportal.portSpec" -}}
+- name: webui-prt-name
+  containerPort: 17990
+  protocol: TCP
+{{- end -}}
+
+
+{{/*
+Generate container HEALTH port spec for oauth
+*/}}
+{{- define "webportal.healthPortSpec" -}}
+- name: web-h-prt-name
+  containerPort: 17990
+  protocol: TCP
+{{- end -}}

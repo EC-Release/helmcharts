@@ -24,24 +24,15 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "enterpriseconnect/webui:v1.1beta"
+          image: "enterpriseconnect/api:v1.2beta"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - name: http
-              containerPort: 80
-              protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
+            {{- include "webportal.portSpec" . | nindent 12 }}
+            {{- include "webportal.healthPortSpec" . | nindent 12 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
-            {{- range (split "\n" .Values.global.agtConfig) }}
+            {{- range (split "\n" .Values.global.webportalConfig) }}
             {{- $a := splitn "=" 2 . }}
             {{- if and (not (eq $a._1 "")) ($a._1) }}
             - name: {{ $a._0|quote }}
