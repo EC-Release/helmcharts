@@ -96,11 +96,6 @@ global:
       hosts:
         - host: ec-oauth-oidc-ci.digitalconnect.apps.ge.com
           paths: [ "/" ]
-      tls:
-        - secretName: tls-secret-1
-          hosts: [ "ec-oauth-oidc-ci.digitalconnect.apps.ge.com", "ec.rel.ge.com" ]
-        - secretName: tls.secret-2
-          hosts: [ "*.ec.https.ge.com", "ec.dev.azure.com" ]
   oauthConfig: |-
     AGENT_REV=temp_1.2-b.0.reiwa
     EC_AUTH_VALIDATE=sso
@@ -113,7 +108,7 @@ global:
     EC_OIDC_DOMAIN=https://fssfed.ge.com
     EC_OIDC_TOKEN_PATH=/fss/as/token.oauth2
     EC_OIDC_USER_PATH=https://fssfed.ge.com/fss/idp/userinfo.openid
-    EC_PORT=17990
-    EC_SEED_HOST=https://ec-oauth-sso.run.aws-usw02-dev.ice.predix.io/v1.2beta
-    EC_SEED_NODE=https://ec-oauth-github.run.aws-usw02-dev.ice.predix.io/v1.2beta
-    IsTimeController=false
+    EC_PORT=:17990
+    EC_SEED_HOST=https://ec-oauth-oidc-ci.digitalconnect.apps.ge.com/v1.2beta
+    EC_SEED_NODE=https://ec-oauth-oidc-ci.digitalconnect.apps.ge.com/v1.2beta
+    IsTimeController=true
