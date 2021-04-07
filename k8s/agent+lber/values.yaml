@@ -67,14 +67,6 @@ tolerations: []
 
 affinity: {}
 
-agtK8Config:
-  portName: agt-prt
-  svcPortName: agt-svc-prt
-  svcPortNum: 8080
-  healthPortName: agt-h-prt
-  svcHealthPortName: agt-svc-h-prt
-  svcHealthPortNum: 8081
-
 global:
   agtK8Config:
     # some cluster instances require resource-spec for the deployment, e.g. GE Digital
