@@ -5,6 +5,7 @@ metadata:
   name: {{ include "oauth.fullname" . }}
   labels:
     {{- include "oauth.labels" . | nindent 4 }}
+    type: local
 spec:
   capacity:
     storage: 1Gi
@@ -15,8 +16,13 @@ spec:
   storageClassName: {{ .Values.global.oauthK8Config.efsPersistence.storageClassName | quote }}
   mountOptions:
   {{- toYaml .Values.global.oauthK8Config.efsPersistence.mountOptions | nindent 4 }}
+  {{- if .Values.global.oauthK8Config.efsPersistence.fileSystemId }}
   csi:
     driver: {{ .Values.global.oauthK8Config.efsPersistence.provisioner  | quote }}
     volumeHandle: {{ printf "%s::%s" .Values.global.oauthK8Config.efsPersistence.fileSystemId .Values.global.oauthK8Config.efsPersistence.accessPointId }}
+  {{- else }}
+  hostPath:
+    path: {{ .Values.global.oauthK8Config.efsPersistence.path | quote }}
+  {{- end }}
  {{- end }}
 # Storage class - EFS default, but can be override from values

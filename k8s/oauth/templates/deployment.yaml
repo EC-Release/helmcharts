@@ -24,6 +24,10 @@ spec:
       {{- end }}
       securityContext:
         {{- toYaml .Values.securityContext | nindent 12 }}
+      volumes:
+        - name: oauth-pv-storage
+          persistentVolumeClaim:
+            claimName: oauth
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -33,6 +37,9 @@ spec:
           ports:
             {{- include "oauth.portSpec" . | nindent 12 }}
             {{- include "oauth.healthPortSpec" . | nindent 12 }}
+          volumeMounts:
+            - mountPath: "/~/.ec/"
+              name: oauth-pv-storage
           resources:
             {{- include "oauth.podResource" . | nindent 12 }}
           env:

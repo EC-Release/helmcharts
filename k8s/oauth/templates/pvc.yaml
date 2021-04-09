@@ -1,4 +1,3 @@
-# add security context to pvc
 # pvc will have th mount - ~/.ec/.db
 
 apiVersion: v1

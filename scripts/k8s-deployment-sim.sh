@@ -69,13 +69,17 @@ kubectl delete --all deployments && kubectl delete --all pods && kubectl delete 
 printf "\n\n\n*** [4] install oauth in k8s\n"
 helm install k8s/examples/oauth --set-file global.oauthConfig=k8s/examples/oauth/oauth.env --generate-name
 printf "\n\n\n*** [4.1] verify installation\n"
-kubectl get deployments && kubectl get pods && kubectl get services && kubectl get ingresses
+kubectl get deployments && kubectl get pods && kubectl get services && kubectl get ingresses && kubectl get pv && kubectl get pvc
 printf "\n\n\n*** [4.2] verify deployment spec\n"
 kubectl describe deployments $(kubectl get deployments|grep oauth|awk '{print $1}'|head -n 1)
 printf "\n\n\n*** [4.3] verify service spec\n"
 kubectl describe services $(kubectl get services|grep oauth|awk '{print $1}'|head -n 1)
 printf "\n\n\n*** [4.4] verify ingress spec\n"
 kubectl describe ingresses $(kubectl get ingresses|grep oauth|awk '{print $1}'|head -n 1)
-printf "\n\n\n*** [4.5] clear installation\n"
-kubectl delete --all deployments && kubectl delete --all pods && kubectl delete --all services && kubectl delete --all ingresses
+printf "\n\n\n*** [4.5] verify pv spec\n"
+kubectl describe pv $(kubectl get pv|grep oauth|awk '{print $1}'|head -n 1)
+printf "\n\n\n*** [4.6] verify pvc spec\n"
+kubectl describe pvc $(kubectl get pvc|grep oauth|awk '{print $1}'|head -n 1)
+printf "\n\n\n*** [4.7] clear installation\n"
+kubectl delete --all deployments && kubectl delete --all pods && kubectl delete --all services && kubectl delete --all ingresses && kubectl delete --all pv && kubectl delete --all pvc
 

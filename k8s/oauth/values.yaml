@@ -77,13 +77,14 @@ global:
     efsPersistence:
       enabled: true
       reclaimPolicy: Retain
+      path: /data
       # mountOptions:
       provisioner: efs.csi.aws.com
-      accessPointId: fsap-0a6e3e1b0fa9517ca
-      fileSystemId: fs-ca92a97f
+#      accessPointId: fsap-0a6e3e1b0fa9517ca
+#      fileSystemId: fs-ca92a97f
       accessModes:
         - ReadWriteMany
-      storageClassName: efs-sc
+      storageClassName: standard
     resources:
       limits:
         cpu: 200m
