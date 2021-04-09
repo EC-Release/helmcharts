@@ -67,15 +67,22 @@ tolerations: []
 
 affinity: {}
 
-agtK8Config:
-  portName: agt-prt
-  svcPortName: agt-svc-prt
-  svcPortNum: 8080
-  healthPortName: agt-h-prt
-  svcHealthPortName: agt-svc-h-prt
-  svcHealthPortNum: 8081
-
 global:
+  agtConfig: |-
+    conf.mod=gateway
+    conf.gpt=7990
+    conf.lpt=7990
+    conf.hca=7991
+    conf.pxy="org-proxy-url-if-needed"
+    conf.hst="ws|wss://gateway-url/agent"
+    conf.dur=3000
+    conf.dbg=true
+    conf.cps=5
+    conf.zon=predix-zone-id
+    conf.grp=test
+    conf.sst=https://predix-zone-id.run.aws-usw02-pr|dev.ice.predix.io
+    conf.tkn=ec-service-admin-token
+    AGENT_REV=v1.hokkaido.213
   agtK8Config:
     # some cluster instances require resource-spec for the deployment, e.g. GE Digital
     # PCS CF1/CF3 Cluster, whereas some can simply ignore the usage.
