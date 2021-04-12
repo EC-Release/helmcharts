@@ -50,11 +50,6 @@ spec:
               value: {{ $a._1|quote }}
             {{- end }}
             {{- end }}
-            - name: CA_PPRS
-              valueFrom:
-                secretKeyRef:
-                  key: password
-                  name: oauth-owners-hash
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
