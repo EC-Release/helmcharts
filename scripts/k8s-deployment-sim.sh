@@ -81,5 +81,5 @@ kubectl describe pv $(kubectl get pv|grep oauth|awk '{print $1}'|head -n 1)
 printf "\n\n\n*** [4.6] verify pvc spec\n"
 kubectl describe pvc $(kubectl get pvc|grep oauth|awk '{print $1}'|head -n 1)
 printf "\n\n\n*** [4.7] clear installation\n"
-kubectl delete --all deployments && kubectl delete --all pods && kubectl delete --all services && kubectl delete --all ingresses && kubectl delete --all persistentvolumes
+kubectl delete --all deployments && kubectl delete --all pods && kubectl delete --all services && kubectl delete --all ingresses
 
