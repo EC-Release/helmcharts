@@ -22,7 +22,7 @@ jobs:
       CA_PPRS: ${{ secrets.EC_PPS }}
       EC_OIDC_CID: ${{ secrets.EC_OIDC_CID }}
       EC_OIDC_CSC: ${{ secrets.EC_OIDC_CSC }}
-      EC_PVTKEY_EXTERNAL: ${{ secrets.EC_PVTKEY_EXTERNAL }}
+      EC_PVTKEY: ${{ secrets.EC_PVTKEY }}
 
     steps:
       - uses: actions/checkout@v2
