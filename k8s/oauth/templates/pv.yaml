@@ -25,4 +25,3 @@ spec:
     path: {{ .Values.global.oauthK8Config.efsPersistence.path | quote }}
   {{- end }}
  {{- end }}
-# Storage class - EFS default, but can be override from values
