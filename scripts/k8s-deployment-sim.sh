@@ -91,6 +91,10 @@ kubectl describe deployments $(kubectl get deployments|grep webportal|awk '{prin
 printf "\n\n\n*** [5.3] verify service spec\n"
 kubectl describe services $(kubectl get services|grep webportal|awk '{print $1}'|head -n 1)
 printf "\n\n\n*** [5.4] verify ingress spec\n"
-kubectl describe services $(kubectl get services|grep webportal|awk '{print $1}'|head -n 1)
+kubectl describe ingresses $(kubectl get ingresses|grep webportal|awk '{print $1}'|head -n 1)
+printf "\n\n\n*** [5.5] verify pv spec\n"
+kubectl describe pv $(kubectl get pv|grep webportal|awk '{print $1}'|head -n 1)
+printf "\n\n\n*** [5.6] verify pvc spec\n"
+kubectl describe pvc $(kubectl get pvc|grep webportal|awk '{print $1}'|head -n 1)
 printf "\n\n\n*** [5.5] clear installation\n"
 kubectl delete --all deployments && kubectl delete --all pods && kubectl delete --all services && kubectl delete --all ingresses
