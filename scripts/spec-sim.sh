@@ -61,7 +61,7 @@ mkdir -p k8s/pkg/agent/$AGENT_CHART_REV k8s/pkg/agent+helper/$AGENT_HELPER_CHART
 
 ls -la k8s/pkg
 helm package k8s/agent+helper -d k8s/pkg/agent+helper/$AGENT_HELPER_CHART_REV
-helm package k8s/webportal -d k8s/pkg/webportal/AGENT_WEBPORTAL_CHART_REV
+helm package k8s/webportal -d k8s/pkg/webportal/$AGENT_WEBPORTAL_CHART_REV
 helm dependency update k8s/agent
 helm dependency update k8s/agent+plg
 helm dependency update k8s/agent+lber
