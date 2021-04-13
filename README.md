@@ -86,10 +86,11 @@ For plugins-relate usage in detail, please refer to the [TLS docs](https://githu
 Please refer [page](https://gitlab.com/digital-fo/connectivity/enterprise-connect/platform-agnostic/agent/-/tree/v1/example-yml) to get the subset of agent flags based on mod
 ```yaml
 ...
+
 global:
-  agtConfig:
+  agtConfig: |-
     conf.mod=gateway|server|client|gw:server|gw:client
-    conf.gpt=global port in number
+    conf.gpt=global port in number (7990 for lber)
     conf.dbg=boolean true|false
     conf.hst="ws|wss://gateway-url/agent"
     conf.tkn=ec-service-admin-token

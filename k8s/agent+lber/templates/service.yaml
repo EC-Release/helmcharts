@@ -13,12 +13,12 @@ spec:
     {{- include "agentlber.selectorLabels" . | nindent 4 }}
 
 ---
-{{- $portName := .Values.agtK8Config.portName -}}
-{{- $healthPortName := .Values.agtK8Config.healthPortName -}}
-{{- $svcPortName := .Values.agtK8Config.svcPortName -}}
-{{- $svcPortNum := .Values.agtK8Config.svcPortNum -}}
-{{- $svcHealthPortNum := .Values.agtK8Config.svcHealthPortNum -}}
-{{- $svcHealthPortName := .Values.agtK8Config.svcHealthPortName -}}
+{{- $portName := "agt-prt" -}}
+{{- $healthPortName := "agt-h-prt" -}}
+{{- $svcPortName := "agt-svc-prt" -}}
+{{- $svcPortNum := 8080 -}}
+{{- $svcHealthPortNum := 8081 -}}
+{{- $svcHealthPortName := "agt-svc-h-prt" -}}
 apiVersion: v1
 kind: Service
 metadata:
