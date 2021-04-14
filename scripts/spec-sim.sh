@@ -75,8 +75,6 @@ helm dependency update k8s/examples/agent
 ls -la k8s/examples/agent/charts/
 helm dependency update k8s/examples/lber
 ls -la k8s/examples/lber/charts/
-helm dependency update k8s/examples/oauth
-ls -la k8s/examples/oauth/charts/
 
 printf "\n\n\n*** test oauth template\n"
 helm template k8s/oauth --debug --set-file global.oauthConfig=k8s/examples/oauth/oauth.env
@@ -131,4 +129,4 @@ helm repo index k8s/pkg-new/agent/$AGENT_CHART_REV --url https://raw.githubuserc
 helm repo index k8s/pkg-new/agent+helper/$AGENT_HELPER_CHART_REV --url https://raw.githubusercontent.com/EC-Release/helmcharts/disty/agent+helper/$AGENT_HELPER_CHART_REV
 helm repo index k8s/pkg-new/agent+plg/$AGENT_PLG_CHART_REV --url https://raw.githubusercontent.com/EC-Release/helmcharts/disty/agent+plg/$AGENT_PLG_CHART_REV
 helm repo index k8s/pkg-new/agent+lber/$AGENT_LBER_CHART_REV --url https://raw.githubusercontent.com/EC-Release/helmcharts/disty/agent+lber/$AGENT_LBER_CHART_REV
-helm repo index k8s/pkg/oauth/$OAUTH_CHART_REV --url https://ec-release.github.io/oci/oauth/$OAUTH_CHART_REV
+helm repo index k8s/pkg-new/oauth/$OAUTH_CHART_REV --url https://raw.githubusercontent.com/EC-Release/helmcharts/disty/oauth/$OAUTH_CHART_REV

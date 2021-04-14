@@ -36,16 +36,21 @@ $ helm dependency update example -n namespace
 ...
 global:
   oauthConfig: |-
-    port={{port}}
-    privateKey={{encrypted-private-key}}
-    publicCert={{encrypted-public-key}}
-    authValidate={{oidc|oaep}}
-    oidcDomain={{ex: https://helloOauthDomain.com}}
-    oidcAuthPath={{/authorize}}
-    oidcTokenPath={{/oauth/token}}
-    oidcUserPath={{oidc-user-path|""}}
-    oidcCid={{oidc-cid|""}}
-    oidcCsc={{oidc-csc|""}}
+    AGENT_REV=temp_1.2-b.0.reiwa
+    EC_AUTH_VALIDATE=sso
+    EC_OAUTH_FAIL_URL=https://ng-portal.run.aws-usw02-dev.ice.predix.io/v1.2beta/ec
+    EC_OIDC_AUTH_PATH=/fss/as/authorization.oauth2
+    CA_PPRS={{CA_PPRS}}
+    EC_OIDC_CID={{EC_OIDC_CID}}
+    EC_OIDC_CSC={{EC_OIDC_CSC}}
+    EC_PVTKEY={{EC_PVTKEY}}
+    EC_OIDC_DOMAIN=https://fssfed.ge.com
+    EC_OIDC_TOKEN_PATH=/fss/as/token.oauth2
+    EC_OIDC_USER_PATH=https://fssfed.ge.com/fss/idp/userinfo.openid
+    EC_PORT=:17990
+    EC_SEED_HOST=https://ec-oauth-oidc-ci.digitalconnect.apps.ge.com/v1.2beta
+    EC_SEED_NODE=https://ec-oauth-oidc-ci.digitalconnect.apps.ge.com/v1.2beta
+    IsTimeController=true
 ```
 
 #### Chart Installation
@@ -61,15 +66,20 @@ $ helm install --debug|dry-run example example/ -n namespace
 
 OAuth configuration parameters - `global.oauthConfig`
 
-| Parameter         | Description                           | Allowed values                            |
-| ----------------- | ------------------------------------- | ---------------------------------------   |
-| `port`            |                                       |                                           |
-| `privateKey`      |                                       |                                           |
-| `publicCert`      |                                       |                                           |
-| `authValidate`    |                                       |                                           |
-| `oidcDomain`      |                                       |                                           |
-| `oidcAuthPath`    |                                       |                                           |
-| `oidcTokenPath`   |                                       |                                           |
-| `oidcUserPath`    |                                       |                                           |
-| `oidcCid`         |                                       |                                           |
-| `oidcCsc`         |                                       |                                           |
+| Parameter            | Description                                                     | 
+| -------------------- | --------------------------------------------------------------- | 
+| `AGENT_REV`          | `temp_1.2-b.0.reiwa`                                            | 
+| `EC_AUTH_VALIDATE`   | `sso`                                                           | 
+| `EC_OAUTH_FAIL_URL`  | `https://ng-portal.run.aws-usw02-dev.ice.predix.io/v1.2beta/ec` | 
+| `EC_OIDC_AUTH_PATH`  | `/fss/as/authorization.oauth2`                                  | 
+| `CA_PPRS`            | Owners hash to read from `oauth-owners-hash`                    | 
+| `EC_OIDC_CID`        | OIDC client ID                                                  | 
+| `EC_OIDC_CSC`        | OIDC client secret                                              | 
+| `EC_PVTKEY`          | Developer private key                                           | 
+| `EC_OIDC_DOMAIN`     | `https://fssfed.ge.com`                                         | 
+| `EC_OIDC_TOKEN_PATH` | `/fss/as/token.oauth2`                                          | 
+| `EC_OIDC_USER_PATH`  | `https://fssfed.ge.com/fss/idp/userinfo.openid`                 | 
+| `EC_PORT`            | `17990`                                                         | 
+| `EC_SEED_HOST`       | `https://{{DNS name / Ingress URL}}/v1.2beta`                   | 
+| `EC_SEED_NODE`       | `https://{{DNS name / Ingress URL}}/v1.2beta`                   | 
+| `IsTimeController`   | `false`                                                         | 
