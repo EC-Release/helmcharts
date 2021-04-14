@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "oauth.fullname" . }}
+  labels:
+    {{- include "oauth.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    {{- include "oauth.svcPortSpec" . | nindent 4 }}
+    {{- include "oauth.svcHealthPortSpec" . | nindent 4 }}
+  selector:
+    {{- include "oauth.selectorLabels" . | nindent 4 }}

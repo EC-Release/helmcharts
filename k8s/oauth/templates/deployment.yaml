@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "oauth.fullname" . }}
+  labels:
+    {{- include "oauth.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "oauth.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "oauth.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.securityContext | nindent 12 }}
+      volumes:
+        - name: oauth-pv-storage
+          persistentVolumeClaim:
+            claimName: oauth
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "enterpriseconnect/oauth:v1.2beta"
+          imagePullPolicy: Always
+          ports:
+            {{- include "oauth.portSpec" . | nindent 12 }}
+            {{- include "oauth.healthPortSpec" . | nindent 12 }}
+          volumeMounts:
+            - mountPath: "/~/.ec/"
+              name: oauth-pv-storage
+          resources:
+            {{- include "oauth.podResource" . | nindent 12 }}
+          env:
+            {{- range (split "\n" .Values.global.oauthConfig) }}
+            {{- $a := splitn "=" 2 . }}
+            {{- if and (not (eq $a._1 "")) ($a._1) }}
+            - name: {{ $a._0|quote }}
+              value: {{ $a._1|quote }}
+            {{- end }}
+            {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
