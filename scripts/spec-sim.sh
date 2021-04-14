@@ -75,6 +75,8 @@ helm dependency update k8s/examples/agent
 ls -la k8s/examples/agent/charts/
 helm dependency update k8s/examples/lber
 ls -la k8s/examples/lber/charts/
+helm dependency update k8s/examples/oauth
+ls -la k8s/examples/oauth/charts/
 
 printf "\n\n\n*** test oauth template\n"
 helm template k8s/oauth --debug --set-file global.oauthConfig=k8s/examples/oauth/oauth.env
