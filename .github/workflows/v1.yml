@@ -13,11 +13,16 @@ jobs:
     environment: v1
     env:
       #helm chart version
-      AGENT_CHART_REV: 0.1.9
-      AGENT_HELPER_CHART_REV: 0.1.7
-      AGENT_PLG_CHART_REV: 0.1.8
-      AGENT_LBER_CHART_REV: 0.1.1
+      AGENT_CHART_REV: 0.1.10
+      AGENT_HELPER_CHART_REV: 0.1.8
+      AGENT_PLG_CHART_REV: 0.1.9
+      AGENT_LBER_CHART_REV: 0.1.2
+      OAUTH_CHART_REV: 0.1.0
       AGENT_REV: v1.hokkaido.213
+      CA_PPRS: ${{ secrets.EC_PPS }}
+      EC_OIDC_CID: ${{ secrets.EC_OIDC_CID }}
+      EC_OIDC_CSC: ${{ secrets.EC_OIDC_CSC }}
+      EC_PVTKEY: ${{ secrets.EC_PVTKEY }}
 
     steps:
       - uses: actions/checkout@v2

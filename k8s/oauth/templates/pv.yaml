@@ -1,0 +1,27 @@
+{{- if .Values.global.oauthK8Config.efsPersistence.enabled -}}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "oauth.fullname" . }}
+  labels:
+    {{- include "oauth.labels" . | nindent 4 }}
+    type: local
+spec:
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+  {{- toYaml .Values.global.oauthK8Config.efsPersistence.accessModes | nindent 4 }}
+  persistentVolumeReclaimPolicy: {{ .Values.global.oauthK8Config.efsPersistence.reclaimPolicy | quote }}
+  storageClassName: {{ .Values.global.oauthK8Config.efsPersistence.storageClassName | quote }}
+  mountOptions:
+  {{- toYaml .Values.global.oauthK8Config.efsPersistence.mountOptions | nindent 4 }}
+  {{- if .Values.global.oauthK8Config.efsPersistence.fileSystemId }}
+  csi:
+    driver: {{ .Values.global.oauthK8Config.efsPersistence.provisioner  | quote }}
+    volumeHandle: {{ printf "%s::%s" .Values.global.oauthK8Config.efsPersistence.fileSystemId .Values.global.oauthK8Config.efsPersistence.accessPointId }}
+  {{- else }}
+  hostPath:
+    path: {{ .Values.global.oauthK8Config.efsPersistence.path | quote }}
+  {{- end }}
+ {{- end }}
