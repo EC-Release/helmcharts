@@ -87,6 +87,8 @@ helm dependency update k8s/examples/lber
 ls -la k8s/examples/lber/charts/
 helm dependency update k8s/examples/oauth
 ls -la k8s/examples/oauth/charts/
+helm dependency update k8s/examples/webportal
+ls -la k8s/examples/webportal/charts/
 
 printf "\n\n\n*** test oauth template\n"
 helm template k8s/oauth --debug --set-file global.oauthConfig=k8s/examples/oauth/oauth.env
@@ -123,13 +125,13 @@ helm repo index k8s/pkg/agent/$AGENT_CHART_REV --url https://ec-release.github.i
 helm repo index k8s/pkg/agent+helper/$AGENT_HELPER_CHART_REV --url https://ec-release.github.io/oci/agent+helper/$AGENT_HELPER_CHART_REV
 helm repo index k8s/pkg/agent+plg/$AGENT_PLG_CHART_REV --url https://ec-release.github.io/oci/agent+plg/$AGENT_PLG_CHART_REV
 helm repo index k8s/pkg/agent+lber/$AGENT_LBER_CHART_REV --url https://ec-release.github.io/oci/agent+lber/$AGENT_LBER_CHART_REV
-<<<<<<< HEAD
 helm repo index k8s/pkg/oauth/$OAUTH_CHART_REV --url https://ec-release.github.io/oci/oauth/$OAUTH_CHART_REV
 helm repo index k8s/pkg/webportal/$AGENT_WEBPORTAL_CHART_REV --url https://ec-release.github.io/oci/webportal/$AGENT_WEBPORTAL_CHART_REV
 
 
 printf "\n\n\n*** packaging w/ dependencies (ec-release/helmcharts)\n"
 mkdir -p k8s/pkg-new/agent/$AGENT_CHART_REV k8s/pkg-new/agent+helper/$AGENT_HELPER_CHART_REV k8s/pkg-new/agent+plg/$AGENT_PLG_CHART_REV k8s/pkg-new/agent+lber/$AGENT_LBER_CHART_REV k8s/pkg-new/oauth/$OAUTH_CHART_REV k8s/pkg-new/webportal/$AGENT_WEBPORTAL_CHART_REV
+
 cp -R k8s/pkg/* k8s/pkg-new
 ls -la k8s/pkg-new
 helm package k8s/agent+helper -d k8s/pkg-new/agent+helper/$AGENT_HELPER_CHART_REV
@@ -147,5 +149,5 @@ helm repo index k8s/pkg-new/agent/$AGENT_CHART_REV --url https://raw.githubuserc
 helm repo index k8s/pkg-new/agent+helper/$AGENT_HELPER_CHART_REV --url https://raw.githubusercontent.com/EC-Release/helmcharts/disty/agent+helper/$AGENT_HELPER_CHART_REV
 helm repo index k8s/pkg-new/agent+plg/$AGENT_PLG_CHART_REV --url https://raw.githubusercontent.com/EC-Release/helmcharts/disty/agent+plg/$AGENT_PLG_CHART_REV
 helm repo index k8s/pkg-new/agent+lber/$AGENT_LBER_CHART_REV --url https://raw.githubusercontent.com/EC-Release/helmcharts/disty/agent+lber/$AGENT_LBER_CHART_REV
-helm repo index k8s/pkg/oauth/$OAUTH_CHART_REV --url https://ec-release.github.io/oci/oauth/$OAUTH_CHART_REV
+helm repo index k8s/pkg-new/oauth/$OAUTH_CHART_REV --url https://raw.githubusercontent.com/EC-Release/helmcharts/disty/oauth/$OAUTH_CHART_REV
 helm repo index k8s/pkg-new/webportal/$AGENT_WEBPORTAL_CHART_REV --url https://raw.githubusercontent.com/EC-Release/helmcharts/disty/webportal/$AGENT_WEBPORTAL_CHART_REV
