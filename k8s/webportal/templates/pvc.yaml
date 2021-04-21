@@ -1,0 +1,15 @@
+# pvc will have th mount - ~/.ec/.db
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "webportalK8Config.fullname" . }}
+  labels:
+    {{- include "webportalK8Config.labels" . | nindent 4 }}
+spec:
+  accessModes:
+  {{- toYaml .Values.global.webportalK8Config.efsPersistence.accessModes | nindent 4 }}
+  storageClassName: {{ .Values.global.webportalK8Config.efsPersistence.storageClassName | quote }}
+  resources:
+    requests:
+      storage: 1Gi

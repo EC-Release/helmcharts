@@ -66,6 +66,7 @@ kubectl describe services $(kubectl get services|grep agent-plg|awk '{print $1}'
 printf "\n\n\n*** [3.4] clear installation\n"
 kubectl delete --all deployments && kubectl delete --all pods && kubectl delete --all services
 
+
 printf "\n\n\n*** [4] install oauth in k8s\n"
 helm install k8s/examples/oauth --set-file global.oauthConfig=k8s/examples/oauth/oauth.env --generate-name
 printf "\n\n\n*** [4.1] verify installation\n"
@@ -83,3 +84,20 @@ kubectl describe pvc $(kubectl get pvc|grep oauth|awk '{print $1}'|head -n 1)
 printf "\n\n\n*** [4.7] clear installation\n"
 kubectl delete --all deployments && kubectl delete --all pods && kubectl delete --all services && kubectl delete --all ingresses
 
+
+printf "\n\n\n*** [5] install webportal in k8s\n"
+helm install k8s/examples/webportal --set-file global.agtConfig=k8s/examples/webportal/webportal.env --generate-name
+printf "\n\n\n*** [5.1] verify installation\n"
+kubectl get deployments && kubectl get pods && kubectl get services && kubectl get ingresses
+printf "\n\n\n*** [5.2] verify deployment spec\n"
+kubectl describe deployments $(kubectl get deployments|grep webportal|awk '{print $1}'|head -n 1)
+printf "\n\n\n*** [5.3] verify service spec\n"
+kubectl describe services $(kubectl get services|grep webportal|awk '{print $1}'|head -n 1)
+printf "\n\n\n*** [5.4] verify ingress spec\n"
+kubectl describe ingresses $(kubectl get ingresses|grep webportal|awk '{print $1}'|head -n 1)
+printf "\n\n\n*** [5.5] verify pv spec\n"
+kubectl describe pv $(kubectl get pv|grep webportal|awk '{print $1}'|head -n 1)
+printf "\n\n\n*** [5.6] verify pvc spec\n"
+kubectl describe pvc $(kubectl get pvc|grep webportal|awk '{print $1}'|head -n 1)
+printf "\n\n\n*** [5.5] clear installation\n"
+kubectl delete --all deployments && kubectl delete --all pods && kubectl delete --all services && kubectl delete --all ingresses
