@@ -68,12 +68,12 @@
     {{- include "agent.healthPortSpec" (merge (dict "healthPortName" .healthPortName) .) | nindent 4 }}
   livenessProbe:
     httpGet:
-      path: /health
-      port: {{ .healthPortName }}
+      path: /status
+      port: 27991
   readinessProbe:
     httpGet:
-      path: /health
-      port: {{ .healthPortName }}
+      path: /status
+      port: 27991
   resources:
     {{- .podResource | nindent 4 }}
   env:
