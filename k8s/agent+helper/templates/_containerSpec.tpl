@@ -70,10 +70,14 @@
     httpGet:
       path: /status
       port: 27991
+    periodSeconds: 120
+    initialDelaySeconds: 120
   readinessProbe:
     httpGet:
       path: /status
       port: 27991
+    periodSeconds: 120
+    initialDelaySeconds: 120
   resources:
     {{- .podResource | nindent 4 }}
   env:
