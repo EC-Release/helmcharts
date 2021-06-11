@@ -14,10 +14,10 @@
 {{/*
 Specify the agt ingress spec
 */}}
-{{- define "agent.ingress" -}}
-{{- if .Values.global.agtK8Config.withIngress.tls -}}
+{{- define "agent.intIngress" -}}
+{{- if .Values.global.agtK8Config.withIntIngress.tls -}}
 tls:
-{{- range .Values.global.agtK8Config.withIngress.tls }}
+{{- range .Values.global.agtK8Config.withIntIngress.tls }}
   - hosts:
     {{- range .hosts }}
     - {{ . | quote }}
@@ -28,7 +28,34 @@ tls:
 rules:
 {{- $serviceName := include "agent.fullname" . -}}
 {{- $servicePort := (ternary .Values.agtK8Config.svcPortNum .Values.global.agtK8Config.svcPortNum (kindIs "invalid" .Values.global.agtK8Config.svcPortNum)) -}}
-{{- range .Values.global.agtK8Config.withIngress.hosts }}
+{{- range .Values.global.agtK8Config.withIntIngress.hosts }}
+  - host: {{ .host | quote }}
+    http:
+      paths:
+      {{- range $path := .paths }}
+        - path: {{ $path | quote }}
+          backend:
+            serviceName: {{ $serviceName | quote }}
+            servicePort: {{ $servicePort }}
+      {{- end }}
+{{- end }}
+{{- end -}}
+
+{{- define "agent.extIngress" -}}
+{{- if .Values.global.agtK8Config.withExtIngress.tls -}}
+tls:
+{{- range .Values.global.agtK8Config.withExtIngress.tls }}
+  - hosts:
+    {{- range .hosts }}
+    - {{ . | quote }}
+    {{- end }}
+    secretName: {{ .secretName }}
+{{- end -}}
+{{- end }}
+rules:
+{{- $serviceName := include "agent.fullname" . -}}
+{{- $servicePort := (ternary .Values.agtK8Config.svcPortNum .Values.global.agtK8Config.svcPortNum (kindIs "invalid" .Values.global.agtK8Config.svcPortNum)) -}}
+{{- range .Values.global.agtK8Config.withExtIngress.hosts }}
   - host: {{ .host | quote }}
     http:
       paths:

@@ -1,6 +1,6 @@
 {{- if $.Values.global.agtK8Config.stsName -}}
 {{- $agtMode := include "agent.mode" . -}}
-{{- if or (eq $agtMode "gateway") (.Values.global.agtK8Config.withExtIngress.enabled) -}}
+{{- if (.Values.global.agtK8Config.withExtIngress.enabled) -}}
 {{- $fullName := include "agentlber.fullname" . -}}
 {{- $svcPort := 8080 -}}
 {{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
@@ -16,6 +16,6 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: "nginx-ext"
 spec:
-  {{- include "agentlber.ingress" . | nindent 2 }}
+  {{- include "agentlber.extIngress" . | nindent 2 }}
 {{- end }}
 {{- end }}
