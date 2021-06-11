@@ -1,4 +1,4 @@
-{{- if .Values.global.oauthK8Config.withIngress.enabled -}}
+{{- if .Values.global.oauthK8Config.withExtIngress.enabled -}}
 {{- $fullName := include "oauth.fullname" . -}}
 {{- $svcPort := .Values.service.port -}}
 {{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
@@ -8,11 +8,11 @@ apiVersion: extensions/v1beta1
 {{- end }}
 kind: Ingress
 metadata:
-  name: {{ $fullName }}
+  name: {{ $fullName }}-ext
   labels:
     {{- include "oauth.labels" . | nindent 4 }}
   annotations:
-    {}
+    kubernetes.io/ingress.class: "nginx-ext"
 spec:
   {{- include "oauth.ingress" . | nindent 2 }}
 {{- end }}
