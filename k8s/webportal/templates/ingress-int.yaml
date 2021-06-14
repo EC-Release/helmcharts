@@ -14,5 +14,5 @@ metadata:
   annotations:
     {}
 spec:
-  {{- include "webportal.ingress" . | nindent 2 }}
+  {{- include "webportal.intIngress" . | nindent 2 }}
 {{- end }}
