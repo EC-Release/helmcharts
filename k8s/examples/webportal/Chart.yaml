@@ -23,6 +23,6 @@ version: 0.1.0
 appVersion: 1.16.0
 
 dependencies:
-- name: oauth
+- name: webportal
   version: <AGENT_WEBPORTAL_CHART_REV>
-  repository: "file://./../../oauth"
+  repository: "file://./../../webportal"
