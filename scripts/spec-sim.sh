@@ -91,7 +91,7 @@ helm dependency update k8s/examples/webportal
 ls -la k8s/examples/webportal/charts/
 
 printf "\n\n\n*** test oauth template\n"
-helm template k8s/oauth --debug --set-file global.oauthConfig=k8s/examples/oauth/oauth.env
+helm template k8s/examples/oauth --debug --set-file global.oauthConfig=k8s/examples/oauth/oauth.env
 
 printf "\n\n\n*** test webportal\n"
 helm template k8s/examples/webportal --debug --set-file global.agtConfig=k8s/examples/webportal/webportal.env
