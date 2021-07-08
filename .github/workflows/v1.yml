@@ -13,12 +13,12 @@ jobs:
     environment: v1
     env:
       #helm chart version
-      AGENT_CHART_REV: 0.1.11
-      AGENT_HELPER_CHART_REV: 0.1.9
-      AGENT_PLG_CHART_REV: 0.1.10
-      AGENT_LBER_CHART_REV: 0.1.3
-      OAUTH_CHART_REV: 0.1.1
-      AGENT_WEBPORTAL_CHART_REV: 0.1.1
+      AGENT_CHART_REV: 0.1.12
+      AGENT_HELPER_CHART_REV: 0.1.10
+      AGENT_PLG_CHART_REV: 0.1.11
+      AGENT_LBER_CHART_REV: 0.1.4
+      OAUTH_CHART_REV: 0.1.2
+      AGENT_WEBPORTAL_CHART_REV: 0.1.2
       AGENT_REV: v1.hokkaido.213
       CA_PPRS: ${{ secrets.EC_PPS }}
       EC_OIDC_CID: ${{ secrets.EC_OIDC_CID }}
