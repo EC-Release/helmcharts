@@ -114,21 +114,16 @@ global:
     replicaCount: {{agent-pod-replicacount}}
     # withIngress decides the availability of the agt ingress obj in deployment.
     # by default, when deploy as the gateway mode (conf.mod=gateway), the value (enabled) will be overridden to true
-    withIngress:
+    withIntIngress:
       enabled: false
-      # host utilised to make the agt accessible via non-tls traffic.
-      # it is also possible for the co-existence and the overlap of both tls/non-tls routings (hosts/tls)
       hosts:
-        - host: ec.helloworld.ge.com
+        - host: url-int.digitalconnect.apps.ge.com
           paths: ["/"]
-      # present if the agt is accessible via wss|https.
-      # example empty array below indicates no tls assignment is avaialble
-      # tls: []
-      tls:
-        - secretName: tls-secret-1
-          hosts: ["ec.helloworld.ge.com", "ec.rel.ge.com"]
-        - secretName: tls.secret-2
-          hosts: ["*.ec.https.ge.com", "ec.dev.azure.com"]
+    withExtIngress:
+      enabled: true
+      hosts:
+        - host: url-ext.digitalconnect.apps.ge.com
+          paths: [ "/" ]
     # options below are applicable only in the agent+plugins helm package.
     # this setting is intended to deploy a plugin alongside the agent when "-plg" is present or is "true"
     withPlugins:

@@ -1,5 +1,5 @@
+{{- if .Values.global.oauthK8Config.efsPersistence.enabled -}}
 # pvc will have th mount - ~/.ec/.db
-
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -13,3 +13,4 @@ spec:
   resources:
     requests:
       storage: 1Gi
+ {{- end }}

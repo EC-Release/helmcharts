@@ -5,10 +5,10 @@
 replicaCount: 1
 
 image:
-  repository: nginx
+  repository: ghcr.io/ec-release/oci/oauth
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
+  tag: "v1.2beta"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -65,15 +65,56 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
-
 nodeSelector: {}
 
 tolerations: []
 
 affinity: {}
+
+global:
+  oauthK8Config:
+    ownersHash: oauth-owners-hash
+    efsPersistence:
+      enabled: false
+      reclaimPolicy: Retain
+      path: /data
+      # mountOptions:
+      provisioner: efs.csi.aws.com
+#      accessPointId: fsap-0a6e3e1b0fa9517ca
+#      fileSystemId: fs-ca92a97f
+      accessModes:
+        - ReadWriteMany
+      storageClassName: standard
+    resources:
+      limits:
+        cpu: 200m
+        memory: 512Mi
+      requests:
+        cpu: 200m
+        memory: 256Mi
+    withExtIngress:
+      enabled: true
+      hosts:
+        - host: ext-url.digitalconnect.apps.ge.com
+          paths: [ "/" ]
+    withIntIngress:
+      enabled: true
+      hosts:
+        - host: int-url.digitalconnect.apps.ge.com
+          paths: [ "/" ]
+  oauthConfig: |-
+    AGENT_REV=temp_1.2-b.0.reiwa
+    EC_AUTH_VALIDATE=sso
+    EC_OAUTH_FAIL_URL=https://ng-portal.run.aws-usw02-dev.ice.predix.io/v1.2beta/ec
+    EC_OIDC_AUTH_PATH=/fss/as/authorization.oauth2
+    CA_PPRS={{CA_PPRS}}
+    EC_OIDC_CID={{EC_OIDC_CID}}
+    EC_OIDC_CSC={{EC_OIDC_CSC}}
+    EC_PVTKEY={{EC_PVTKEY}}
+    EC_OIDC_DOMAIN=https://fssfed.ge.com
+    EC_OIDC_TOKEN_PATH=/fss/as/token.oauth2
+    EC_OIDC_USER_PATH=https://fssfed.ge.com/fss/idp/userinfo.openid
+    EC_PORT=17990
+    EC_SEED_HOST=https://ec-oauth-oidc-ci.digitalconnect.apps.ge.com/v1.2beta
+    EC_SEED_NODE=https://ec-oauth-oidc-ci.digitalconnect.apps.ge.com/v1.2beta
+    IsTimeController=false

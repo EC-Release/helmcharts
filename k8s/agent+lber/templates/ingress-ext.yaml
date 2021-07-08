@@ -1,0 +1,21 @@
+{{- if $.Values.global.agtK8Config.stsName -}}
+{{- $agtMode := include "agent.mode" . -}}
+{{- if (.Values.global.agtK8Config.withExtIngress.enabled) -}}
+{{- $fullName := include "agentlber.fullname" . -}}
+{{- $svcPort := 8080 -}}
+{{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: networking.k8s.io/v1beta1
+{{- else -}}
+apiVersion: extensions/v1beta1
+{{- end }}
+kind: Ingress
+metadata:
+  name: {{ $fullName }}-ext
+  labels:
+    {{- include "agentlber.labels" . | nindent 4 }}
+  annotations:
+    kubernetes.io/ingress.class: "nginx-ext"
+spec:
+  {{- include "agentlber.extIngress" . | nindent 2 }}
+{{- end }}
+{{- end }}

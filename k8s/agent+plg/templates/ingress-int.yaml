@@ -1,5 +1,5 @@
 {{- $agtMode := include "agent.mode" . -}}
-{{- if and (or (eq $agtMode "gateway") (eq $agtMode "gw:client") (eq $agtMode "gw:server")) (.Values.global.agtK8Config.withIngress.enabled) -}}
+{{- if and (or (eq $agtMode "gateway") (eq $agtMode "gw:client") (eq $agtMode "gw:server")) (.Values.global.agtK8Config.withIntIngress.enabled) -}}
 {{- $fullName := include "agent.fullname" . -}}
 {{- $svcPort := .Values.global.agtK8Config.svcPortNum -}}
 {{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
@@ -9,11 +9,11 @@ apiVersion: extensions/v1beta1
 {{- end }}
 kind: Ingress
 metadata:
-  name: {{ $fullName }}
+  name: {{ $fullName }}-int
   labels:
     {{- include "agent.labels" . | nindent 4 }}
   annotations:
     {}
 spec:
-  {{- include "agent.ingress" . | nindent 2 }}
+  {{- include "agent.intIngress" . | nindent 2 }}
 {{- end }}

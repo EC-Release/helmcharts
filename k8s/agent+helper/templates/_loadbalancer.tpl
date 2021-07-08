@@ -36,7 +36,7 @@ map $http_X_CF_APP_INSTANCE $pool {
 
 
 {{- define "agent.host" -}}
-{{- range $index, $hosts := .Values.global.agtK8Config.withIngress.hosts }}
+{{- range $index, $hosts := .Values.global.agtK8Config.withExtIngress.hosts }}
 {{- if (eq $index 0) }}
   {{- .host | quote }}
 {{- end }}

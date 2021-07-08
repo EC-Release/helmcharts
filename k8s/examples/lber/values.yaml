@@ -67,22 +67,31 @@ tolerations: []
 
 affinity: {}
 
+agtK8Config:
+  portName: agt-prt
+  svcPortName: agt-svc-prt
+  svcPortNum: 8080
+  healthPortName: agt-h-prt
+  svcHealthPortName: agt-svc-h-prt
+  svcHealthPortNum: 8081
+
 global:
   agtConfig: |-
     conf.mod=gateway
-    conf.gpt=7990
     conf.lpt=7990
     conf.hca=7991
-    conf.pxy="org-proxy-url-if-needed"
-    conf.hst="ws|wss://gateway-url/agent"
+    conf.pxy=""
+    conf.hst="wss://{{gateway-uri}}/agent"
     conf.dur=3000
     conf.dbg=true
     conf.cps=5
-    conf.zon=predix-zone-id
-    conf.grp=test
-    conf.sst=https://predix-zone-id.run.aws-usw02-pr|dev.ice.predix.io
-    conf.tkn=ec-service-admin-token
+    conf.gpt=7990
+    conf.zon={{EC_TEST_ZON}}
+    conf.grp={{EC_TEST_GRP}}
+    conf.sst={{EC_TEST_SST}}
+    conf.tkn={{EC_TEST_TKN}}
     AGENT_REV=v1.hokkaido.213
+    EC_PPS={{ownerhash}}
   agtK8Config:
     # some cluster instances require resource-spec for the deployment, e.g. GE Digital
     # PCS CF1/CF3 Cluster, whereas some can simply ignore the usage.
@@ -116,23 +125,16 @@ global:
     replicaCount: 2
     # withIngress decides the availability of the agt ingress obj in deployment.
     # by default, when deploy as the gateway mode (conf.mod=gateway), the value (enabled) will be overridden to true
-    withIngress:
+    withIntIngress:
       enabled: true
-      # host utilised to make the agt accessible via non-tls traffic.
-      # it is also possible for the co-existence and the overlap of both tls/non-tls routings (hosts/tls)
       hosts:
-        - host: ec.http.helloworld.ge.com
-          paths: ["/agent", "/health", "/v1", "/v1beta"]
-      # present if the agt is accessible via wss|https.
-      # example empty array below indicates no tls assignment is avaialble
-      # tls: []
-      tls:
-        - secretName: tls-secret-1
-          hosts: ["ec.helloworld.ge.com", "ec.rel.ge.com"]
-        - secretName: tls.secret-2
-          hosts: ["*.ec.https.ge.com", "ec.dev.azure.com"]
-    # options below are applicable only in the agent+plugins helm package.
-    # this setting is intended to deploy a plugin alongside the agent when "-plg" is present or is "true"
+        - host: ec-gw-eng-poc-aws.digitalconnect.apps.ge.com
+          paths: ["/"]
+    withExtIngress:
+      enabled: true
+      hosts:
+        - host: ec-gw-eng-poc-aws-ext.digitalconnect.apps.ge.com
+          paths: [ "/" ]
     withPlugins:
       # the tls setting only valid when agent mode "-mod" is either "server" or "gw:server"
       tls:
