@@ -67,17 +67,15 @@
     {{- include "agent.portSpec" (merge (dict "portName" .portName) .) | nindent 4 }}
     {{- include "agent.healthPortSpec" (merge (dict "healthPortName" .healthPortName) .) | nindent 4 }}
   livenessProbe:
-    httpGet:
-      path: /status
-      port: 27991
-    periodSeconds: 120
-    initialDelaySeconds: 120
+    tcpSocket:
+      port: {{ .portName }}
+    periodSeconds: 10
+    initialDelaySeconds: 10
   readinessProbe:
-    httpGet:
-      path: /status
-      port: 27991
-    periodSeconds: 120
-    initialDelaySeconds: 120
+    tcpSocket:
+      port: {{ .portName }}
+    periodSeconds: 10
+    initialDelaySeconds: 10
   resources:
     {{- .podResource | nindent 4 }}
   env:

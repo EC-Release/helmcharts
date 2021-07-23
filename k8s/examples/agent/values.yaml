@@ -67,19 +67,47 @@ tolerations: []
 
 affinity: {}
 
+agtK8Config:
+  portName: agt-prt
+  svcPortName: agt-svc-prt
+  svcPortNum: 8080
+  healthPortName: agt-h-prt
+  svcHealthPortName: agt-svc-h-prt
+  svcHealthPortNum: 8081
+
 global:
+  agtConfig: |-
+    conf.mod=gateway
+    conf.lpt=7990
+    conf.hca={{health-port}}
+    conf.pxy=""
+    conf.hst="wss://{{gateway-uri}}/agent"
+    conf.dur=3000
+    conf.dbg={{true|false}}
+    conf.cps=5
+    conf.gpt=7990
+    conf.zon={{zone-id}}
+    conf.grp=test
+    conf.sst=https://{{service-uri}}
+    conf.tkn={{admin-token}}
+    AGENT_REV=v1.hokkaido.xxx
+    EC_PPS={{admin-hash}}
   agtK8Config:
     # some cluster instances require resource-spec for the deployment, e.g. GE Digital
     # PCS CF1/CF3 Cluster, whereas some can simply ignore the usage.
     resources:
       limits:
-        cpu: 100m
-        memory: 128Mi
+        cpu: 200m
+        memory: 512Mi
       requests:
         cpu: 100m
         memory: 128Mi
-    svcPortNum: 18080
-    svcHealthPortNum: 18081
+    svcPortNum: 8080
+    svcHealthPortNum: 8081
+    # Following properties related to load balancer
+    # statefulset fields are optional for deploying agent alone.. mandatory for agent with load balancer
+    stsName: my-app-agent
+    lberReplicaCount: 1
     # options v1.1beta|v1|v1beta
     releaseTag: v1
     # A download-able url for an "decrypted" agent binary that will be used as
@@ -97,8 +125,8 @@ global:
     replicaCount: 1
     # withIngress decides the availability of the agt ingress obj in deployment.
     # by default, when deploy as the gateway mode (conf.mod=gateway), the value (enabled) will be overridden to true
-    withIntIngress:
-      enabled: false
+    withIngress:
+      enabled: true
       hosts:
         - host: url-int.digitalconnect.apps.ge.com
           paths: ["/"]
@@ -112,7 +140,7 @@ global:
     withPlugins:
       # the tls setting only valid when agent mode "-mod" is either "server" or "gw:server"
       tls:
-        enabled: true
+        enabled: false
         schema: https
         hostname: twitter.com
         tlsport: 443

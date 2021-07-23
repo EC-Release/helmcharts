@@ -125,7 +125,7 @@ global:
     replicaCount: 2
     # withIngress decides the availability of the agt ingress obj in deployment.
     # by default, when deploy as the gateway mode (conf.mod=gateway), the value (enabled) will be overridden to true
-    withIntIngress:
+    withIngress:
       enabled: true
       hosts:
         - host: ec-gw-eng-poc-aws.digitalconnect.apps.ge.com

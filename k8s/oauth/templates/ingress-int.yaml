@@ -1,4 +1,5 @@
-{{- if .Values.global.oauthK8Config.withIntIngress.enabled -}}
+{{- if .Values.global.oauthK8Config.withIngress -}}
+{{- if .Values.global.oauthK8Config.withIngress.enabled -}}
 {{- $fullName := include "oauth.fullname" . -}}
 {{- $svcPort := .Values.service.port -}}
 {{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
@@ -15,4 +16,5 @@ metadata:
     {}
 spec:
   {{- include "oauth.intIngress" . | nindent 2 }}
+{{- end }}
 {{- end }}

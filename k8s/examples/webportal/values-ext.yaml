@@ -98,7 +98,7 @@ global:
       requests:
         cpu: 200m
         memory: 256Mi
-    withIntIngress:
+    withIngress:
       enabled: true
       hosts:
         - host: int-url.digitalconnect.apps.ge.com

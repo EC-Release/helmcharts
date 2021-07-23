@@ -1,5 +1,6 @@
+{{- if .Values.global.agtK8Config.withIngress -}}
 {{- $agtMode := include "agent.mode" . -}}
-{{- if (.Values.global.agtK8Config.withIntIngress.enabled) -}}
+{{- if (.Values.global.agtK8Config.withIngress.enabled) -}}
 {{- $fullName := include "agent.fullname" . -}}
 {{- $svcPort := .Values.agtK8Config.svcPortNum -}}
 {{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
@@ -16,4 +17,5 @@ metadata:
     {}
 spec:
   {{- include "agent.intIngress" . | nindent 2 }}
+{{- end }}
 {{- end }}

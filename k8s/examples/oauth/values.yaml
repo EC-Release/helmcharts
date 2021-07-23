@@ -97,7 +97,7 @@ global:
       hosts:
         - host: ext-url.digitalconnect.apps.ge.com
           paths: [ "/" ]
-    withIntIngress:
+    withIngress:
       enabled: true
       hosts:
         - host: int-url.digitalconnect.apps.ge.com
