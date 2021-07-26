@@ -53,9 +53,16 @@ jobs:
           source ./scripts/commonlib.sh
           source ./scripts/k8s-deployment-sim.sh
 
-      - name: git status
+      - name: git ops
         run: |
+          git remote -v
           git status
+          git add k8s/pkg/agent+helper/${AGENT_HELPER_CHART_REV}/
+          git add k8s/pkg/agent/${AGENT_CHART_REV}/
+          git add k8s/pkg/agent+lber/${AGENT_LBER_CHART_REV}/
+          git add k8s/pkg/agent+plg/${AGENT_PLG_CHART_REV}/
+          git add k8s/pkg/oauth/${OAUTH_CHART_REV}/
+          git add k8s/pkg/webportal/${AGENT_WEBPORTAL_CHART_REV}/
 
       - name: publish distribution packages (ec-release/helmcharts)
         if: github.event_name == 'push'
