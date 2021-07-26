@@ -53,6 +53,10 @@ jobs:
           source ./scripts/commonlib.sh
           source ./scripts/k8s-deployment-sim.sh
 
+      - name: git status
+        run: |
+          git status
+
       - name: publish distribution packages (ec-release/helmcharts)
         if: github.event_name == 'push'
         uses: cpina/github-action-push-to-another-repository@master
