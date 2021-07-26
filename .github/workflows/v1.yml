@@ -63,6 +63,8 @@ jobs:
           git add k8s/pkg/agent+plg/${AGENT_PLG_CHART_REV}/
           git add k8s/pkg/oauth/${OAUTH_CHART_REV}/
           git add k8s/pkg/webportal/${AGENT_WEBPORTAL_CHART_REV}/
+          printf "\nafter git add....\n"
+          git status
 
       - name: publish distribution packages (ec-release/helmcharts)
         if: github.event_name == 'push'
