@@ -3,12 +3,12 @@ entries:
   webportal:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2021-07-08T20:04:34.62214927Z"
+    created: "2021-07-27T20:47:24.456382299Z"
     description: A Helm chart for Kubernetes
-    digest: db11d6702471ea9c317b496846e83c710859e006d568de9de1e5a99021ae34ad
+    digest: fd9b2f0c9850f96ea49d3ccb071141be6cd3f6a6b1e94e3ed16800ecbd5aa903
     name: webportal
     type: application
     urls:
     - https://raw.githubusercontent.com/EC-Release/helmcharts/disty/webportal/0.1.2/webportal-0.1.2.tgz
     version: 0.1.2
-generated: "2021-07-08T20:04:34.621388564Z"
+generated: "2021-07-27T20:47:24.455143984Z"

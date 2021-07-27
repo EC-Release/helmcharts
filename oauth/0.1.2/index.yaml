@@ -3,12 +3,12 @@ entries:
   oauth:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2021-07-08T20:04:34.581332445Z"
+    created: "2021-07-27T20:47:24.315520853Z"
     description: A Helm chart for Kubernetes
-    digest: f787ef801010538b3d2b3ab2346ac58509d1856741def0957f62c53e0dc25488
+    digest: 7e54ab5a962543b17445eb7c254516e02f38a2d5b803603be90bea8ec8b63489
     name: oauth
     type: application
     urls:
     - https://raw.githubusercontent.com/EC-Release/helmcharts/disty/oauth/0.1.2/oauth-0.1.2.tgz
     version: 0.1.2
-generated: "2021-07-08T20:04:34.580482439Z"
+generated: "2021-07-27T20:47:24.314622143Z"
