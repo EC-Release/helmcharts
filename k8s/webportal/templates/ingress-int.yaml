@@ -1,4 +1,5 @@
-{{- if .Values.global.webportalK8Config.withIntIngress.enabled -}}
+{{- if .Values.global.webportalK8Config.withIngress -}}
+{{- if .Values.global.webportalK8Config.withIngress.enabled -}}
 {{- $fullName := include "webportal.fullname" . -}}
 {{- $svcPort := .Values.service.port -}}
 {{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
@@ -15,4 +16,5 @@ metadata:
     {}
 spec:
   {{- include "webportal.intIngress" . | nindent 2 }}
+{{- end }}
 {{- end }}

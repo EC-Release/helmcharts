@@ -2,9 +2,9 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: {{ include "webportalK8Config.fullname" . }}
+  name: {{ include "webportal.fullname" . }}
   labels:
-    {{- include "webportalK8Config.labels" . | nindent 4 }}
+    {{- include "webportal.labels" . | nindent 4 }}
     type: local
 spec:
   capacity:

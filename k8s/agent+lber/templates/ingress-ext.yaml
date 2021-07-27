@@ -1,3 +1,4 @@
+{{- if .Values.global.agtK8Config.withExtIngress -}}
 {{- if $.Values.global.agtK8Config.stsName -}}
 {{- $agtMode := include "agent.mode" . -}}
 {{- if (.Values.global.agtK8Config.withExtIngress.enabled) -}}
@@ -17,5 +18,6 @@ metadata:
     kubernetes.io/ingress.class: "nginx-ext"
 spec:
   {{- include "agentlber.extIngress" . | nindent 2 }}
+{{- end }}
 {{- end }}
 {{- end }}

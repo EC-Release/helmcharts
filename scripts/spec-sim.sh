@@ -17,7 +17,7 @@ eval "sed -i -e 's#<AGENT_WEBPORTAL_CHART_REV>#${AGENT_WEBPORTAL_CHART_REV}#g' k
 eval "sed -i -e 's#<AGENT_HELPER_CHART_REV>#${AGENT_HELPER_CHART_REV}#g' k8s/examples/agent/Chart.yaml"
 eval "sed -i -e 's#<AGENT_PLG_CHART_REV>#${AGENT_PLG_CHART_REV}#g' k8s/examples/agent/Chart.yaml"
 eval "sed -i -e 's#<AGENT_CHART_REV>#${AGENT_CHART_REV}#g' k8s/examples/agent/Chart.yaml"
-eval "sed -i -e 's#<LBER_HELPER_CHART_REV>#${LBER_HELPER_CHART_REV}#g' k8s/examples/lber/Chart.yaml"
+eval "sed -i -e 's#<AGENT_LBER_CHART_REV>#${AGENT_LBER_CHART_REV}#g' k8s/examples/lber/Chart.yaml"
 eval "sed -i -e 's#<OAUTH_CHART_REV>#${OAUTH_CHART_REV}#g' k8s/examples/oauth/Chart.yaml"
 eval "sed -i -e 's#<AGENT_WEBPORTAL_CHART_REV>#${AGENT_WEBPORTAL_CHART_REV}#g' k8s/examples/webportal/Chart.yaml"
 

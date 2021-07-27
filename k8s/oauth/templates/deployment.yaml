@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "oauth.fullname" . }}
+  name: {{ $.Release.Name }}
   labels:
     {{- include "oauth.labels" . | nindent 4 }}
 spec:
@@ -32,7 +32,7 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "enterpriseconnect/oauth:v1.2beta"
+          image: "ghcr.io/ec-release/oauth:v1.2beta"
           imagePullPolicy: Always
           ports:
             {{- include "oauth.portSpec" . | nindent 12 }}

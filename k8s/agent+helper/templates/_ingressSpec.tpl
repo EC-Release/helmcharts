@@ -15,9 +15,9 @@
 Specify the agt ingress spec
 */}}
 {{- define "agent.intIngress" -}}
-{{- if .Values.global.agtK8Config.withIntIngress.tls -}}
+{{- if .Values.global.agtK8Config.withIngress.tls -}}
 tls:
-{{- range .Values.global.agtK8Config.withIntIngress.tls }}
+{{- range .Values.global.agtK8Config.withIngress.tls }}
   - hosts:
     {{- range .hosts }}
     - {{ . | quote }}
@@ -28,7 +28,7 @@ tls:
 rules:
 {{- $serviceName := include "agent.fullname" . -}}
 {{- $servicePort := (ternary .Values.agtK8Config.svcPortNum .Values.global.agtK8Config.svcPortNum (kindIs "invalid" .Values.global.agtK8Config.svcPortNum)) -}}
-{{- range .Values.global.agtK8Config.withIntIngress.hosts }}
+{{- range .Values.global.agtK8Config.withIngress.hosts }}
   - host: {{ .host | quote }}
     http:
       paths:

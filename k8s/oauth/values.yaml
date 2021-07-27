@@ -41,7 +41,7 @@ service:
   port: 80
 
 ingress:
-  enabled: true
+  enabled: false
   annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
@@ -93,7 +93,7 @@ global:
         cpu: 200m
         memory: 256Mi
     withIngress:
-      enabled: true
+      enabled: false
       hosts:
         - host: ec-oauth-oidc-ci.digitalconnect.apps.ge.com
           paths: [ "/" ]

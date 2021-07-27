@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "webportal.fullname" . }}
+  name: {{ $.Release.Name }}
   labels:
     {{- include "webportal.labels" . | nindent 4 }}
 spec:
@@ -28,7 +28,7 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "enterpriseconnect/api:v1.2beta"
+          image: "ghcr.io/ec-release/api:v1.2beta"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             {{- include "webportal.portSpec" . | nindent 12 }}

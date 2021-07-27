@@ -56,9 +56,9 @@ run: {{ include "webportal.fullname" . }}
 Specify the webportal internal ingress spec
 */}}
 {{- define "webportal.intIngress" -}}
-{{- if .Values.global.webportalK8Config.withIntIngress.tls -}}
+{{- if .Values.global.webportalK8Config.withIngress.tls -}}
 tls:
-{{- range .Values.global.webportalK8Config.withIntIngress.tls }}
+{{- range .Values.global.webportalK8Config.withIngress.tls }}
   - hosts:
     {{- range .hosts }}
     - {{ . | quote }}
@@ -67,14 +67,14 @@ tls:
 {{- end -}}
 {{- end }}
 rules:
-{{- range .Values.global.webportalK8Config.withIntIngress.hosts }}
+{{- range .Values.global.webportalK8Config.withIngress.hosts }}
   - host: {{ .host | quote }}
     http:
       paths:
       {{- range $path := .paths }}
         - path: {{ $path | quote }}
           backend:
-            serviceName: webportal
+            serviceName: {{ $.Release.Name }}
             servicePort: 18090
       {{- end }}
 {{- end }}
@@ -103,7 +103,7 @@ rules:
       {{- range $path := .paths }}
         - path: {{ $path | quote }}
           backend:
-            serviceName: webportal
+            serviceName: {{ $.Release.Name }}
             servicePort: 18090
       {{- end }}
 {{- end }}

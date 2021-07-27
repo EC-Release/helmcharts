@@ -22,5 +22,5 @@ appVersion: 1.16.0
 
 dependencies:
 - name: agent+lber
-  version: <LBER_HELPER_CHART_REV>
+  version: <AGENT_LBER_CHART_REV>
   repository: "file://./../../agent+lber"
