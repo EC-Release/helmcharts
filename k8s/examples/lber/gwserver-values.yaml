@@ -122,7 +122,7 @@ global:
     # withIngress decides the availability of the agt ingress obj in deployment.
     # by default, when deploy as the gateway mode (conf.mod=gateway), the value (enabled) will be overridden to true
     withIngress:
-      enabled: true
+      enabled: false
       # host utilised to make the agt accessible via non-tls traffic.
       # it is also possible for the co-existence and the overlap of both tls/non-tls routings (hosts/tls)
       hosts:

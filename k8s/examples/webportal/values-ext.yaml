@@ -99,12 +99,12 @@ global:
         cpu: 200m
         memory: 256Mi
     withIngress:
-      enabled: true
+      enabled: false
       hosts:
         - host: int-url.digitalconnect.apps.ge.com
           paths: [ "/" ]
     withExtIngress:
-      enabled: true
+      enabled: false
       hosts:
         - host: ext-url.digitalconnect.apps.ge.com
           paths: [ "/" ]

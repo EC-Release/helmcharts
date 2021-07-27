@@ -126,12 +126,12 @@ global:
     # withIngress decides the availability of the agt ingress obj in deployment.
     # by default, when deploy as the gateway mode (conf.mod=gateway), the value (enabled) will be overridden to true
     withIngress:
-      enabled: true
+      enabled: false
       hosts:
         - host: url-int.digitalconnect.apps.ge.com
           paths: ["/"]
     withExtIngress:
-      enabled: true
+      enabled: false
       hosts:
         - host: url-ext.digitalconnect.apps.ge.com
           paths: [ "/" ]
