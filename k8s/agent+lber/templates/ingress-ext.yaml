@@ -1,4 +1,4 @@
-{{- if .Values.global.webportalK8Config.withExtIngress -}}
+{{- if .Values.global.agtK8Config.withExtIngress -}}
 {{- if $.Values.global.agtK8Config.stsName -}}
 {{- $agtMode := include "agent.mode" . -}}
 {{- if (.Values.global.agtK8Config.withExtIngress.enabled) -}}
