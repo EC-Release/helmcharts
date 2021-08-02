@@ -13,12 +13,12 @@ jobs:
     environment: v1
     env:
       #helm chart version
-      AGENT_CHART_REV: 0.1.12
-      AGENT_HELPER_CHART_REV: 0.1.10
-      AGENT_PLG_CHART_REV: 0.1.11
-      AGENT_LBER_CHART_REV: 0.1.4
-      OAUTH_CHART_REV: 0.1.2
-      AGENT_WEBPORTAL_CHART_REV: 0.1.2
+      AGENT_CHART_REV: 0.1.13
+      AGENT_HELPER_CHART_REV: 0.1.11
+      AGENT_PLG_CHART_REV: 0.1.12
+      AGENT_LBER_CHART_REV: 0.1.5
+      OAUTH_CHART_REV: 0.1.3
+      AGENT_WEBPORTAL_CHART_REV: 0.1.3
       AGENT_REV: v1.hokkaido.213
       CA_PPRS: ${{ secrets.EC_PPS }}
       EC_OIDC_CID: ${{ secrets.EC_OIDC_CID }}
@@ -55,27 +55,98 @@ jobs:
 
       - name: publish distribution packages (ec-release/helmcharts)
         if: github.event_name == 'push'
-        uses: cpina/github-action-push-to-another-repository@master
         env:
-          AGENT_REV: v1.hokkaido.213
           API_TOKEN_GITHUB: ${{ secrets.EC_CHART_DEPLOYMENT_TKN }}
-        with:
-          source-directory: 'k8s/pkg-new'
-          destination-github-username: 'ec-release'
-          destination-repository-name: 'helmcharts'
-          target-branch: 'disty'
-          commit-message: 'EC Bot Deployment'
-          user-email: enterprise-connect@ge.com
+          EC_CHART_GIT_USEREMAIL: ${{ secrets.EC_CHART_GIT_USEREMAIL }}
+          EC_CHART_GIT_USERNAME: ${{ secrets.EC_CHART_GIT_USERNAME }}
+        run: |
+          set -e
+          set -x
+          CLONE_DIR=$(mktemp -d)
+
+          echo "Cloning destination git repository"
+          git config --global user.email "$EC_CHART_GIT_USEREMAIL"
+          git config --global user.name "$EC_CHART_GIT_USERNAME"
+          git clone --single-branch --branch disty "https://x-access-token:$API_TOKEN_GITHUB@github.com/ec-release/helmcharts.git" "$CLONE_DIR"
+
+          echo "Copying contents to git repo"
+          mkdir -p $CLONE_DIR/agent
+          mkdir -p $CLONE_DIR/agent+helper
+          mkdir -p $CLONE_DIR/agent+plg
+          mkdir -p $CLONE_DIR/agent+lber
+          mkdir -p $CLONE_DIR/oauth
+          mkdir -p $CLONE_DIR/webportal
+
+          cp -R "k8s/pkg-new/agent/${AGENT_CHART_REV}" "$CLONE_DIR/agent/"
+          cp -R "k8s/pkg-new/agent+helper/${AGENT_HELPER_CHART_REV}" "$CLONE_DIR/agent+helper/"
+          cp -R "k8s/pkg-new/agent+plg/${AGENT_PLG_CHART_REV}" "$CLONE_DIR/agent+plg/"
+          cp -R "k8s/pkg-new/agent+lber/${AGENT_LBER_CHART_REV}" "$CLONE_DIR/agent+lber/"
+          cp -R "k8s/pkg-new/oauth/${OAUTH_CHART_REV}" "$CLONE_DIR/oauth/"
+          cp -R "k8s/pkg-new/webportal/${AGENT_WEBPORTAL_CHART_REV}" "$CLONE_DIR/webportal/"
+          cd "$CLONE_DIR"
+
+          echo "Adding git commit"
+          git add $CLONE_DIR/agent/${AGENT_CHART_REV}
+          git add $CLONE_DIR/agent+helper/${AGENT_HELPER_CHART_REV}
+          git add $CLONE_DIR/agent+plg/${AGENT_PLG_CHART_REV}
+          git add $CLONE_DIR/agent+lber/${AGENT_LBER_CHART_REV}
+          git add $CLONE_DIR/oauth/${OAUTH_CHART_REV}
+          git add $CLONE_DIR/webportal/${AGENT_WEBPORTAL_CHART_REV}
+
+          if git status | grep -q "Changes to be committed"
+          then
+            git status
+            git commit -m "checking files"
+            git push origin disty
+          else
+            echo "No changes detected"
+          fi
+
       - name: publish distribution packages (ec-release/oci)
         if: github.event_name == 'push'
-        uses: cpina/github-action-push-to-another-repository@master
         env:
-          AGENT_REV: v1.hokkaido.213
           API_TOKEN_GITHUB: ${{ secrets.EC_CHART_DEPLOYMENT_TKN }}
-        with:
-          source-directory: 'k8s/pkg'
-          destination-github-username: 'ec-release'
-          destination-repository-name: 'oci'
-          target-branch: 'disty'
-          commit-message: 'EC Bot Deployment'
-          user-email: enterprise-connect@ge.com
+          EC_CHART_GIT_USEREMAIL: ${{ secrets.EC_CHART_GIT_USEREMAIL }}
+          EC_CHART_GIT_USERNAME: ${{ secrets.EC_CHART_GIT_USERNAME }}
+        run: |
+          set -e
+          set -x
+          CLONE_DIR=$(mktemp -d)
+
+          echo "Cloning destination git repository"
+          git config --global user.email "$EC_CHART_GIT_USEREMAIL"
+          git config --global user.name "$EC_CHART_GIT_USERNAME"
+          git clone --single-branch --branch disty "https://x-access-token:$API_TOKEN_GITHUB@github.com/ec-release/oci.git" "$CLONE_DIR"
+
+          echo "Copying contents to git repo"
+          mkdir -p $CLONE_DIR/agent
+          mkdir -p $CLONE_DIR/agent+helper
+          mkdir -p $CLONE_DIR/agent+plg
+          mkdir -p $CLONE_DIR/agent+lber
+          mkdir -p $CLONE_DIR/oauth
+          mkdir -p $CLONE_DIR/webportal
+
+          cp -R "k8s/pkg/agent/${AGENT_CHART_REV}" "$CLONE_DIR/agent/"
+          cp -R "k8s/pkg/agent+helper/${AGENT_HELPER_CHART_REV}" "$CLONE_DIR/agent+helper/"
+          cp -R "k8s/pkg/agent+plg/${AGENT_PLG_CHART_REV}" "$CLONE_DIR/agent+plg/"
+          cp -R "k8s/pkg/agent+lber/${AGENT_LBER_CHART_REV}" "$CLONE_DIR/agent+lber/"
+          cp -R "k8s/pkg/oauth/${OAUTH_CHART_REV}" "$CLONE_DIR/oauth/"
+          cp -R "k8s/pkg/webportal/${AGENT_WEBPORTAL_CHART_REV}" "$CLONE_DIR/webportal/"
+          cd "$CLONE_DIR"
+
+          echo "Adding git commit"
+          git add $CLONE_DIR/agent/${AGENT_CHART_REV}
+          git add $CLONE_DIR/agent+helper/${AGENT_HELPER_CHART_REV}
+          git add $CLONE_DIR/agent+plg/${AGENT_PLG_CHART_REV}
+          git add $CLONE_DIR/agent+lber/${AGENT_LBER_CHART_REV}
+          git add $CLONE_DIR/oauth/${OAUTH_CHART_REV}
+          git add $CLONE_DIR/webportal/${AGENT_WEBPORTAL_CHART_REV}
+
+          if git status | grep -q "Changes to be committed"
+          then
+            git status
+            git commit -m "checking files"
+            git push origin disty
+          else
+            echo "No changes detected"
+          fi
