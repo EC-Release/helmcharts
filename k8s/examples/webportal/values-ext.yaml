@@ -82,7 +82,7 @@ global:
   webportalK8Config:
     ownersHash: oauth-owners-hash
     efsPersistence:
-      enabled: true
+      enabled: false
       reclaimPolicy: Retain
       # mountOptions:
       provisioner: efs.csi.aws.com
@@ -99,9 +99,14 @@ global:
         cpu: 200m
         memory: 256Mi
     withIngress:
-      enabled: true
+      enabled: false
       hosts:
-        - host: ec-portal-ci.digitalconnect.apps.ge.com
+        - host: int-url.digitalconnect.apps.ge.com
+          paths: [ "/" ]
+    withExtIngress:
+      enabled: false
+      hosts:
+        - host: ext-url.digitalconnect.apps.ge.com
           paths: [ "/" ]
   webportalConfig: |-
     AGENT_REV_TEMP_UNSET=1.2-b.0.reiwa

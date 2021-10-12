@@ -1,3 +1,4 @@
+{{- if .Values.global.oauthK8Config.withIngress -}}
 {{- if .Values.global.oauthK8Config.withIngress.enabled -}}
 {{- $fullName := include "oauth.fullname" . -}}
 {{- $svcPort := .Values.service.port -}}
@@ -8,11 +9,12 @@ apiVersion: extensions/v1beta1
 {{- end }}
 kind: Ingress
 metadata:
-  name: {{ $fullName }}
+  name: {{ $fullName }}-int
   labels:
     {{- include "oauth.labels" . | nindent 4 }}
   annotations:
     {}
 spec:
-  {{- include "oauth.ingress" . | nindent 2 }}
+  {{- include "oauth.intIngress" . | nindent 2 }}
+{{- end }}
 {{- end }}

@@ -92,7 +92,7 @@ global:
         cpu: 200m
         memory: 256Mi
     withIngress:
-      enabled: true
+      enabled: false
       hosts:
         - host: ec-portal-ci.digitalconnect.apps.ge.com
           paths: [ "/" ]

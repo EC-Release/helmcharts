@@ -86,9 +86,9 @@ Generate service health port spec for agent pods.
 
 
 {{/*
-Specify the agt ingress spec
+Specify the agt internal ingress spec
 */}}
-{{- define "agentlber.ingress" -}}
+{{- define "agentlber.intIngress" -}}
 {{- if .Values.global.agtK8Config.withIngress.tls -}}
 tls:
 {{- range .Values.global.agtK8Config.withIngress.tls }}
@@ -114,6 +114,38 @@ rules:
       {{- end }}
 {{- end }}
 {{- end -}}
+
+
+{{/*
+Specify the agt ingress spec
+*/}}
+{{- define "agentlber.extIngress" -}}
+{{- if .Values.global.agtK8Config.withExtIngress.tls -}}
+tls:
+{{- range .Values.global.agtK8Config.withExtIngress.tls }}
+  - hosts:
+    {{- range .hosts }}
+    - {{ . | quote }}
+    {{- end }}
+    secretName: {{ .secretName }}
+{{- end -}}
+{{- end }}
+rules:
+{{- $serviceName := include "agentlber.fullname" . -}}
+{{- $servicePort := 18090 -}}
+{{- range .Values.global.agtK8Config.withExtIngress.hosts }}
+  - host: {{ .host | quote }}
+    http:
+      paths:
+      {{- range $path := .paths }}
+        - path: {{ $path | quote }}
+          backend:
+            serviceName: {{ $serviceName | quote }}
+            servicePort: {{ $servicePort }}
+      {{- end }}
+{{- end }}
+{{- end -}}
+
 
 {{/*
 Generate container port spec for client agent. Need review for gateway usage

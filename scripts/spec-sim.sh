@@ -17,7 +17,7 @@ eval "sed -i -e 's#<AGENT_WEBPORTAL_CHART_REV>#${AGENT_WEBPORTAL_CHART_REV}#g' k
 eval "sed -i -e 's#<AGENT_HELPER_CHART_REV>#${AGENT_HELPER_CHART_REV}#g' k8s/examples/agent/Chart.yaml"
 eval "sed -i -e 's#<AGENT_PLG_CHART_REV>#${AGENT_PLG_CHART_REV}#g' k8s/examples/agent/Chart.yaml"
 eval "sed -i -e 's#<AGENT_CHART_REV>#${AGENT_CHART_REV}#g' k8s/examples/agent/Chart.yaml"
-eval "sed -i -e 's#<LBER_HELPER_CHART_REV>#${LBER_HELPER_CHART_REV}#g' k8s/examples/lber/Chart.yaml"
+eval "sed -i -e 's#<AGENT_LBER_CHART_REV>#${AGENT_LBER_CHART_REV}#g' k8s/examples/lber/Chart.yaml"
 eval "sed -i -e 's#<OAUTH_CHART_REV>#${OAUTH_CHART_REV}#g' k8s/examples/oauth/Chart.yaml"
 eval "sed -i -e 's#<AGENT_WEBPORTAL_CHART_REV>#${AGENT_WEBPORTAL_CHART_REV}#g' k8s/examples/webportal/Chart.yaml"
 
@@ -91,7 +91,7 @@ helm dependency update k8s/examples/webportal
 ls -la k8s/examples/webportal/charts/
 
 printf "\n\n\n*** test oauth template\n"
-helm template k8s/oauth --debug --set-file global.oauthConfig=k8s/examples/oauth/oauth.env
+helm template k8s/examples/oauth --debug --set-file global.oauthConfig=k8s/examples/oauth/oauth.env
 
 printf "\n\n\n*** test webportal\n"
 helm template k8s/examples/webportal --debug --set-file global.agtConfig=k8s/examples/webportal/webportal.env

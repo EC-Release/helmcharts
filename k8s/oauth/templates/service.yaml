@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "oauth.fullname" . }}
+  name: {{ $.Release.Name }}
   labels:
     {{- include "oauth.labels" . | nindent 4 }}
 spec:

@@ -79,17 +79,19 @@ global:
   agtConfig: |-
     conf.mod=gateway
     conf.lpt=7990
-    conf.hca={{ecgwclient-health-port}}
-    conf.pxy={{corp-pxy|""}}
-    conf.hst={{ws|wss://gateway-uri/agent}}
-    conf.dur={{oatuth-tkn-dur}}
-    conf.dbg={{true|false}}
-    conf.cps={{number}}
-    conf.gpt={{ecgw-listen-port}}
-    conf.zon={{ecservice-zone}}
-    conf.grp=test
-    conf.sst={{ecservice-uri}}
-    conf.tkn={{ecservice-admtkn}}
+    conf.hca=7991
+    conf.pxy=""
+    conf.hst="wss://{{gateway-url}}/agent"
+    conf.dur=3000
+    conf.dbg=true
+    conf.cps=5
+    conf.gpt=7990
+    conf.zon={{EC_TEST_ZON}}
+    conf.grp={{EC_TEST_GRP}}
+    conf.sst={{EC_TEST_SST}}
+    conf.tkn={{EC_TEST_TKN}}
+    AGENT_REV={{v1.hokkaido.xxx}}
+    EC_PPS={{owner-hash}}
   agtK8Config:
     # some cluster instances require resource-spec for the deployment, e.g. GE Digital
     # PCS CF1/CF3 Cluster, whereas some can simply ignore the usage.
@@ -124,22 +126,15 @@ global:
     # withIngress decides the availability of the agt ingress obj in deployment.
     # by default, when deploy as the gateway mode (conf.mod=gateway), the value (enabled) will be overridden to true
     withIngress:
-      enabled: true
-      # host utilised to make the agt accessible via non-tls traffic.
-      # it is also possible for the co-existence and the overlap of both tls/non-tls routings (hosts/tls)
+      enabled: false
       hosts:
-        - host: {{gateway-host-url}}
+        - host: url-int.digitalconnect.apps.ge.com
           paths: ["/"]
-      # present if the agt is accessible via wss|https.
-      # example empty array below indicates no tls assignment is avaialble
-      # tls: []
-      tls:
-        - secretName: tls-secret-1
-          hosts: ["{{gateway-host-url}}", "ec.rel.ge.com"]
-        - secretName: tls.secret-2
-          hosts: ["*.ec.https.ge.com", "ec.dev.azure.com"]
-    # options below are applicable only in the agent+plugins helm package.
-    # this setting is intended to deploy a plugin alongside the agent when "-plg" is present or is "true"
+    withExtIngress:
+      enabled: false
+      hosts:
+        - host: url-ext.digitalconnect.apps.ge.com
+          paths: [ "/" ]
     withPlugins:
       # the tls setting only valid when agent mode "-mod" is either "server" or "gw:server"
       tls:

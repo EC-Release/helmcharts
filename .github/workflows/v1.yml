@@ -13,12 +13,12 @@ jobs:
     environment: v1
     env:
       #helm chart version
-      AGENT_CHART_REV: 0.1.11
-      AGENT_HELPER_CHART_REV: 0.1.9
-      AGENT_PLG_CHART_REV: 0.1.10
-      AGENT_LBER_CHART_REV: 0.1.3
-      OAUTH_CHART_REV: 0.1.1
-      AGENT_WEBPORTAL_CHART_REV: 0.1.1
+      AGENT_CHART_REV: 0.1.15
+      AGENT_HELPER_CHART_REV: 0.1.13
+      AGENT_PLG_CHART_REV: 0.1.14
+      AGENT_LBER_CHART_REV: 0.1.7
+      OAUTH_CHART_REV: 0.1.5
+      AGENT_WEBPORTAL_CHART_REV: 0.1.5
       AGENT_REV: v1.hokkaido.213
       CA_PPRS: ${{ secrets.EC_PPS }}
       EC_OIDC_CID: ${{ secrets.EC_OIDC_CID }}
@@ -53,29 +53,15 @@ jobs:
           source ./scripts/commonlib.sh
           source ./scripts/k8s-deployment-sim.sh
 
-      - name: publish distribution packages (ec-release/helmcharts)
+      - name: publish distribution packages 
         if: github.event_name == 'push'
-        uses: cpina/github-action-push-to-another-repository@master
+        uses: ec-release/github-action-copy-files-folders-to-another-repos@main
         env:
-          AGENT_REV: v1.hokkaido.213
           API_TOKEN_GITHUB: ${{ secrets.EC_CHART_DEPLOYMENT_TKN }}
+          GIT_USEREMAIL: ${{ secrets.EC_CHART_GIT_USEREMAIL }}
+          GIT_USERNAME: ${{ secrets.EC_CHART_GIT_USERNAME }}
         with:
-          source-directory: 'k8s/pkg-new'
-          destination-github-username: 'ec-release'
-          destination-repository-name: 'helmcharts'
-          target-branch: 'disty'
-          commit-message: 'EC Bot Deployment'
-          user-email: enterprise-connect@ge.com
-      - name: publish distribution packages (ec-release/oci)
-        if: github.event_name == 'push'
-        uses: cpina/github-action-push-to-another-repository@master
-        env:
-          AGENT_REV: v1.hokkaido.213
-          API_TOKEN_GITHUB: ${{ secrets.EC_CHART_DEPLOYMENT_TKN }}
-        with:
-          source-directory: 'k8s/pkg'
-          destination-github-username: 'ec-release'
-          destination-repository-name: 'oci'
-          target-branch: 'disty'
-          commit-message: 'EC Bot Deployment'
-          user-email: enterprise-connect@ge.com
+          SOURCE_DIR: 'k8s/pkg'
+          DESTINATION_REPOS_BRANCHES: 'github.com/ec-release/oci.git:disty github.com/ec-release/helmcharts.git:disty'
+          COMMIT_MESSAGE: 'Helm packages with tag v1.0.0-fukuoka-1'
+          TAG_NAME: 'v1.0.0-fukuoka-1'

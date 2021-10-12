@@ -53,9 +53,9 @@ run: {{ include "webportal.fullname" . }}
 {{- end }}
 
 {{/*
-Specify the webportal ingress spec
+Specify the webportal internal ingress spec
 */}}
-{{- define "webportal.ingress" -}}
+{{- define "webportal.intIngress" -}}
 {{- if .Values.global.webportalK8Config.withIngress.tls -}}
 tls:
 {{- range .Values.global.webportalK8Config.withIngress.tls }}
@@ -74,7 +74,36 @@ rules:
       {{- range $path := .paths }}
         - path: {{ $path | quote }}
           backend:
-            serviceName: webportal
+            serviceName: {{ $.Release.Name }}
+            servicePort: 18090
+      {{- end }}
+{{- end }}
+{{- end -}}
+
+
+{{/*
+Specify the webportal external ingress spec
+*/}}
+{{- define "webportal.extIngress" -}}
+{{- if .Values.global.webportalK8Config.withExtIngress.tls -}}
+tls:
+{{- range .Values.global.webportalK8Config.withExtIngress.tls }}
+  - hosts:
+    {{- range .hosts }}
+    - {{ . | quote }}
+    {{- end }}
+    secretName: {{ .secretName }}
+{{- end -}}
+{{- end }}
+rules:
+{{- range .Values.global.webportalK8Config.withExtIngress.hosts }}
+  - host: {{ .host | quote }}
+    http:
+      paths:
+      {{- range $path := .paths }}
+        - path: {{ $path | quote }}
+          backend:
+            serviceName: {{ $.Release.Name }}
             servicePort: 18090
       {{- end }}
 {{- end }}

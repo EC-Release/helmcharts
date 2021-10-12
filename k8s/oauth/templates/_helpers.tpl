@@ -63,9 +63,9 @@ Create the name of the service account to use
 {{- end }}
 
 {{/*
-Specify the oauth ingress spec
+Specify the oauth internal ingress spec
 */}}
-{{- define "oauth.ingress" -}}
+{{- define "oauth.intIngress" -}}
 {{- if .Values.global.oauthK8Config.withIngress.tls -}}
 tls:
 {{- range .Values.global.oauthK8Config.withIngress.tls }}
@@ -84,7 +84,35 @@ rules:
       {{- range $path := .paths }}
         - path: {{ $path | quote }}
           backend:
-            serviceName: oauth
+            serviceName: {{ $.Release.Name }}
+            servicePort: 18090
+      {{- end }}
+{{- end }}
+{{- end -}}
+
+{{/*
+Specify the oauth external ingress spec
+*/}}
+{{- define "oauth.extIngress" -}}
+{{- if .Values.global.oauthK8Config.withExtIngress.tls -}}
+tls:
+{{- range .Values.global.oauthK8Config.withExtIngress.tls }}
+  - hosts:
+    {{- range .hosts }}
+    - {{ . | quote }}
+    {{- end }}
+    secretName: {{ .secretName }}
+{{- end -}}
+{{- end }}
+rules:
+{{- range .Values.global.oauthK8Config.withExtIngress.hosts }}
+  - host: {{ .host | quote }}
+    http:
+      paths:
+      {{- range $path := .paths }}
+        - path: {{ $path | quote }}
+          backend:
+            serviceName: {{ $.Release.Name }}
             servicePort: 18090
       {{- end }}
 {{- end }}
