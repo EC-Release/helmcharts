@@ -96,6 +96,11 @@ global:
       hosts:
         - host: ec-portal-ci.digitalconnect.apps.ge.com
           paths: [ "/" ]
+    withExtIngress:
+      enabled: false
+      hosts:
+        - host: ec-portal-ci-ext.digitalconnect.apps.ge.com
+          paths: [ "/" ]
   webportalConfig: |-
     AGENT_REV_TEMP_UNSET=1.2-b.0.reiwa
     CA_PPRS={{CA_PPRS}}

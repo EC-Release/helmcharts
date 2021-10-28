@@ -97,6 +97,11 @@ global:
       hosts:
         - host: ec-oauth-oidc-ci.digitalconnect.apps.ge.com
           paths: [ "/" ]
+    withExtIngress:
+      enabled: false
+      hosts:
+        - host: ec-oauth-oidc-ci-ext.digitalconnect.apps.ge.com
+          paths: [ "/" ]
   oauthConfig: |-
     AGENT_REV=temp_1.2-b.0.reiwa
     EC_AUTH_VALIDATE=sso
@@ -112,4 +117,4 @@ global:
     EC_PORT=:17990
     EC_SEED_HOST=https://ec-oauth-oidc-ci.digitalconnect.apps.ge.com/v1.2beta
     EC_SEED_NODE=https://ec-oauth-oidc-ci.digitalconnect.apps.ge.com/v1.2beta
-    IsTimeController=true
+    IsTimeController=false
