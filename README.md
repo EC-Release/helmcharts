@@ -187,6 +187,8 @@ global:
         ips: ["10.10.10.0/30","8.8.8.100","8.8.8.101","8.8.8.102"]
 ```
 
+`values.yaml` file for multiple agent types can be found [here](https://github.com/EC-Release/helmcharts/tree/v1/k8s/examples/agent)
+
 [Back to Contents](#contents)
 #### Install Plugin & Go
 ```bash
