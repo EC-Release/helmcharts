@@ -13,12 +13,12 @@ jobs:
     environment: v1
     env:
       #helm chart version
-      AGENT_CHART_REV: 0.1.16
-      AGENT_HELPER_CHART_REV: 0.1.14
-      AGENT_PLG_CHART_REV: 0.1.15
-      AGENT_LBER_CHART_REV: 0.1.8
-      OAUTH_CHART_REV: 0.1.6
-      AGENT_WEBPORTAL_CHART_REV: 0.1.6
+      AGENT_CHART_REV: 0.1.17
+      AGENT_HELPER_CHART_REV: 0.1.15
+      AGENT_PLG_CHART_REV: 0.1.16
+      AGENT_LBER_CHART_REV: 0.1.9
+      OAUTH_CHART_REV: 0.1.7
+      AGENT_WEBPORTAL_CHART_REV: 0.1.7
       AGENT_REV: v1.hokkaido.213
       CA_PPRS: ${{ secrets.EC_PPS }}
       EC_OIDC_CID: ${{ secrets.EC_OIDC_CID }}
@@ -63,5 +63,5 @@ jobs:
         with:
           SOURCE_DIR: 'k8s/pkg'
           DESTINATION_REPOS_BRANCHES: 'github.com/ec-release/oci.git:disty github.com/ec-release/helmcharts.git:disty'
-          COMMIT_MESSAGE: 'Helm packages with tag v1.0.0-fukuoka-2'
-          TAG_NAME: 'v1.0.0-fukuoka-2'
+          COMMIT_MESSAGE: 'Helm packages with tag v1.0.0-fukuoka-3'
+          TAG_NAME: 'v1.0.0-fukuoka-3'
