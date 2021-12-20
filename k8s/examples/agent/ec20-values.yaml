@@ -81,11 +81,11 @@ global:
     conf.lpt=7990
     conf.hca=7990
     EC_GPT=:7990
-    EC_HST=https://{{gateway-dns-name}}/agent
-    EC_SED=https://{{gateway-dns-name}}
-    EC_CID={{license-id}}
-    EC_OA2=https://{{sdc-dns-name}}/oauth/token
-    EC_PPS={{license-admin-hash}}
+    EC_HST=https://{{gateway_dns_name}}/agent
+    EC_SED=https://{{gateway_dns_name}}
+    EC_CID={{license_id}}
+    EC_OA2=https://{{sdc_dns_name}}/oauth/token
+    EC_PPS={{license_admin_hash}}
     AGENT_REV=agent_v12_beta
   agtK8Config:
     # some cluster instances require resource-spec for the deployment, e.g. GE Digital
@@ -123,12 +123,12 @@ global:
     withIngress:
       enabled: true
       hosts:
-        - host: {{gateway-dns-name}}
+        - host: {{gateway_dns_name}}
           paths: ["/"]
     withExtIngress:
       enabled: false
       hosts:
-        - host: {{gateway-dns-name}}
+        - host: {{gateway_dns_name}}
           paths: [ "/" ]
     withPlugins:
       # the tls setting only valid when agent mode "-mod" is either "server" or "gw:server"
