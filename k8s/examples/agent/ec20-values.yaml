@@ -123,12 +123,12 @@ global:
     withIngress:
       enabled: true
       hosts:
-        - host: {{gateway_dns_name}}
+        - host: {{int_gateway_dns_name}}
           paths: ["/"]
     withExtIngress:
       enabled: false
       hosts:
-        - host: {{gateway_dns_name}}
+        - host: {{ext_gateway_dns_name}}
           paths: [ "/" ]
     withPlugins:
       # the tls setting only valid when agent mode "-mod" is either "server" or "gw:server"
