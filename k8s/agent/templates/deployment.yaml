@@ -2,7 +2,6 @@
 {{- $binaryURL := .Values.global.agtK8Config.binaryURL -}}
 {{- $ownerHash := .Values.global.agtK8Config.ownerHash -}}
 {{- $contrName := "agt-contr" -}}
-{{- $fullName := include "agent.fullname" . -}}
 {{- $releaseTag := .Values.global.agtK8Config.releaseTag -}}
 {{- $securityContext := .Values.securityContext -}}
 {{- $portName := .Values.agtK8Config.portName -}}
@@ -32,7 +31,6 @@ spec:
     {{- end }}
       containers:
         {{- include "agent.container" (merge (dict "isPlugin" false "contrName" $contrName "releaseTag" $releaseTag "launchCmd" $launchCmd "securityContext" $securityContext "portName" $portName "healthPortName" $healthPortName "podResource" $podResource "agentRev" $agentRev "binaryURL" $binaryURL "ownerHash" $ownerHash "agtConfig" $agtConfig) .) | nindent 8}}
-      serviceAccountName: {{ $fullName }}-serviceaccount
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
