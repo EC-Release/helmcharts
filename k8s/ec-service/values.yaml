@@ -82,6 +82,8 @@ tolerations: []
 affinity: {}
 
 global:
+  efs:
+    fileSystemId: {{FILE_SYSTEM_ID}}
   ecServiceK8Config:
     resources:
       limits:
@@ -100,7 +102,7 @@ global:
       hosts:
         - host: zone-id-xxx-ext.digitalconnect.apps.ge.com
           paths: [ "/" ]
-  oauthConfig: |-
+  ecServiceConfig: |-
     ADMIN_PWD={{ADMIN_PWD}}
     ADMIN_TKN={{ADMIN_TKN}}
     ADMIN_USR={{ADMIN_USR}}

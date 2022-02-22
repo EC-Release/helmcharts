@@ -26,12 +26,19 @@ spec:
       {{- end }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      volumes:
+        - name: {{ include "ec-service.fullname" . }}
+          persistentVolumeClaim:
+            claimName: {{ include "ec-service.fullname" . }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+            - name: {{ include "ec-service.fullname" . }}
+              mountPath: /root
           ports:
             - name: http
               containerPort: 8080
@@ -47,7 +54,7 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
-            {{- range (split "\n" .Values.global.oauthConfig) }}
+            {{- range (split "\n" .Values.global.ecServiceConfig) }}
             {{- $a := splitn "=" 2 . }}
             {{- if and (not (eq $a._1 "")) ($a._1) }}
             - name: {{ $a._0|quote }}
