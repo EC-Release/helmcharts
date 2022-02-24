@@ -88,7 +88,7 @@ eval "sed -i -e 's#{{ZAC_UAA}}#${ZAC_UAA}#g' k8s/examples/ec-service/ec-service.
 eval "sed -i -e 's#{{ZAC_URL}}#${ZAC_URL}#g' k8s/examples/ec-service/ec-service.env"
 
 printf "\n\n\n*** packaging w/ dependencies (ec-release/oci) \n"
-mkdir -p k8s/pkg/agent/$AGENT_CHART_REV k8s/pkg/agent+helper/$AGENT_HELPER_CHART_REV k8s/pkg/agent+plg/$AGENT_PLG_CHART_REV k8s/pkg/agent+lber/$AGENT_LBER_CHART_REV k8s/pkg/oauth/$OAUTH_CHART_REV k8s/pkg/webportal/$AGENT_WEBPORTAL_CHART_REV k8s/pkg/ec-release/$EC_SERVICE_CHART_REV
+mkdir -p k8s/pkg/agent/$AGENT_CHART_REV k8s/pkg/agent+helper/$AGENT_HELPER_CHART_REV k8s/pkg/agent+plg/$AGENT_PLG_CHART_REV k8s/pkg/agent+lber/$AGENT_LBER_CHART_REV k8s/pkg/oauth/$OAUTH_CHART_REV k8s/pkg/webportal/$AGENT_WEBPORTAL_CHART_REV k8s/pkg/ec-service/$EC_SERVICE_CHART_REV
 
 ls -la k8s/pkg
 helm package k8s/agent+helper -d k8s/pkg/agent+helper/$AGENT_HELPER_CHART_REV

@@ -84,14 +84,12 @@ affinity: {}
 global:
   efsPersistence:
     enabled: true
-    namespace: {{NAMESPACE}}
-    storageClassName: {{STORAGE_CLASS_NAME}}
-    storage: {{STORAGE_IN_M_Gi}}
-    mountOptions:
-      - tls
-    provisioner: {{EFS_PROVISIONER}}
-    fileSystemId: {{EFS_FILE_SYSTEM_ID}}
-    accessPointId: {{EFS_ACCESS_POINT_ID}}
+    namespace: NAMESPACE
+    storageClassName: STORAGE_CLASS_NAME
+    storage: STORAGE_IN_M_Gi
+    provisioner: EFS_PROVISIONER
+    fileSystemId: EFS_FILE_SYSTEM_ID
+    accessPointId: EFS_ACCESS_POINT_ID
   ecServiceK8Config:
     resources:
       limits:
