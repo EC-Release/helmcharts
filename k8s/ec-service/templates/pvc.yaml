@@ -1,13 +1,19 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ include "ec-service.fullname" . }}
-  labels:
-    {{- include "ec-service.labels" . | nindent 4 }}
+  name: {{ include "ec-service.fullname" . }}-pvc
+  namespace: {{ .Values.global.efsPersistence.namespace }}
 spec:
   accessModes:
     - ReadWriteMany
-  storageClassName: encrypted-efs
   resources:
     requests:
-      storage: 6KiB
+      storage: {{ .Values.global.efsPersistence.storage }}
+  storageClassName: {{ .Values.global.efsPersistence.storageClassName }}
+  volumeMode: Filesystem
+  volumeName: {{ include "ec-service.fullname" . }}-pv
+status:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: {{ .Values.global.efsPersistence.storage }}

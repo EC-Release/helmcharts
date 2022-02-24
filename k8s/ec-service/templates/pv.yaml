@@ -1,0 +1,24 @@
+{{- if .Values.global.efsPersistence.enabled -}}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "ec-service.fullname" . }}-pv
+  namespace: {{ .Values.global.efsPersistence.namespace }}
+spec:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: {{ .Values.global.efsPersistence.storage }}
+  csi:
+    driver: efs.csi.aws.com
+    {{ - if .Values.global.efs.accessPointId }}
+    volumeHandle: {{ printf "%s::%s" .Values.global.efs.fileSystemId .Values.global.efs.accessPointId }}
+    {{ - else }}
+    volumeHandle: {{ .Values.global.efs.fileSystemId }}
+    {{ - end }}
+  mountOptions:
+    - tls
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ .Values.global.efsPersistence.storageClassName }}
+  volumeMode: Filesystem
+{{- end }}
