@@ -24,6 +24,6 @@ version: 0.1.0
 appVersion: 1.16.0
 
 dependencies:
-- name: webportal
+- name: ec-service
   version: <EC_SERVICE_CHART_REV>
   repository: "file://./../../ec-service"
