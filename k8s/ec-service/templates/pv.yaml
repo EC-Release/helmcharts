@@ -11,11 +11,11 @@ spec:
     storage: {{ .Values.global.efsPersistence.storage }}
   csi:
     driver: efs.csi.aws.com
-    {{ - if .Values.global.efs.accessPointId }}
+    {{- if .Values.global.efs.accessPointId }}
     volumeHandle: {{ printf "%s::%s" .Values.global.efs.fileSystemId .Values.global.efs.accessPointId }}
-    {{ - else }}
+    {{- else }}
     volumeHandle: {{ .Values.global.efs.fileSystemId }}
-    {{ - end }}
+    {{- end }}
   mountOptions:
     - tls
   persistentVolumeReclaimPolicy: Retain
