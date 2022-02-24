@@ -122,7 +122,7 @@ printf "\n\n\n*** test webportal\n"
 helm template k8s/examples/webportal --debug --set-file global.webportalConfig=k8s/examples/webportal/webportal.env
 
 printf "\n\n\n*** test ec-service\n"
-helm template k8s/examples/ec-service --debug --set-file global.ecServiceConfig=k8s/examples/ec-service/ec-service.env
+#helm template k8s/examples/ec-service --debug --set-file global.ecServiceConfig=k8s/examples/ec-service/ec-service.env
 
 printf "\n\n\n*** test server with tls template\n"
 yq e '.global.agtK8Config.withPlugins.tls.enabled = true' -i k8s/examples/agent/values.yaml
