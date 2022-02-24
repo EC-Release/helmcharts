@@ -122,24 +122,24 @@ printf "\n\n\n*** test webportal\n"
 helm template k8s/examples/webportal --debug --set-file global.webportalConfig=k8s/examples/webportal/webportal.env
 
 printf "\n\n\n*** test ec-service\n"
-#helm template k8s/examples/ec-service --debug --set-file global.ecServiceConfig=k8s/examples/ec-service/ec-service.env
+helm template k8s/examples/ec-service --debug --set-file global.ecServiceConfig=k8s/examples/ec-service/ec-service.env
 
-printf "\n\n\n*** test server with tls template\n"
-yq e '.global.agtK8Config.withPlugins.tls.enabled = true' -i k8s/examples/agent/values.yaml
-yq e '.global.agtK8Config.withPlugins.vln.enabled = false' -i k8s/examples/agent/values.yaml
-helm template k8s/examples/agent --debug --set-file global.agtConfig=k8s/examples/agent/server+tls.env
-
-printf "\n\n\n*** test client with local vln template\n"
-yq e '.global.agtK8Config.withPlugins.tls.enabled = false' -i k8s/examples/agent/values.yaml
-yq e '.global.agtK8Config.withPlugins.vln.enabled = true' -i k8s/examples/agent/values.yaml
-yq e '.global.agtK8Config.withPlugins.vln.remote = false' -i k8s/examples/agent/values.yaml
-helm template k8s/examples/agent --debug --set-file global.agtConfig=k8s/examples/agent/client+vln.env
-
-printf "\n\n\n*** test client with remote vln template\n"
-yq e '.global.agtK8Config.withPlugins.tls.enabled = false' -i k8s/examples/agent/values.yaml
-yq e '.global.agtK8Config.withPlugins.vln.enabled = true' -i k8s/examples/agent/values.yaml
-yq e '.global.agtK8Config.withPlugins.vln.remote = true' -i k8s/examples/agent/values.yaml
-helm template k8s/examples/agent --debug --set-file global.agtConfig=k8s/examples/agent/client+vln.env
+#printf "\n\n\n*** test server with tls template\n"
+#yq e '.global.agtK8Config.withPlugins.tls.enabled = true' -i k8s/examples/agent/values.yaml
+#yq e '.global.agtK8Config.withPlugins.vln.enabled = false' -i k8s/examples/agent/values.yaml
+#helm template k8s/examples/agent --debug --set-file global.agtConfig=k8s/examples/agent/server+tls.env
+#
+#printf "\n\n\n*** test client with local vln template\n"
+#yq e '.global.agtK8Config.withPlugins.tls.enabled = false' -i k8s/examples/agent/values.yaml
+#yq e '.global.agtK8Config.withPlugins.vln.enabled = true' -i k8s/examples/agent/values.yaml
+#yq e '.global.agtK8Config.withPlugins.vln.remote = false' -i k8s/examples/agent/values.yaml
+#helm template k8s/examples/agent --debug --set-file global.agtConfig=k8s/examples/agent/client+vln.env
+#
+#printf "\n\n\n*** test client with remote vln template\n"
+#yq e '.global.agtK8Config.withPlugins.tls.enabled = false' -i k8s/examples/agent/values.yaml
+#yq e '.global.agtK8Config.withPlugins.vln.enabled = true' -i k8s/examples/agent/values.yaml
+#yq e '.global.agtK8Config.withPlugins.vln.remote = true' -i k8s/examples/agent/values.yaml
+#helm template k8s/examples/agent --debug --set-file global.agtConfig=k8s/examples/agent/client+vln.env
 
 printf "\n\n\n*** test agent/gateway agt template\n"
 helm template k8s/examples/agent --debug --set-file global.agtConfig=k8s/examples/agent/gateway.env
