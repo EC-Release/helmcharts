@@ -55,16 +55,16 @@ printf "\n\n\n*** [3] install client with remote vln template in minikube\n"
 #yq e '.global.agtK8Config.withPlugins.tls.enabled = false' -i k8s/examples/agent/values.yaml
 #yq e '.global.agtK8Config.withPlugins.vln.enabled = true' -i k8s/examples/agent/values.yaml
 #yq e '.global.agtK8Config.withPlugins.vln.remote = true' -i k8s/examples/agent/values.yaml
-helm install k8s/examples/agent --set-file global.agtConfig=k8s/examples/agent/client+vln.env --generate-name
-
-printf "\n\n\n*** [3.1] verify installation\n"
-kubectl get deployments && kubectl get pods && kubectl get services
-printf "\n\n\n*** [3.2] verify deployment spec\n"
-kubectl describe deployments $(kubectl get deployments|grep agent-plg|awk '{print $1}'|head -n 1)
-printf "\n\n\n*** [3.3] verify service spec\n"
-kubectl describe services $(kubectl get services|grep agent-plg|awk '{print $1}'|head -n 1)
-printf "\n\n\n*** [3.4] clear installation\n"
-kubectl delete --all deployments && kubectl delete --all pods && kubectl delete --all services
+#helm install k8s/examples/agent --set-file global.agtConfig=k8s/examples/agent/client+vln.env --generate-name
+#
+#printf "\n\n\n*** [3.1] verify installation\n"
+#kubectl get deployments && kubectl get pods && kubectl get services
+#printf "\n\n\n*** [3.2] verify deployment spec\n"
+#kubectl describe deployments $(kubectl get deployments|grep agent-plg|awk '{print $1}'|head -n 1)
+#printf "\n\n\n*** [3.3] verify service spec\n"
+#kubectl describe services $(kubectl get services|grep agent-plg|awk '{print $1}'|head -n 1)
+#printf "\n\n\n*** [3.4] clear installation\n"
+#kubectl delete --all deployments && kubectl delete --all pods && kubectl delete --all services
 
 
 printf "\n\n\n*** [4] install oauth in k8s\n"
