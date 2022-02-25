@@ -1,8 +1,8 @@
 #!/bin/bash
 
 printf "\n\n\n*** [0] install gateway with HA in k8s\n"
-yq e '.global.agtK8Config.withPlugins.tls.enabled = false' -i k8s/examples/lber/values.yaml
-yq e '.global.agtK8Config.withPlugins.vln.enabled = false' -i k8s/examples/lber/values.yaml
+#yq e '.global.agtK8Config.withPlugins.tls.enabled = false' -i k8s/examples/lber/values.yaml
+#yq e '.global.agtK8Config.withPlugins.vln.enabled = false' -i k8s/examples/lber/values.yaml
 helm install my-app k8s/examples/lber --set-file global.agtConfig=k8s/examples/lber/gateway.env
 printf "\n\n\n*** [0.1] verify installation\n"
 kubectl get deployments && kubectl get sts && kubectl get pods && kubectl get services && kubectl get ingress
@@ -21,8 +21,8 @@ kubectl delete --all deployments && kubectl delete --all sts && kubectl delete -
 
 
 printf "\n\n\n*** [1] install server with tls template in k8s\n"
-yq e '.global.agtK8Config.withPlugins.tls.enabled = true' -i k8s/examples/agent/values.yaml
-yq e '.global.agtK8Config.withPlugins.vln.enabled = false' -i k8s/examples/agent/values.yaml
+#yq e '.global.agtK8Config.withPlugins.tls.enabled = true' -i k8s/examples/agent/values.yaml
+#yq e '.global.agtK8Config.withPlugins.vln.enabled = false' -i k8s/examples/agent/values.yaml
 helm install k8s/examples/agent --set-file global.agtConfig=k8s/examples/agent/server+tls.env --generate-name
 
 printf "\n\n\n*** [1.1] verify installation\n"
@@ -39,9 +39,9 @@ printf "\n\n\n*** [1.4] clear installation\n"
 kubectl delete --all deployments && kubectl delete --all pods && kubectl delete --all services
 
 printf "\n\n\n*** [2] install client with local vln multi-contr template in k8s\n"
-yq e '.global.agtK8Config.withPlugins.tls.enabled = false' -i k8s/examples/agent/values.yaml
-yq e '.global.agtK8Config.withPlugins.vln.enabled = true' -i k8s/examples/agent/values.yaml
-yq e '.global.agtK8Config.withPlugins.vln.remote = false' -i k8s/examples/agent/values.yaml
+#yq e '.global.agtK8Config.withPlugins.tls.enabled = false' -i k8s/examples/agent/values.yaml
+#yq e '.global.agtK8Config.withPlugins.vln.enabled = true' -i k8s/examples/agent/values.yaml
+#yq e '.global.agtK8Config.withPlugins.vln.remote = false' -i k8s/examples/agent/values.yaml
 helm install k8s/examples/agent --set-file global.agtConfig=k8s/examples/agent/client+vln.env --generate-name
 
 printf "\n\n\n*** [2.1] verify installation\n"
@@ -52,19 +52,19 @@ printf "\n\n\n*** [2.3] clear installation\n"
 kubectl delete --all deployments && kubectl delete --all pods && kubectl delete --all services
 
 printf "\n\n\n*** [3] install client with remote vln template in minikube\n"
-yq e '.global.agtK8Config.withPlugins.tls.enabled = false' -i k8s/examples/agent/values.yaml
-yq e '.global.agtK8Config.withPlugins.vln.enabled = true' -i k8s/examples/agent/values.yaml
-yq e '.global.agtK8Config.withPlugins.vln.remote = true' -i k8s/examples/agent/values.yaml
-helm install k8s/examples/agent --set-file global.agtConfig=k8s/examples/agent/client+vln.env --generate-name
-
-printf "\n\n\n*** [3.1] verify installation\n"
-kubectl get deployments && kubectl get pods && kubectl get services
-printf "\n\n\n*** [3.2] verify deployment spec\n"
-kubectl describe deployments $(kubectl get deployments|grep agent-plg|awk '{print $1}'|head -n 1)
-printf "\n\n\n*** [3.3] verify service spec\n"
-kubectl describe services $(kubectl get services|grep agent-plg|awk '{print $1}'|head -n 1)
-printf "\n\n\n*** [3.4] clear installation\n"
-kubectl delete --all deployments && kubectl delete --all pods && kubectl delete --all services
+#yq e '.global.agtK8Config.withPlugins.tls.enabled = false' -i k8s/examples/agent/values.yaml
+#yq e '.global.agtK8Config.withPlugins.vln.enabled = true' -i k8s/examples/agent/values.yaml
+#yq e '.global.agtK8Config.withPlugins.vln.remote = true' -i k8s/examples/agent/values.yaml
+#helm install k8s/examples/agent --set-file global.agtConfig=k8s/examples/agent/client+vln.env --generate-name
+#
+#printf "\n\n\n*** [3.1] verify installation\n"
+#kubectl get deployments && kubectl get pods && kubectl get services
+#printf "\n\n\n*** [3.2] verify deployment spec\n"
+#kubectl describe deployments $(kubectl get deployments|grep agent-plg|awk '{print $1}'|head -n 1)
+#printf "\n\n\n*** [3.3] verify service spec\n"
+#kubectl describe services $(kubectl get services|grep agent-plg|awk '{print $1}'|head -n 1)
+#printf "\n\n\n*** [3.4] clear installation\n"
+#kubectl delete --all deployments && kubectl delete --all pods && kubectl delete --all services
 
 
 printf "\n\n\n*** [4] install oauth in k8s\n"
@@ -77,11 +77,7 @@ printf "\n\n\n*** [4.3] verify service spec\n"
 kubectl describe services $(kubectl get services|grep oauth|awk '{print $1}'|head -n 1)
 printf "\n\n\n*** [4.4] verify ingress spec\n"
 kubectl describe ingresses $(kubectl get ingresses|grep oauth|awk '{print $1}'|head -n 1)
-printf "\n\n\n*** [4.5] verify pv spec\n"
-kubectl describe pv $(kubectl get pv|grep oauth|awk '{print $1}'|head -n 1)
-printf "\n\n\n*** [4.6] verify pvc spec\n"
-kubectl describe pvc $(kubectl get pvc|grep oauth|awk '{print $1}'|head -n 1)
-printf "\n\n\n*** [4.7] clear installation\n"
+printf "\n\n\n*** [4.5] clear installation\n"
 kubectl delete --all deployments && kubectl delete --all pods && kubectl delete --all services && kubectl delete --all ingresses
 
 
@@ -95,9 +91,23 @@ printf "\n\n\n*** [5.3] verify service spec\n"
 kubectl describe services $(kubectl get services|grep webportal|awk '{print $1}'|head -n 1)
 printf "\n\n\n*** [5.4] verify ingress spec\n"
 kubectl describe ingresses $(kubectl get ingresses|grep webportal|awk '{print $1}'|head -n 1)
-printf "\n\n\n*** [5.5] verify pv spec\n"
-kubectl describe pv $(kubectl get pv|grep webportal|awk '{print $1}'|head -n 1)
-printf "\n\n\n*** [5.6] verify pvc spec\n"
-kubectl describe pvc $(kubectl get pvc|grep webportal|awk '{print $1}'|head -n 1)
 printf "\n\n\n*** [5.5] clear installation\n"
 kubectl delete --all deployments && kubectl delete --all pods && kubectl delete --all services && kubectl delete --all ingresses
+
+
+printf "\n\n\n*** [6] install ec-service in k8s\n"
+helm install k8s/examples/ec-service --set-file global.ecServiceConfig=k8s/examples/ec-service/ec-service.env --generate-name
+printf "\n\n\n*** [6.1] verify installation\n"
+kubectl get deployments && kubectl get pods && kubectl get services && kubectl get ingresses && kubectl get pv && kubectl get pvc
+printf "\n\n\n*** [6.2] verify deployment spec\n"
+kubectl describe deployments $(kubectl get deployments|grep ec-service|awk '{print $1}'|head -n 1)
+printf "\n\n\n*** [6.3] verify service spec\n"
+kubectl describe services $(kubectl get services|grep ec-service|awk '{print $1}'|head -n 1)
+printf "\n\n\n*** [6.4] verify ingress spec\n"
+kubectl describe ingresses $(kubectl get ingresses|grep ec-service|awk '{print $1}'|head -n 1)
+printf "\n\n\n*** [6.5] verify pv spec\n"
+kubectl describe pv $(kubectl get pv|grep ec-service|awk '{print $1}'|head -n 1)
+printf "\n\n\n*** [6.6] verify pvc spec\n"
+kubectl describe pvc $(kubectl get pvc|grep ec-service|awk '{print $1}'|head -n 1)
+printf "\n\n\n*** [6.7] clear installation\n"
+kubectl delete --all deployments && kubectl delete --all pods && kubectl delete --all services && kubectl delete --all ingresses && kubectl delete --all pvc && kubectl delete --all pv

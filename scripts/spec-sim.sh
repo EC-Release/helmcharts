@@ -14,15 +14,17 @@ eval "sed -i -e 's#<AGENT_LBER_CHART_REV>#${AGENT_LBER_CHART_REV}#g' k8s/agent+l
 eval "sed -i -e 's#<AGENT_HELPER_CHART_REV>#${AGENT_HELPER_CHART_REV}#g' k8s/agent+lber/Chart.yaml"
 eval "sed -i -e 's#<OAUTH_CHART_REV>#${OAUTH_CHART_REV}#g' k8s/oauth/Chart.yaml"
 eval "sed -i -e 's#<AGENT_WEBPORTAL_CHART_REV>#${AGENT_WEBPORTAL_CHART_REV}#g' k8s/webportal/Chart.yaml"
+eval "sed -i -e 's#<EC_SERVICE_CHART_REV>#${EC_SERVICE_CHART_REV}#g' k8s/ec-service/Chart.yaml"
 eval "sed -i -e 's#<AGENT_HELPER_CHART_REV>#${AGENT_HELPER_CHART_REV}#g' k8s/examples/agent/Chart.yaml"
 eval "sed -i -e 's#<AGENT_PLG_CHART_REV>#${AGENT_PLG_CHART_REV}#g' k8s/examples/agent/Chart.yaml"
 eval "sed -i -e 's#<AGENT_CHART_REV>#${AGENT_CHART_REV}#g' k8s/examples/agent/Chart.yaml"
 eval "sed -i -e 's#<AGENT_LBER_CHART_REV>#${AGENT_LBER_CHART_REV}#g' k8s/examples/lber/Chart.yaml"
 eval "sed -i -e 's#<OAUTH_CHART_REV>#${OAUTH_CHART_REV}#g' k8s/examples/oauth/Chart.yaml"
 eval "sed -i -e 's#<AGENT_WEBPORTAL_CHART_REV>#${AGENT_WEBPORTAL_CHART_REV}#g' k8s/examples/webportal/Chart.yaml"
+eval "sed -i -e 's#<EC_SERVICE_CHART_REV>#${EC_SERVICE_CHART_REV}#g' k8s/examples/ec-service/Chart.yaml"
 
-cat k8s/agent+helper/Chart.yaml k8s/agent/Chart.yaml k8s/agent+plg/Chart.yaml k8s/agent+lber/Chart.yaml k8s/oauth/Chart.yaml k8s/webportal/Chart.yaml
-cat k8s/examples/agent/Chart.yaml k8s/examples/lber/Chart.yaml k8s/examples/oauth/Chart.yaml k8s/examples/webportal/Chart.yaml
+cat k8s/agent+helper/Chart.yaml k8s/agent/Chart.yaml k8s/agent+plg/Chart.yaml k8s/agent+lber/Chart.yaml k8s/oauth/Chart.yaml k8s/webportal/Chart.yaml k8s/ec-service/Chart.yaml
+cat k8s/examples/agent/Chart.yaml k8s/examples/lber/Chart.yaml k8s/examples/oauth/Chart.yaml k8s/examples/webportal/Chart.yaml k8s/examples/ec-service/Chart.yaml
 
 printf "\n\n\n*** update server+tls.env \n"
 eval "sed -i -e 's#{{EC_TEST_OA2}}#${EC_TEST_OA2}#g' k8s/examples/agent/server+tls.env"
@@ -66,13 +68,34 @@ eval "sed -i -e 's#{{EC_OAUTH_URL}}#${EC_OAUTH_URL}#g' k8s/examples/webportal/we
 eval "sed -i -e 's#{{EC_CID}}#${EC_CID}#g' k8s/examples/webportal/webportal.env"
 eval "sed -i -e 's#{{EC_CSC}}#${EC_CSC}#g' k8s/examples/webportal/webportal.env"
 
+printf "\n\n\n*** update ec-service.env \n"
+eval "sed -i -e 's#{{ADMIN_PWD}}#${ADMIN_PWD}#g' k8s/examples/ec-service/ec-service.env"
+eval "sed -i -e 's#{{ADMIN_TKN}}#${ADMIN_TKN}#g' k8s/examples/ec-service/ec-service.env"
+eval "sed -i -e 's#{{ADMIN_USR}}#${ADMIN_USR}#g' k8s/examples/ec-service/ec-service.env"
+eval "sed -i -e 's#{{BASE}}#${BASE}#g' k8s/examples/ec-service/ec-service.env"
+eval "sed -i -e 's#{{EC_PRVT_PWD}}#${EC_PRVT_PWD}#g' k8s/examples/ec-service/ec-service.env"
+eval "sed -i -e 's#{{EC_SETTINGS}}#${EC_SETTINGS}#g' k8s/examples/ec-service/ec-service.env"
+eval "sed -i -e 's#{{ENV}}#${ENV}#g' k8s/examples/ec-service/ec-service.env"
+eval "sed -i -e 's#{{GITHUB_TOKEN}}#${GITHUB_TOKEN}#g' k8s/examples/ec-service/ec-service.env"
+eval "sed -i -e 's#{{PLAN_ID}}#${PLAN_ID}#g' k8s/examples/ec-service/ec-service.env"
+eval "sed -i -e 's#{{PLAN_NAME}}#${PLAN_NAME}#g' k8s/examples/ec-service/ec-service.env"
+eval "sed -i -e 's#{{UPDATED}}#${UPDATED}#g' k8s/examples/ec-service/ec-service.env"
+eval "sed -i -e 's#{{ZONE}}#${ZONE}#g' k8s/examples/ec-service/ec-service.env"
+eval "sed -i -e 's#{{ZAC_CLIENT_ID}}#${ZAC_CLIENT_ID}#g' k8s/examples/ec-service/ec-service.env"
+eval "sed -i -e 's#{{ZAC_CLIENT_SECRET}}#${ZAC_CLIENT_SECRET}#g' k8s/examples/ec-service/ec-service.env"
+eval "sed -i -e 's#{{ZAC_SERVICE_ID}}#${ZAC_SERVICE_ID}#g' k8s/examples/ec-service/ec-service.env"
+eval "sed -i -e 's#{{ZAC_UAA}}#${ZAC_UAA}#g' k8s/examples/ec-service/ec-service.env"
+eval "sed -i -e 's#{{ZAC_URL}}#${ZAC_URL}#g' k8s/examples/ec-service/ec-service.env"
+
 printf "\n\n\n*** packaging w/ dependencies (ec-release/oci) \n"
-mkdir -p k8s/pkg/agent/$AGENT_CHART_REV k8s/pkg/agent+helper/$AGENT_HELPER_CHART_REV k8s/pkg/agent+plg/$AGENT_PLG_CHART_REV k8s/pkg/agent+lber/$AGENT_LBER_CHART_REV k8s/pkg/oauth/$OAUTH_CHART_REV k8s/pkg/webportal/AGENT_WEBPORTAL_CHART_REV
+mkdir -p k8s/pkg/agent/$AGENT_CHART_REV k8s/pkg/agent+helper/$AGENT_HELPER_CHART_REV k8s/pkg/agent+plg/$AGENT_PLG_CHART_REV k8s/pkg/agent+lber/$AGENT_LBER_CHART_REV k8s/pkg/oauth/$OAUTH_CHART_REV k8s/pkg/webportal/$AGENT_WEBPORTAL_CHART_REV k8s/pkg/ec-service/$EC_SERVICE_CHART_REV
 
 ls -la k8s/pkg
 helm package k8s/agent+helper -d k8s/pkg/agent+helper/$AGENT_HELPER_CHART_REV
 helm package k8s/oauth -d k8s/pkg/oauth/$OAUTH_CHART_REV
 helm package k8s/webportal -d k8s/pkg/webportal/$AGENT_WEBPORTAL_CHART_REV
+helm package k8s/ec-service -d k8s/pkg/ec-service/$EC_SERVICE_CHART_REV
+
 helm dependency update k8s/agent
 helm dependency update k8s/agent+plg
 helm dependency update k8s/agent+lber
@@ -89,29 +112,34 @@ helm dependency update k8s/examples/oauth
 ls -la k8s/examples/oauth/charts/
 helm dependency update k8s/examples/webportal
 ls -la k8s/examples/webportal/charts/
+helm dependency update k8s/examples/ec-service
+ls -la k8s/examples/ec-service/charts/
 
 printf "\n\n\n*** test oauth template\n"
 helm template k8s/examples/oauth --debug --set-file global.oauthConfig=k8s/examples/oauth/oauth.env
 
 printf "\n\n\n*** test webportal\n"
-helm template k8s/examples/webportal --debug --set-file global.agtConfig=k8s/examples/webportal/webportal.env
+helm template k8s/examples/webportal --debug --set-file global.webportalConfig=k8s/examples/webportal/webportal.env
 
-printf "\n\n\n*** test server with tls template\n"
-yq e '.global.agtK8Config.withPlugins.tls.enabled = true' -i k8s/examples/agent/values.yaml
-yq e '.global.agtK8Config.withPlugins.vln.enabled = false' -i k8s/examples/agent/values.yaml
-helm template k8s/examples/agent --debug --set-file global.agtConfig=k8s/examples/agent/server+tls.env
+printf "\n\n\n*** test ec-service\n"
+helm template k8s/examples/ec-service --debug --set-file global.ecServiceConfig=k8s/examples/ec-service/ec-service.env
 
-printf "\n\n\n*** test client with local vln template\n"
-yq e '.global.agtK8Config.withPlugins.tls.enabled = false' -i k8s/examples/agent/values.yaml
-yq e '.global.agtK8Config.withPlugins.vln.enabled = true' -i k8s/examples/agent/values.yaml
-yq e '.global.agtK8Config.withPlugins.vln.remote = false' -i k8s/examples/agent/values.yaml
-helm template k8s/examples/agent --debug --set-file global.agtConfig=k8s/examples/agent/client+vln.env
-
-printf "\n\n\n*** test client with remote vln template\n"
-yq e '.global.agtK8Config.withPlugins.tls.enabled = false' -i k8s/examples/agent/values.yaml
-yq e '.global.agtK8Config.withPlugins.vln.enabled = true' -i k8s/examples/agent/values.yaml
-yq e '.global.agtK8Config.withPlugins.vln.remote = true' -i k8s/examples/agent/values.yaml
-helm template k8s/examples/agent --debug --set-file global.agtConfig=k8s/examples/agent/client+vln.env
+#printf "\n\n\n*** test server with tls template\n"
+#yq e '.global.agtK8Config.withPlugins.tls.enabled = true' -i k8s/examples/agent/values.yaml
+#yq e '.global.agtK8Config.withPlugins.vln.enabled = false' -i k8s/examples/agent/values.yaml
+#helm template k8s/examples/agent --debug --set-file global.agtConfig=k8s/examples/agent/server+tls.env
+#
+#printf "\n\n\n*** test client with local vln template\n"
+#yq e '.global.agtK8Config.withPlugins.tls.enabled = false' -i k8s/examples/agent/values.yaml
+#yq e '.global.agtK8Config.withPlugins.vln.enabled = true' -i k8s/examples/agent/values.yaml
+#yq e '.global.agtK8Config.withPlugins.vln.remote = false' -i k8s/examples/agent/values.yaml
+#helm template k8s/examples/agent --debug --set-file global.agtConfig=k8s/examples/agent/client+vln.env
+#
+#printf "\n\n\n*** test client with remote vln template\n"
+#yq e '.global.agtK8Config.withPlugins.tls.enabled = false' -i k8s/examples/agent/values.yaml
+#yq e '.global.agtK8Config.withPlugins.vln.enabled = true' -i k8s/examples/agent/values.yaml
+#yq e '.global.agtK8Config.withPlugins.vln.remote = true' -i k8s/examples/agent/values.yaml
+#helm template k8s/examples/agent --debug --set-file global.agtConfig=k8s/examples/agent/client+vln.env
 
 printf "\n\n\n*** test agent/gateway agt template\n"
 helm template k8s/examples/agent --debug --set-file global.agtConfig=k8s/examples/agent/gateway.env
@@ -127,16 +155,19 @@ helm repo index k8s/pkg/agent+plg/$AGENT_PLG_CHART_REV --url https://ec-release.
 helm repo index k8s/pkg/agent+lber/$AGENT_LBER_CHART_REV --url https://ec-release.github.io/oci/agent+lber/$AGENT_LBER_CHART_REV
 helm repo index k8s/pkg/oauth/$OAUTH_CHART_REV --url https://ec-release.github.io/oci/oauth/$OAUTH_CHART_REV
 helm repo index k8s/pkg/webportal/$AGENT_WEBPORTAL_CHART_REV --url https://ec-release.github.io/oci/webportal/$AGENT_WEBPORTAL_CHART_REV
+helm repo index k8s/pkg/ec-service/$EC_SERVICE_CHART_REV --url https://ec-release.github.io/oci/ec-service/$EC_SERVICE_CHART_REV
 
 
 printf "\n\n\n*** packaging w/ dependencies (ec-release/helmcharts)\n"
-mkdir -p k8s/pkg-new/agent/$AGENT_CHART_REV k8s/pkg-new/agent+helper/$AGENT_HELPER_CHART_REV k8s/pkg-new/agent+plg/$AGENT_PLG_CHART_REV k8s/pkg-new/agent+lber/$AGENT_LBER_CHART_REV k8s/pkg-new/oauth/$OAUTH_CHART_REV k8s/pkg-new/webportal/$AGENT_WEBPORTAL_CHART_REV
+mkdir -p k8s/pkg-new/agent/$AGENT_CHART_REV k8s/pkg-new/agent+helper/$AGENT_HELPER_CHART_REV k8s/pkg-new/agent+plg/$AGENT_PLG_CHART_REV k8s/pkg-new/agent+lber/$AGENT_LBER_CHART_REV k8s/pkg-new/oauth/$OAUTH_CHART_REV k8s/pkg-new/webportal/$AGENT_WEBPORTAL_CHART_REV k8s/pkg-new/ec-service/$EC_SERVICE_CHART_REV
 
 cp -R k8s/pkg/* k8s/pkg-new
 ls -la k8s/pkg-new
 helm package k8s/agent+helper -d k8s/pkg-new/agent+helper/$AGENT_HELPER_CHART_REV
 helm package k8s/oauth -d k8s/pkg-new/oauth/$OAUTH_CHART_REV
 helm package k8s/webportal -d k8s/pkg-new/webportal/$AGENT_WEBPORTAL_CHART_REV
+helm package k8s/ec-service -d k8s/pkg-new/ec-service/$EC_SERVICE_CHART_REV
+
 helm dependency update k8s/agent
 helm dependency update k8s/agent+plg
 helm dependency update k8s/agent+lber
@@ -151,3 +182,4 @@ helm repo index k8s/pkg-new/agent+plg/$AGENT_PLG_CHART_REV --url https://raw.git
 helm repo index k8s/pkg-new/agent+lber/$AGENT_LBER_CHART_REV --url https://raw.githubusercontent.com/EC-Release/helmcharts/disty/agent+lber/$AGENT_LBER_CHART_REV
 helm repo index k8s/pkg-new/oauth/$OAUTH_CHART_REV --url https://raw.githubusercontent.com/EC-Release/helmcharts/disty/oauth/$OAUTH_CHART_REV
 helm repo index k8s/pkg-new/webportal/$AGENT_WEBPORTAL_CHART_REV --url https://raw.githubusercontent.com/EC-Release/helmcharts/disty/webportal/$AGENT_WEBPORTAL_CHART_REV
+helm repo index k8s/pkg-new/ec-service/$EC_SERVICE_CHART_REV --url https://raw.githubusercontent.com/EC-Release/helmcharts/disty/ec-service/$EC_SERVICE_CHART_REV
