@@ -84,7 +84,7 @@ affinity: {}
 global:
   efsPersistence:
     enabled: true
-    namespace: NAMESPACE
+#    namespace: NAMESPACE
     storageClassName: efs.csi.aws.com
     storage: 5M
     provisioner: EFS_PROVISIONER
