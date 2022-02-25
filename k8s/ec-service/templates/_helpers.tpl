@@ -61,3 +61,60 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Specify the ec-service internal ingress spec
+*/}}
+{{- define "ec-service.intIngress" -}}
+{{- if .Values.global.ecServiceK8Config.withIngress.tls -}}
+tls:
+{{- range .Values.global.ecServiceK8Config.withIngress.tls }}
+  - hosts:
+    {{- range .hosts }}
+    - {{ . | quote }}
+    {{- end }}
+    secretName: {{ .secretName }}
+{{- end -}}
+{{- end }}
+rules:
+{{- range .Values.global.ecServiceK8Config.withIngress.hosts }}
+  - host: {{ .host | quote }}
+    http:
+      paths:
+      {{- range $path := .paths }}
+        - path: {{ $path | quote }}
+          backend:
+            serviceName: {{ $.Release.Name }}
+            servicePort: 18090
+      {{- end }}
+{{- end }}
+{{- end -}}
+
+
+{{/*
+Specify the ec-service external ingress spec
+*/}}
+{{- define "ec-service.extIngress" -}}
+{{- if .Values.global.ecServiceK8Config.withExtIngress.tls -}}
+tls:
+{{- range .Values.global.ecServiceK8Config.withExtIngress.tls }}
+  - hosts:
+    {{- range .hosts }}
+    - {{ . | quote }}
+    {{- end }}
+    secretName: {{ .secretName }}
+{{- end -}}
+{{- end }}
+rules:
+{{- range .Values.global.ecServiceK8Config.withExtIngress.hosts }}
+  - host: {{ .host | quote }}
+    http:
+      paths:
+      {{- range $path := .paths }}
+        - path: {{ $path | quote }}
+          backend:
+            serviceName: {{ $.Release.Name }}
+            servicePort: 18090
+      {{- end }}
+{{- end }}
+{{- end -}}
