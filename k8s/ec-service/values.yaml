@@ -85,7 +85,7 @@ global:
   efsPersistence:
     enabled: true
     namespace: NAMESPACE
-    storageClassName: STORAGE_CLASS_NAME
+    storageClassName: efs.csi.aws.com
     storage: 5M
     provisioner: EFS_PROVISIONER
     fileSystemId: EFS_FILE_SYSTEM_ID
