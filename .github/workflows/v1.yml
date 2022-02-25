@@ -54,7 +54,7 @@ jobs:
           source ./scripts/commonlib.sh
           source ./scripts/k8s-deployment-sim.sh
 
-      - name: publish distribution packages 
+      - name: publish distribution packages
         if: github.event_name == 'push'
         uses: ec-release/github-action-copy-files-folders-to-another-repos@main
         env:
