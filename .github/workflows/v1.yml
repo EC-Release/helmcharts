@@ -45,7 +45,7 @@ jobs:
           source ./scripts/commonlib.sh
           source ./scripts/spec-sim.sh
 
-      - name: helm packages deployment sim test 
+      - name: helm packages deployment sim test
         env:
           AGENT_REV: v1.hokkaido.213
           #EC_PPS: ${{secrets.EC_PPS_2_DECRYPT_213}}
@@ -54,7 +54,7 @@ jobs:
           source ./scripts/commonlib.sh
           source ./scripts/k8s-deployment-sim.sh
 
-      - name: publish distribution packages 
+      - name: publish distribution packages
         if: github.event_name == 'push'
         uses: ec-release/github-action-copy-files-folders-to-another-repos@main
         env:
