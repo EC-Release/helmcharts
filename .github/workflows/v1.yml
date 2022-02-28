@@ -36,7 +36,7 @@ jobs:
           kubernetes version: 'v1.19.2'
           #github token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: k8s sim test for the helm packages
+      - name: k8s sim test for the helm packages 
         env:
           AGENT_REV: v1.hokkaido.213
           #EC_PPS: ${{secrets.EC_PPS_2_DECRYPT_213}}
