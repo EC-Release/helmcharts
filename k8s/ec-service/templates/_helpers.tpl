@@ -84,8 +84,8 @@ rules:
       {{- range $path := .paths }}
         - path: {{ $path | quote }}
           backend:
-            serviceName: {{ $.Release.Name }}
-            servicePort: 18090
+            serviceName: {{ include "ec-service.fullname" . }}
+            servicePort: {{ .Values.service.port }}
       {{- end }}
 {{- end }}
 {{- end -}}
