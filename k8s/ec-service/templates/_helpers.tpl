@@ -66,6 +66,8 @@ Create the name of the service account to use
 Specify the ec-service internal ingress spec
 */}}
 {{- define "ec-service.intIngress" -}}
+{{- $fullName := include "ec-service.fullname" . -}}
+{{- $svcPort := .Values.service.port -}}
 {{- if .Values.global.ecServiceK8Config.withIngress.tls -}}
 tls:
 {{- range .Values.global.ecServiceK8Config.withIngress.tls }}
@@ -84,8 +86,8 @@ rules:
       {{- range $path := .paths }}
         - path: {{ $path | quote }}
           backend:
-            serviceName: {{ $.Release.Name }}
-            servicePort: 18090
+            serviceName: {{ $fullName }}
+            servicePort: {{ $svcPort }}
       {{- end }}
 {{- end }}
 {{- end -}}
@@ -95,6 +97,8 @@ rules:
 Specify the ec-service external ingress spec
 */}}
 {{- define "ec-service.extIngress" -}}
+{{- $fullName := include "ec-service.fullname" . -}}
+{{- $svcPort := .Values.service.port -}}
 {{- if .Values.global.ecServiceK8Config.withExtIngress.tls -}}
 tls:
 {{- range .Values.global.ecServiceK8Config.withExtIngress.tls }}
@@ -113,8 +117,8 @@ rules:
       {{- range $path := .paths }}
         - path: {{ $path | quote }}
           backend:
-            serviceName: {{ $.Release.Name }}
-            servicePort: 18090
+            serviceName: {{ $fullName }}
+            servicePort: {{ $svcPort }}
       {{- end }}
 {{- end }}
 {{- end -}}
