@@ -38,10 +38,10 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           volumeMounts:
             - name: {{ include "ec-service.fullname" . }}-pv
-              mountPath: /root
+              mountPath: /root/svcs
           ports:
             - name: http
-              containerPort: 8080
+              containerPort: 8989
               protocol: TCP
           livenessProbe:
             httpGet:
