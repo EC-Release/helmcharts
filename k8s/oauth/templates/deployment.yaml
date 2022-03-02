@@ -22,6 +22,7 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      restartPolicy: Always
       securityContext:
         {{- toYaml .Values.securityContext | nindent 12 }}
       containers:
