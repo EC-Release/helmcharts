@@ -12,7 +12,7 @@ jobs:
     if: "!contains(github.event.head_commit.message, '[skip ci]')"
     environment: v1
     env:
-      #helm chart version
+      #helm chart version 
       AGENT_CHART_REV: 0.1.17
       AGENT_HELPER_CHART_REV: 0.1.15
       AGENT_PLG_CHART_REV: 0.1.16
