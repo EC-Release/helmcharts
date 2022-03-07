@@ -36,16 +36,17 @@ $ helm dependency update example -n namespace
 ...
 global:
   ecServiceConfig: |-
-    EC_SVC_ID=my-test-id
-    EC_SVC_URL=my-test-url
-    EC_ADM_TKN=my-legacy-cf-admin-token
-    EC_SAC_URL=sac-app-url
-    EC_ATH_URL=ath-app-url-for-sac
-    EC_CID=cid-for-sac
-    EC_CSC=csc-for-sac
-    EC_SCRIPT_1=EC_SCRIPT_1
-    EC_SCRIPT_2=EC_SCRIPT_2
-    EC_SCRIPT_3=EC_SCRIPT_3
+    EC_SVC_ID={my-test-id}
+    EC_SVC_URL={my-test-url}
+    EC_SVC_NAT_URL=http://{ec-k8s-svc-name}.{namespace}.svc.cluster.local:18090
+    EC_ADM_TKN={my-legacy-cf-admin-token}
+    EC_SAC_URL=http://{sac-svc-name}.{namespace}.svc.cluster.local:18090
+    EC_ATH_URL=http://{auth-svc-name}.{namespace}.svc.cluster.local:18090
+    EC_CID={cid-for-sac}
+    EC_CSC={csc-for-sac}
+    EC_SCRIPT_1={EC_SCRIPT_1}
+    EC_SCRIPT_2={EC_SCRIPT_2}
+    EC_SCRIPT_3={EC_SCRIPT_3}
 ```
 
 #### Chart Installation
@@ -61,15 +62,16 @@ $ helm install --debug|dry-run example example/ -n namespace
 
 EC Service configuration parameters - `global.ecServiceConfig`
 
-| Parameter     | Description                                                            | 
-| ------------- | ---------------------------------------------------------------------- | 
-| `EC_SVC_ID`   | EC Service id (Zone id)                                                | 
-| `EC_SVC_URL`  | EC Service URI - ex: `https://{zone-id}.digitalconnect.apps.ge.com`    | 
-| `EC_ADM_TKN`  | EC Service legacy admin token                                          | 
-| `EC_SAC_URL`  | SAC application URI - ex: `https://sac-int.digitalconnect.apps.ge.com` | 
-| `EC_ATH_URL`  | OAuth application URI for SAC                                          | 
-| `EC_CID`      | OAuth client ID to authenticate SAC application                        | 
-| `EC_CSC`      | OAuth client secret to authenticate SAC application                    | 
-| `EC_SCRIPT_1` | EC_SCRIPT_1                                                            | 
-| `EC_SCRIPT_2` | EC_SCRIPT_2                                                            | 
-| `EC_SCRIPT_3` | EC_SCRIPT_3                                                            | 
+| Parameter     | Description                                                                                      | 
+| ------------- | ------------------------------------------------------------------------------------------------ | 
+| `EC_SVC_ID`   | EC Service id (Zone id)                                                                          | 
+| `EC_SVC_URL`  | EC Service URI - ex: `https://{zone-id}.digitalconnect.apps.ge.com`                              |
+| `EC_SVC_NAT_URL` | EC Service NAT URL - ex: `http://{ec-k8s-svc-name}.{namespace}.svc.cluster.local:18090`       |
+| `EC_ADM_TKN`  | EC Service legacy admin token                                                                    | 
+| `EC_SAC_URL`  | SAC application URI - ex: `http://{sac-svc-name}.{namespace}.svc.cluster.local:18090`            | 
+| `EC_ATH_URL`  | OAuth application URI for SAC - ex: `http://{auth-svc-name}.{namespace}.svc.cluster.local:18090` | 
+| `EC_CID`      | OAuth client ID to authenticate SAC application                                                  | 
+| `EC_CSC`      | OAuth client secret to authenticate SAC application                                              | 
+| `EC_SCRIPT_1` | EC_SCRIPT_1                                                                                      | 
+| `EC_SCRIPT_2` | EC_SCRIPT_2                                                                                      | 
+| `EC_SCRIPT_3` | EC_SCRIPT_3                                                                                      | 
