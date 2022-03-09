@@ -55,6 +55,11 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
+            - name: EC_CSC
+              valueFrom:
+                secretKeyRef:
+                  name: ec-csc
+                  key: ec-csc
             {{- range (split "\n" .Values.global.ecServiceConfig) }}
             {{- $a := splitn "=" 2 . }}
             {{- if and (not (eq $a._1 "")) ($a._1) }}
