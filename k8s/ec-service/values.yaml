@@ -88,9 +88,9 @@ global:
   efsPersistence:
     enabled: true
 #    namespace: NAMESPACE
-    storageClassName: STORAGE_CLASS_NAME
-    storage: STORAGE
-    pv: PERSISTENT_VOLUME
+    storageClassName: efs.csi.aws.com
+    storage: 5M
+    pv: PERSISTENT-VOLUME
   ecServiceK8Config:
     resources:
       limits:
