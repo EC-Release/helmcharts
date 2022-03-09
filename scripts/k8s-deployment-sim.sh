@@ -98,14 +98,12 @@ kubectl delete --all deployments && kubectl delete --all pods && kubectl delete 
 printf "\n\n\n*** [6] install ec-service in k8s\n"
 helm install k8s/examples/ec-service --set-file global.ecServiceConfig=k8s/examples/ec-service/ec-service.env --generate-name
 printf "\n\n\n*** [6.1] verify installation\n"
-kubectl get deployments && kubectl get pods && kubectl get services && kubectl get ingresses && kubectl get pvc
+kubectl get deployments && kubectl get pods && kubectl get services && kubectl get ingresses
 printf "\n\n\n*** [6.2] verify deployment spec\n"
 kubectl describe deployments $(kubectl get deployments|grep ec-service|awk '{print $1}'|head -n 1)
 printf "\n\n\n*** [6.3] verify service spec\n"
 kubectl describe services $(kubectl get services|grep ec-service|awk '{print $1}'|head -n 1)
 printf "\n\n\n*** [6.4] verify ingress spec\n"
 kubectl describe ingresses $(kubectl get ingresses|grep ec-service|awk '{print $1}'|head -n 1)
-printf "\n\n\n*** [6.5] verify pvc spec\n"
-kubectl describe pvc $(kubectl get pvc|grep ec-service|awk '{print $1}'|head -n 1)
-printf "\n\n\n*** [6.6] clear installation\n"
-kubectl delete --all deployments && kubectl delete --all pods && kubectl delete --all services && kubectl delete --all ingresses && kubectl delete --all pvc
+printf "\n\n\n*** [6.5] clear installation\n"
+kubectl delete --all deployments && kubectl delete --all pods && kubectl delete --all services && kubectl delete --all ingresses
