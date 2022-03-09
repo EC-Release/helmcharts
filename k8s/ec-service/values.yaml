@@ -90,9 +90,7 @@ global:
 #    namespace: NAMESPACE
     storageClassName: STORAGE_CLASS_NAME
     storage: STORAGE
-    provisioner: EFS_PROVISIONER
-    fileSystemId: EFS_FILE_SYSTEM_ID
-    accessPointId: EFS_ACCESS_POINT_ID
+    pv: PERSISTENT_VOLUME
   ecServiceK8Config:
     resources:
       limits:
@@ -123,3 +121,4 @@ global:
     EC_SCRIPT_1={EC_SCRIPT_1}
     EC_SCRIPT_2={EC_SCRIPT_2}
     EC_SCRIPT_3={EC_SCRIPT_3}
+    EC_SETTING={EC_SETTING}

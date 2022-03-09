@@ -80,6 +80,7 @@ eval "sed -i -e 's#{{EC_CSC}}#${EC_CSC}#g' k8s/examples/ec-service/ec-service.en
 eval "sed -i -e 's#{{EC_SCRIPT_1}}#${EC_SCRIPT_1}#g' k8s/examples/ec-service/ec-service.env"
 eval "sed -i -e 's#{{EC_SCRIPT_2}}#${EC_SCRIPT_2}#g' k8s/examples/ec-service/ec-service.env"
 eval "sed -i -e 's#{{EC_SCRIPT_3}}#${EC_SCRIPT_3}#g' k8s/examples/ec-service/ec-service.env"
+eval "sed -i -e 's#{{EC_SETTING}}#${EC_SETTING}#g' k8s/examples/ec-service/ec-service.env"
 
 
 printf "\n\n\n*** packaging w/ dependencies (ec-release/oci) \n"

@@ -47,6 +47,7 @@ global:
     EC_SCRIPT_1={EC_SCRIPT_1}
     EC_SCRIPT_2={EC_SCRIPT_2}
     EC_SCRIPT_3={EC_SCRIPT_3}
+    EC_SETTING={EC_SETTING}
 ```
 
 #### Chart Installation
@@ -74,4 +75,5 @@ EC Service configuration parameters - `global.ecServiceConfig`
 | `EC_CSC`      | OAuth client secret to authenticate SAC application                                              | 
 | `EC_SCRIPT_1` | EC_SCRIPT_1                                                                                      | 
 | `EC_SCRIPT_2` | EC_SCRIPT_2                                                                                      | 
-| `EC_SCRIPT_3` | EC_SCRIPT_3                                                                                      | 
+| `EC_SCRIPT_3` | EC_SCRIPT_3                                                                                      |
+| `EC_SETTING`  | EC accounts information                                                                          |

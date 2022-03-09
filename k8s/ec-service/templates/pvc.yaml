@@ -21,7 +21,7 @@ spec:
   storageClassName: efs.csi.aws.com
   {{- end }}
   volumeMode: Filesystem
-  volumeName: {{ include "ec-service.fullname" . }}-pv
+  volumeName: {{ .Values.global.efsPersistence.pv }}
 status:
   accessModes:
     - ReadWriteMany
