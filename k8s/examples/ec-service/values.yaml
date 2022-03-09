@@ -86,8 +86,8 @@ global:
     create: true
     annotations: { }
     efsPersistence:
-      pv: PERSISTENTVOLUME
-      pvc: PERSISTENTVOLUMECLIAM
+      pv: persistentvolume
+      pvc: persistentvolumeclaim
   ecServiceK8Config:
     resources:
       limits:
