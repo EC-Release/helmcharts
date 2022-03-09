@@ -28,9 +28,9 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       volumes:
-        - name: {{ include "ec-service.fullname" . }}-pv
+        - name: {{ .Values.global.efsPersistence.pv }}
           persistentVolumeClaim:
-            claimName: {{ include "ec-service.fullname" . }}-pvc
+            claimName: {{ .Values.global.efsPersistence.pvc }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -38,7 +38,7 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           volumeMounts:
-            - name: {{ include "ec-service.fullname" . }}-pv
+            - name: {{ .Values.global.efsPersistence.pv }}
               mountPath: /root/svcs
           ports:
             - name: http

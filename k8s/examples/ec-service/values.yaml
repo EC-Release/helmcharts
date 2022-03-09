@@ -86,11 +86,8 @@ global:
     create: true
     annotations: { }
     efsPersistence:
-      enabled: true
-      #    namespace: NAMESPACE
-      storageClassName: efs.csi.aws.com
-      storage: 5M
       pv: PERSISTENT-VOLUME
+      pvc: PERSISTENT-VOLUME-CLIAM
   ecServiceK8Config:
     resources:
       limits:
