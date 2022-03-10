@@ -5,9 +5,7 @@ metadata:
   labels:
     {{- include "ec-service.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
-  {{- end }}
+  replicas: {{ .Values.global.ecServiceK8Config.replicaCount }}
   selector:
     matchLabels:
       {{- include "ec-service.selectorLabels" . | nindent 6 }}
