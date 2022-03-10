@@ -89,6 +89,7 @@ global:
       pv: persistentvolume
       pvc: persistentvolumeclaim
   ecServiceK8Config:
+    containerPort: 17991
     resources:
       limits:
         cpu: 200m

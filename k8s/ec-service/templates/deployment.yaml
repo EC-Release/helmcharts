@@ -42,7 +42,7 @@ spec:
               mountPath: /root/svcs
           ports:
             - name: http
-              containerPort: 8989
+              containerPort: {{ .Values.global.ecServiceK8Config.containerPort }}
               protocol: TCP
           livenessProbe:
             httpGet:
