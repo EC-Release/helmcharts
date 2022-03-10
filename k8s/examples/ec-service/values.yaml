@@ -89,6 +89,7 @@ global:
       pv: persistentvolume
       pvc: persistentvolumeclaim
   ecServiceK8Config:
+    replicaCount: 1
     containerPort: 17991
     resources:
       limits:
