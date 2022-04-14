@@ -12,8 +12,8 @@ metadata:
   name: {{ $fullName }}-ext
   labels:
     {{- include "ec-service.labels" . | nindent 4 }}
-  {{- if .Values.global.withExtIngress.ingressExtAnnotations -}}
-  {{- with .Values.global.withExtIngress.ingressExtAnnotations }}
+  {{ if .Values.global.ecServiceK8Config.withExtIngress.ingressExtAnnotations }}
+  {{- with .Values.global.ecServiceK8Config.withExtIngress.ingressExtAnnotations }}
   annotations:
     {{- toYaml . | nindent 8 }}
   {{- end }}
