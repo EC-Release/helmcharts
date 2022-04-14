@@ -82,15 +82,18 @@ tolerations: []
 affinity: {}
 
 global:
+  ecCertsConfigmapName: ec-certs
+  ecSecretName: ec-secrets
   serviceAccount:
     create: true
     annotations: { }
-    efsPersistence:
-      pv: persistentvolume
-      pvc: persistentvolumeclaim
+  efsPersistence:
+    pvc: persistentvolumeclaim
+    mountPath: /root/svcs
+    subPath: preprod/svcs/{svc-id}
   ecServiceK8Config:
     replicaCount: 1
-    containerPort: 17991
+    containerPort: 7990
     resources:
       limits:
         cpu: 200m
@@ -103,21 +106,25 @@ global:
       hosts:
         - host: zone-id-xxx.digitalconnect.apps.ge.com
           paths: [ "/" ]
+      ingressIntAnnotations:
+        {
+          nginx.ingress.kubernetes.io/rewrite-target: /
+        }
     withExtIngress:
       enabled: true
       hosts:
         - host: zone-id-xxx-ext.digitalconnect.apps.ge.com
           paths: [ "/" ]
+      ingressExtAnnotations:
+        {
+          kubernetes.io/ingress.class: "nginx-ext"
+        }
   ecServiceConfig: |-
-    EC_SVC_ID={my-test-id}
-    EC_SVC_URL={my-test-url}
-    EC_SVC_NAT_URL=http://{ec-k8s-svc-name}.{namespace}.svc.cluster.local:18090
-    EC_ADM_TKN={my-legacy-cf-admin-token}
-    EC_SAC_URL=http://{sac-svc-name}.{namespace}.svc.cluster.local:18090
-    EC_ATH_URL=http://{auth-svc-name}.{namespace}.svc.cluster.local:18090
-    EC_CID={cid-for-sac}
-    EC_CSC={csc-for-sac}
-    EC_SCRIPT_1={EC_SCRIPT_1}
-    EC_SCRIPT_2={EC_SCRIPT_2}
-    EC_SCRIPT_3={EC_SCRIPT_3}
-    EC_SETTING={EC_SETTING}
+    EC_SAC_MSTR_URL={sac-master-url}
+    EC_SAC_SLAV_URL={sac-slave-url}
+    EC_SVC_URL={ec-svc-url}
+    ADMIN_USR=admin
+    ADMIN_TKN={ec-legacy-cf-admin-token}
+    EC_SETTING={ec-settings}
+    EC_SVC_ID={ec-svc-id}
+    EC_PORT=:7990

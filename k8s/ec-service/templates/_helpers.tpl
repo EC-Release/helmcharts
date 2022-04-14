@@ -86,7 +86,7 @@ rules:
         - path: {{ $path | quote }}
           backend:
             serviceName: {{ $fullName }}
-            servicePort: 18090
+            servicePort: 80
       {{- end }}
 {{- end }}
 {{- end -}}
@@ -116,7 +116,32 @@ rules:
         - path: {{ $path | quote }}
           backend:
             serviceName: {{ $fullName }}
-            servicePort: 18090
+            servicePort: 80
       {{- end }}
+{{- end }}
+{{- end -}}
+
+{{/*
+Function to get the existence of ConfigMap component for root certs
+*/}}
+{{- define "ec-service.isECCertsCMExist" -}}
+{{- $configmap := (lookup "v1" "ConfigMap" .Release.Namespace .Values.global.ecCertsConfigmapName) }}
+{{- if $configmap }}
+{{- printf "Exists" }}
+{{- else }}
+{{- printf "Not Exists" }}
+{{- end }}
+{{- end -}}
+
+
+{{/*
+Function to get the existence of ec secrets component
+*/}}
+{{- define "ec-service.isECSecretExist" -}}
+{{- $ecsecret := (lookup "v1" "Secret" .Release.Namespace .Values.global.ecSecretName) }}
+{{- if $ecsecret }}
+{{- printf "Exists" }}
+{{- else }}
+{{- printf "Not Exists" }}
 {{- end }}
 {{- end -}}
