@@ -12,8 +12,15 @@ metadata:
   name: {{ $fullName }}-ext
   labels:
     {{- include "ec-service.labels" . | nindent 4 }}
+  {{ if .Values.global.ecServiceK8Config.withExtIngress.ingressExtAnnotations }}
+  {{- with .Values.global.ecServiceK8Config.withExtIngress.ingressExtAnnotations }}
   annotations:
-    kubernetes.io/ingress.class: "nginx-ext"
+    {{- toYaml . | nindent 8 }}
+  {{- end }}
+  {{- else -}}
+  annotations:
+    {}
+  {{- end }}
 spec:
   {{- include "ec-service.extIngress" . | nindent 2 }}
 {{- end }}

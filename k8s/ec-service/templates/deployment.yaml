@@ -1,3 +1,6 @@
+{{- $isCertsConfigMapExist := include "ec-service.isECCertsCMExist" . -}}
+{{- $isECSecretExist := include "ec-service.isECSecretExist" . -}}
+{{- if and (eq "Exists" $isCertsConfigMapExist) (eq "Exists" $isECSecretExist) }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -5,7 +8,7 @@ metadata:
   labels:
     {{- include "ec-service.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.global.ecServiceK8Config.replicaCount }}
+  replicas: {{ .Values.global.ecServiceK8Config.replicaCount | default 2 }}
   selector:
     matchLabels:
       {{- include "ec-service.selectorLabels" . | nindent 6 }}
@@ -26,9 +29,12 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       volumes:
-        - name: {{ .Values.global.efsPersistence.pv }}
+        - name: svc-mount
           persistentVolumeClaim:
             claimName: {{ .Values.global.efsPersistence.pvc }}
+        - name: ec-certs
+          configMap:
+            name: {{ .Values.global.ecCertsConfigmapName }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -36,28 +42,43 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           volumeMounts:
-            - name: {{ .Values.global.efsPersistence.pv }}
-              mountPath: /root/svcs
+            - name: svc-mount
+              mountPath: {{ .Values.global.efsPersistence.mountPath }}
+              subPath: {{ .Values.global.efsPersistence.subPath }}
+#            This needs to be enabled once root certs files in service-update repo has write permissions
+#            - name: ec-certs
+#              mountPath: "/root/service1.1"
+#              readOnly: true
           ports:
             - name: http
               containerPort: {{ .Values.global.ecServiceK8Config.containerPort }}
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /
+              path: /v1/info/
               port: http
           readinessProbe:
             httpGet:
-              path: /
+              path: /v1/info/
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
+            - name: EC_CID
+              valueFrom:
+                secretKeyRef:
+                  name: ec-secrets
+                  key: cid
             - name: EC_CSC
               valueFrom:
                 secretKeyRef:
-                  name: ec-csc
-                  key: ec-csc
+                  name: ec-secrets
+                  key: csc
+            - name: EC_PRVT_PWD
+              valueFrom:
+                secretKeyRef:
+                  name: ec-secrets
+                  key: ecPvtPwd
             {{- range (split "\n" .Values.global.ecServiceConfig) }}
             {{- $a := splitn "=" 2 . }}
             {{- if and (not (eq $a._1 "")) ($a._1) }}
@@ -77,3 +98,4 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+{{- end }}
