@@ -121,27 +121,20 @@ rules:
 {{- end }}
 {{- end -}}
 
-{{/*
-Function to get the existence of ConfigMap component for root certs
-*/}}
+{{/* Function to get the existence of ConfigMap component for root certs */}}
 {{- define "ec-service.isECCertsCMExist" -}}
-{{- $configmap := (lookup "v1" "ConfigMap" .Release.Namespace .Values.global.ecCertsConfigmapName) }}
-{{- if $configmap }}
-{{- printf "Exists" }}
+{{- if (lookup "v1" "ConfigMap" .Release.Namespace .Values.global.ecCertsConfigmapName) }}
+{{- print "Exists" }}
 {{- else }}
-{{- printf "Not Exists" }}
-{{- end }}
+{{- print "Not Exists" }}
+{{- end -}}
 {{- end -}}
 
-
-{{/*
-Function to get the existence of ec secrets component
-*/}}
+{{/* Function to get the existence of ec secrets component */}}
 {{- define "ec-service.isECSecretExist" -}}
-{{- $ecsecret := (lookup "v1" "Secret" .Release.Namespace .Values.global.ecSecretName) }}
-{{- if $ecsecret }}
-{{- printf "Exists" }}
+{{- if (lookup "v1" "Secret" .Release.Namespace .Values.global.ecSecretName) }}
+{{- print "Exists" }}
 {{- else }}
-{{- printf "Not Exists" }}
-{{- end }}
+{{- print "Not Exists" }}
+{{- end -}}
 {{- end -}}
