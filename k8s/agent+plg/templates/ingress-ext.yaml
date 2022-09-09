@@ -3,7 +3,9 @@
 {{- if and (or (eq $agtMode "gateway") (eq $agtMode "gw:client") (eq $agtMode "gw:server")) (.Values.global.agtK8Config.withExtIngress.enabled) -}}
 {{- $fullName := include "agent.fullname" . -}}
 {{- $svcPort := .Values.global.agtK8Config.svcPortNum -}}
-{{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
+{{- if $.Capabilities.APIVersions.Has "networking.k8s.io/v1" }}
+apiVersion: networking.k8s.io/v1
+{{- else if $.Capabilities.APIVersions.Has "networking.k8s.io/v1beta1"}}
 apiVersion: networking.k8s.io/v1beta1
 {{- else -}}
 apiVersion: extensions/v1beta1
